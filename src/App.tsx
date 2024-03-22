@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { accountSID, authToken } from "./config";
 import axios from "axios";
 import Header from "./templates/Header";
 import ProductSection from "./components/ProductsSection";
+import { apiUrlDomain } from "./config";
+import ProductPage from "./components/ProductPage";
 function App() {
   const [data, setData] = useState([]);
-  const [catalogs, setCatalogs] = useState([])
+  const [catalogs, setCatalogs] = useState([]);
   const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/CompanyInformation`;
   const promotionsLink = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Promotions`;
   const storesAiURL = `https://api.impact.com/Mediapartners/${accountSID}/Stores/[4639,5939]`;
 
-  console.log('catalogs',catalogs)
+  console.log("catalogs", catalogs);
 
   useEffect(() => {
- 
-
     // fetching catalogs
     const catalogURL = `https://api.impact.com/Mediapartners/${accountSID}/Catalogs`;
 
@@ -32,18 +32,17 @@ function App() {
             password: authToken,
           },
         });
-        console.log('response fetchCatalogs', response)
-        if(response.status === 200){
-          setCatalogs(response.data.Catalogs)
+        console.log("response fetchCatalogs", response);
+        if (response.status === 200) {
+          setCatalogs(response.data.Catalogs);
         }
       } catch (error) {
-        console.error('fetchCatalogs: ',error)
+        console.error("fetchCatalogs: ", error);
       }
-
     };
 
-    // fetchCatalogs()
-    const catalogId = "1630";
+    // fetchCatalogs();
+    const catalogId = "5939";
     const catalogItemsURL = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Catalogs/${catalogId}/Items`;
 
     const fetchCatalogItems = async () => {
@@ -59,14 +58,17 @@ function App() {
       });
     };
     // fetchCatalogItems();
-
-    // fetchStores();
   }, [apiUrl, accountSID, authToken]);
 
   return (
     <>
-      <Header />
-      <ProductSection />
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<ProductSection />} />
+          <Route path="/product-page/:id" element={<ProductPage />} />
+        </Routes>
+      </Router>
     </>
   );
 }
