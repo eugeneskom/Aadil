@@ -27,7 +27,9 @@ const ProductPage = () => {
           <p className="mt-3 text-xl text-gray-900">${product.CurrentPrice}</p>
           <div className="mt-6">
             <h3 className="sr-only">Description</h3>
-            <div className="text-base text-gray-700 space-y-6">{product.Description}</div>
+            <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} />
+
+            {/* <div className="text-base text-gray-700 space-y-6">{product.Description}</div> */}
           </div>
           <div className="mt-8">
             <button type="button" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

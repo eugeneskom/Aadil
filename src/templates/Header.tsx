@@ -1,13 +1,14 @@
 import React from "react";
 import { BiSearch, BiHeart, BiBell } from "react-icons/bi";
 import WishlistPopup from "../components/WishlistPopup";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
     <header className="bg-gray-800 text-white py-4 px-6 flex items-center justify-between">
       {/* Logo */}
       <div className="text-2xl font-bold">
-        <a href="#">Your Logo</a>
+        <NavLink to={'/'}>Your Logo</NavLink>
       </div>
 
       {/* Search */}
