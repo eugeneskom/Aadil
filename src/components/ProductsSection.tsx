@@ -49,9 +49,9 @@ const ProductSection = () => {
   const loadingPercentage = totalProducts === 0 ? 0 : (displayedProductsCount / totalProducts) * 100;
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 overflow-hidden">
       {/* Filters */}
-      <div className="mb-6">
+      <div className="mb-6 ml-6">
         <h2 className="text-2xl font-bold mb-4">Filters</h2>
         <div className="flex flex-wrap -mx-2">
           <div className="px-2">
@@ -60,7 +60,6 @@ const ProductSection = () => {
           <div className="px-2">
             <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Filter 2</button>
           </div>
-          {/* Add more filter buttons as needed */}
         </div>
       </div>
 
@@ -76,7 +75,7 @@ const ProductSection = () => {
                 <p className="text-gray-600 mb-2">
                   {product.CurrentPrice} {product.Currency}
                 </p>
-                <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} />
+                {/* <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} /> */}
                 <p className="text-gray-500 mb-2">
                   From: <span className="text-black font-bold">{product.CampaignName}</span>{" "}
                 </p>
@@ -87,7 +86,7 @@ const ProductSection = () => {
               </div>
 
               <div className="p-4 bg-gray-50">
-                <NavLink to={`/product-page/${product.Id}`} className="w-full flex justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+                <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}  className="w-full flex justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
                   Read more
                 </NavLink>
               </div>

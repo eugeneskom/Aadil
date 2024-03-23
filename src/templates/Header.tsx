@@ -27,11 +27,11 @@ const Header = () => {
         </button>
 
         {/* Wishlist Heart */}
-        <button className="hover:text-gray-300 transition-colors duration-300">
+        <NavLink to="/wishlist" className="hover:text-gray-300 transition-colors duration-300">
           <BiHeart size={24} />
-        </button>
+        </NavLink>
 
-        <WishlistPopup />
+        {/* <WishlistPopup /> */}
 
         {/* Sign Up Button */}
         <button className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">Sign Up</button>

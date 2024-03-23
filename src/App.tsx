@@ -6,7 +6,11 @@ import axios from "axios";
 import Header from "./templates/Header";
 import ProductSection from "./components/ProductsSection";
 import { apiUrlDomain } from "./config";
-import ProductPage from "./components/ProductPage";
+import ProductPage from "./pages/ProductPage";
+import Hero from "./components/Hero";
+import WishlistPage from "./pages/WishlistPage";
+import Login from "./components/auth/Login";
+
 function App() {
   const [data, setData] = useState([]);
   const [catalogs, setCatalogs] = useState([]);
@@ -15,6 +19,8 @@ function App() {
   const storesAiURL = `https://api.impact.com/Mediapartners/${accountSID}/Stores/[4639,5939]`;
 
   console.log("catalogs", catalogs);
+
+  console.log('env', process.env.REACT_APP_ACCOUNT_SID)
 
   useEffect(() => {
     // fetching catalogs
@@ -65,8 +71,20 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<ProductSection />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Login />
+                <Hero />
+                <ProductSection />
+              </>
+            }
+          />
           <Route path="/product-page/:id" element={<ProductPage />} />
+          <Route path="/wishlist" element={
+            <WishlistPage />
+          } />
         </Routes>
       </Router>
     </>
