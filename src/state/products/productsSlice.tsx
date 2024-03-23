@@ -75,6 +75,14 @@ export const selectProductsError = (state: RootState) => state.products.error;
 export const selectPage = (state: RootState) => state.products.page;
 export const selectProductById = (productId: string) => (state: RootState) =>
   state.products.products.find((product) => product.Id === productId);
+// Define a new selector to filter products by the manufacturer name of a specific product
+export const selectProductsByManufacturer = (productId: string) => (state: RootState) => {
+  const product = state.products.products.find((product) => product.Id === productId);
+  if (!product) return []; // Return an empty array if the product is not found
+  const manufacturerName = product.Manufacturer; // Assuming the manufacturer name is stored in a property called 'manufacturer'
+  return state.products.products.filter((product) => product.Manufacturer === manufacturerName);
+};
+
 
 
 export default productsSlice.reducer;
