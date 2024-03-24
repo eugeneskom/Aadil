@@ -27,20 +27,11 @@ function App() {
 
   useEffect(() => {
     // fetching catalogs
-    const catalogURL = `https://api.impact.com/Mediapartners/${accountSID}/Catalogs`;
+    const catalogURL = `http://localhost:3001/api/catalogs`;
 
     const fetchCatalogs = async () => {
       try {
-        const response = await axios.get(catalogURL, {
-          headers: {
-            Accept: "application/json", // Add the Accept header
-            Authorization: `Bearer ${authToken}`,
-          },
-          auth: {
-            username: accountSID,
-            password: authToken,
-          },
-        });
+        const response = await axios.get(catalogURL);
         console.log("response fetchCatalogs", response);
         if (response.status === 200) {
           setCatalogs(response.data.Catalogs);
@@ -50,7 +41,7 @@ function App() {
       }
     };
 
-    // fetchCatalogs();
+    fetchCatalogs();
     const catalogId = "5939";
     const catalogItemsURL = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Catalogs/${catalogId}/Items`;
 
