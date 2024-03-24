@@ -10,6 +10,8 @@ import ProductPage from "./pages/ProductPage";
 import Hero from "./components/Hero";
 import WishlistPage from "./pages/WishlistPage";
 import Login from "./components/auth/Login";
+import { selectWishlist } from "./state/wishlist/wishlistSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
   const [data, setData] = useState([]);
@@ -17,8 +19,9 @@ function App() {
   const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/CompanyInformation`;
   const promotionsLink = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Promotions`;
   const storesAiURL = `https://api.impact.com/Mediapartners/${accountSID}/Stores/[4639,5939]`;
-
-  console.log("catalogs", catalogs);
+  const dispatch = useDispatch();
+  const wishlist = useSelector(selectWishlist);
+  console.log("wishlist", wishlist);
 
   console.log('env', process.env.REACT_APP_ACCOUNT_SID)
 

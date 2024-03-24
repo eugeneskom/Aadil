@@ -8,7 +8,7 @@ import { selectPage, incrementPage, fetchProductsAsync, selectProducts, selectPr
 import { NavLink } from "react-router-dom";
 import Image from "../images/bird.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import ProductCard from "./Product";
+import ProductCard from "./ProductCard";
 
 const ProductSection = () => {
   const dispatch = useDispatch();
