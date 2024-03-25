@@ -27,7 +27,7 @@ function App() {
 
   useEffect(() => {
     // fetching catalogs
-    const catalogURL = `http://localhost:3001/api/catalogs`;
+    const catalogURL = `/api/catalogs`;
 
     const fetchCatalogs = async () => {
       try {

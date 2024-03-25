@@ -30,7 +30,8 @@ export const fetchProductsAsync = createAsyncThunk(
   'products/fetchProducts',
   async ({ page, limit }: FetchProductsPayload) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
+      const response = await axios.get(`/api/products?page=${page}&limit=${limit}`);
+      // const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
       console.log('response',response.data)
       if (response.status !== 200) {
         throw new Error('Failed to fetch products');
