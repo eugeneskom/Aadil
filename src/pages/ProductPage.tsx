@@ -32,7 +32,8 @@ const ProductPage = () => {
   const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
 
-  console.log("filteredProducts", filteredProducts);
+  console.log("filteredProducts", id, product);
+  console.log("ProductPage", filteredProducts);
   if (id === undefined || product === undefined) return <h1>Product id is undefined</h1>;
   // Update your component to use the new selector
   // For example:
