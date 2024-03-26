@@ -10,55 +10,46 @@ import ProductPage from "./pages/ProductPage";
 import Hero from "./components/Hero";
 import WishlistPage from "./pages/WishlistPage";
 import Login from "./components/auth/Login";
-import { selectWishlist } from "./state/wishlist/wishlistSlice";
 import { useSelector, useDispatch } from "react-redux";
+import LoginCallback from "./components/auth/LoginCallback";
+import { setUser,selectUser } from "./state/user/userSlice";
+import { fetchWishlist } from "./state/wishlist/wishlistSlice";
+import { RootState, AppDispatch } from "./state/store";
 
 function App() {
-  const [data, setData] = useState([]);
-  const [catalogs, setCatalogs] = useState([]);
-  const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/CompanyInformation`;
-  const promotionsLink = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Promotions`;
-  const storesAiURL = `https://api.impact.com/Mediapartners/${accountSID}/Stores/[4639,5939]`;
-  const dispatch = useDispatch();
-  const wishlist = useSelector(selectWishlist);
+  const dispatch = useDispatch<AppDispatch>();
+  const [wishlist, setWishlist] = useState([])
+  const user = useSelector(selectUser);
+  // const wishlist = useSelector(selectWishlist);
+  // console.log("wishlist", wishlist); 
   console.log("wishlist", wishlist);
 
-  console.log('env', process.env.REACT_APP_ACCOUNT_SID)
 
   useEffect(() => {
-    // fetching catalogs
-    const catalogURL = `/api/catalogs`;
-
-    const fetchCatalogs = async () => {
+    const getUser = async () => {
       try {
-        const response = await axios.get(catalogURL);
-        console.log("response fetchCatalogs", response);
-        if (response.status === 200) {
-          setCatalogs(response.data.Catalogs);
+        const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+        const { data } = await axios.get(url, { withCredentials: true });
+        if(data.success){
+          dispatch(setUser(data.user));
+          setWishlist(data.user.wishlist)
         }
       } catch (error) {
-        console.error("fetchCatalogs: ", error);
+        console.log("getUser: ", error);
       }
     };
 
-    fetchCatalogs();
-    const catalogId = "5939";
-    const catalogItemsURL = `https://cors-anywhere.herokuapp.com/https://api.impact.com/Mediapartners/${accountSID}/Catalogs/${catalogId}/Items`;
+    getUser()
 
-    const fetchCatalogItems = async () => {
-      const response = await axios.get(catalogItemsURL, {
-        headers: {
-          Accept: "application/json", // Add the Accept header
-          Authorization: `Bearer ${authToken}`,
-        },
-        auth: {
-          username: accountSID,
-          password: authToken,
-        },
-      });
-    };
-    // fetchCatalogItems();
-  }, [apiUrl, accountSID, authToken]);
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (user && user.email) {
+      dispatch(fetchWishlist(user.email));
+    }
+  }, [dispatch, user]);
+  
 
   return (
     <>
@@ -71,14 +62,13 @@ function App() {
               <>
                 <Login />
                 <Hero />
-                <ProductSection />
+                <ProductSection wishlist={wishlist}/>
               </>
             }
           />
+          <Route path="/login/success" element={<LoginCallback />} />
           <Route path="/product-page/:id" element={<ProductPage />} />
-          <Route path="/wishlist" element={
-            <WishlistPage />
-          } />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Routes>
       </Router>
     </>

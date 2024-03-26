@@ -1,6 +1,5 @@
 import React from "react";
 import { BiSearch, BiHeart, BiBell } from "react-icons/bi";
-import WishlistPopup from "../components/WishlistPopup";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {

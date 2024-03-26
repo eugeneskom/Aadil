@@ -1,36 +1,46 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Product } from "../types/Product";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { NavLink } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { addToWishlist, removeFromWishlist, selectWishlist } from "../state/wishlist/wishlistSlice";
-
+import { selectUser } from "../state/user/userSlice";
+import { AppDispatch } from "../state/store";
+import { RootState } from "../state/store";
+import { toggleProjectId } from "../state/wishlist/wishlistSlice";
+import axios from "axios";
 interface ProductProps {
   product: Product;
+  wishlist: string[];
 }
-function ProductCard({ product }: ProductProps) {
-  const dispatch = useDispatch();
-  const wishlist = useSelector(selectWishlist);
+function ProductCard({ product, wishlist }: ProductProps) {
+  const user = useSelector(selectUser);
 
-  // Check if the product is already in the wishlist
-  const isInWishlist = wishlist.some((item) => item.Id === product.Id);
+  const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
+  // const wishlist = useSelector(selectWishlist);
+  const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+  console.log('wishlistItems',wishlistItems)
+  const isInWishlist = wishlistItems.includes(product.Id);
+
+  const userEmail = user ? user.email : "";
 
   const handleToggleWishlist = () => {
-    if (isInWishlist) {
-      dispatch(removeFromWishlist(product));
-    } else {
-      dispatch(addToWishlist(product));
+    if (userEmail) {
+      dispatch(toggleProjectId({ email: userEmail, productId: product.Id }));
     }
   };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       <LazyLoadImage src={product.ImageUrl} height={300} alt={product.Name} className="w-full max-h-[300px] object-contain" />
       <div className="p-4 flex-grow relative">
         <h3 className="text-lg font-semibold">{product.Name}</h3>
         <p className="text-gray-600 mb-2 font-bold">
-          
-          Price: {" "}
+          Price:{" "}
           {product.OriginalPrice !== product.CurrentPrice && (
             <span className="text-gray-500 line-through">
               {product.OriginalPrice} {product.Currency}

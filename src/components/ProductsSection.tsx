@@ -9,8 +9,10 @@ import { NavLink } from "react-router-dom";
 import Image from "../images/bird.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import ProductCard from "./ProductCard";
-
-const ProductSection = () => {
+interface ProductSectionProps{
+  wishlist: string []
+}
+const ProductSection = ({wishlist}:ProductSectionProps) => {
   const dispatch = useDispatch();
   const products: Product[] = useSelector(selectProducts);
 
@@ -69,7 +71,7 @@ const ProductSection = () => {
         {products &&
           products.length > 0 &&
           products.map((product) => (
-            <ProductCard product={product} />
+            <ProductCard product={product} wishlist={wishlist}/>
           ))}
       </div>
 
