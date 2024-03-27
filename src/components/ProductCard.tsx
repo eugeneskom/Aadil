@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { NavLink } from "react-router-dom";
@@ -14,6 +14,10 @@ interface ProductProps {
   product: Product;
 }
 function ProductCard({ product }: ProductProps) {
+  const [imageIsLoaded, setImageIsLoaded] = useState(false);
+
+
+
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
 
@@ -23,7 +27,16 @@ function ProductCard({ product }: ProductProps) {
   // console.log("wishlistItems", wishlistItems);
   const isInWishlist = wishlistItems.includes(product.Id);
 
- 
+  useEffect(() => {
+    const img = new Image();
+    img.src = product.ImageUrl;
+    img.onload = () => setImageIsLoaded(true);
+    img.onerror = () => setImageIsLoaded(false);
+  }, [product.ImageUrl]);
+
+  if (!imageIsLoaded) {
+    return null; // Don't render the product if the image is broken
+  }
 
   const toggleWishlist = async (productId: string) => {
     try {
