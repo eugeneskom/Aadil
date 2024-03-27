@@ -16,21 +16,20 @@ const ProductSection = () => {
   const dispatch = useDispatch();
   const products: Product[] = useSelector(selectProducts);
 
-  const page = useSelector((state: RootState) => state.products.page);
   console.log("products", products);
  
-  useEffect(() => {
-    dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
-  }, [dispatch, page]);
+  // useEffect(() => {
+  //   dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
+  // }, [dispatch, page]);
 
   const handleLoadMore = () => {
     dispatch(incrementPage());
   };
 
-  useEffect(() => {
-    dispatch(incrementPage());
-    return () => {};
-  }, []);
+  // useEffect(() => {
+  //   dispatch(incrementPage());
+  //   return () => {};
+  // }, []);
 
  
 

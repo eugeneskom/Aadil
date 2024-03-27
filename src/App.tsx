@@ -17,6 +17,7 @@ import { RootState, AppDispatch } from "./state/store";
 import { setToken } from "./state/token/tokenSlice";
 import { selectToken } from "./state/token/tokenSlice";
 import { setWishlist } from "./state/wishlist/wishlistSlice";
+import { fetchProductsAsync } from "./state/products/productsSlice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +25,7 @@ function App() {
   const token = useSelector(selectToken);
   // const wishlist = useSelector(selectWishlist);
   // console.log("wishlist", wishlist);
+  const page = useSelector((state: RootState) => state.products.page);
 
   useEffect(() => {
     const getUser = async () => {
@@ -48,16 +50,21 @@ function App() {
   }, []);
 
   useEffect(() => {
+    dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
+  }, [dispatch, page]);
+
+
+  useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const tokenLocal = localStorage.getItem("jwt");
+        const tokenLocal = localStorage.getItem("jwt") ?? "";
         if (!tokenLocal) return; // Return if no token is found in localStorage
   
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/wishlist`,
           {
             headers: {
-              Authorization: `Bearer ${tokenLocal}`,
+              Authorization: `Bearer ${JSON.parse(tokenLocal)}`,
             },
           }
         );
@@ -68,7 +75,7 @@ function App() {
       }
     };
   
-    // fetchWishlist();
+    fetchWishlist();
   }, [dispatch]);
 
   // useEffect(() => {
