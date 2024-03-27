@@ -9,30 +9,16 @@ import { NavLink } from "react-router-dom";
 import Image from "../images/bird.jpg";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import ProductCard from "./ProductCard";
-interface ProductSectionProps{
-  wishlist: string []
+interface ProductSectionProps {
+  wishlist: string[];
 }
-const ProductSection = ({wishlist}:ProductSectionProps) => {
+const ProductSection = () => {
   const dispatch = useDispatch();
   const products: Product[] = useSelector(selectProducts);
 
   const page = useSelector((state: RootState) => state.products.page);
   console.log("products", products);
-
-  const extractCategories = (products: Product[]) => {
-    const categories = new Set(); // Use Set to store unique categories
-
-    products.forEach((product: Product) => {
-      const categoryPath = product.OriginalFormatCategory.split(" > ");
-      categoryPath.forEach((category) => categories.add(category.trim()));
-    });
-
-    return Array.from(categories); // Convert Set to array
-  };
-
-  // Usage
-  const uniqueCategories = extractCategories(products);
-  console.log("Unique Categories:", uniqueCategories);
+ 
   useEffect(() => {
     dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
   }, [dispatch, page]);
@@ -46,10 +32,60 @@ const ProductSection = ({wishlist}:ProductSectionProps) => {
     return () => {};
   }, []);
 
+ 
+
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;
   const displayedProductsCount = displayedProducts.length;
   const loadingPercentage = totalProducts === 0 ? 0 : (displayedProductsCount / totalProducts) * 100;
+
+  
+  
+  function groupProductsByManufacturer(products: Product[]): Map<string, Product[]> {
+    return products.reduce((map, product) => {
+      const manufacturer = product.Manufacturer.toLowerCase();
+      if (!map.has(manufacturer)) {
+        map.set(manufacturer, []);
+      }
+      map.get(manufacturer)?.push(product);
+      return map;
+    }, new Map<string, Product[]>());
+  }
+  
+  function sortProductsWithLimit(products: Product[], limit: number): Product[] {
+    const productsByManufacturer = groupProductsByManufacturer(products);
+    const manufacturers = Array.from(productsByManufacturer.keys());
+    const sortedProducts: Product[] = [];
+  
+    while (manufacturers.length > 0) {
+      const currentManufacturers = [...manufacturers];
+  
+      for (const manufacturer of currentManufacturers) {
+        const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
+        const productsToAdd = productsFromManufacturer.splice(0, limit);
+        sortedProducts.push(...productsToAdd);
+  
+        if (productsFromManufacturer.length === 0) {
+          productsByManufacturer.delete(manufacturer);
+          manufacturers.splice(manufacturers.indexOf(manufacturer), 1);
+        }
+      }
+    }
+  
+    // Add remaining products from manufacturers with more than 4 products
+    for (const products of Array.from(productsByManufacturer.values())) {
+      sortedProducts.push(...products);
+    }
+  
+    return sortedProducts;
+  }
+   
+  const limit = 4;
+  const sortedProducts = sortProductsWithLimit(products, limit);
+  
+  console.log(sortedProducts);
+
+console.log('sortedProducts',sortedProducts);
 
   return (
     <div className="container mx-auto py-8 overflow-hidden">
@@ -68,10 +104,10 @@ const ProductSection = ({wishlist}:ProductSectionProps) => {
 
       {/* Products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products &&
-          products.length > 0 &&
-          products.map((product) => (
-            <ProductCard product={product} wishlist={wishlist}/>
+        {sortedProducts &&
+          sortedProducts.length > 0 &&
+          sortedProducts.map((product) => (
+            <ProductCard product={product}/>
           ))}
       </div>
 

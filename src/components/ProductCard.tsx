@@ -7,32 +7,47 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../state/user/userSlice";
 import { AppDispatch } from "../state/store";
 import { RootState } from "../state/store";
-import { toggleProjectId } from "../state/wishlist/wishlistSlice";
 import axios from "axios";
+import { setWishlist } from "../state/wishlist/wishlistSlice";
+import { selectToken } from "../state/token/tokenSlice";
 interface ProductProps {
   product: Product;
-  wishlist: string[];
 }
-function ProductCard({ product, wishlist }: ProductProps) {
+function ProductCard({ product }: ProductProps) {
   const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
 
   const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
   // const wishlist = useSelector(selectWishlist);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
-  console.log('wishlistItems',wishlistItems)
+  // console.log("wishlistItems", wishlistItems);
   const isInWishlist = wishlistItems.includes(product.Id);
 
-  const userEmail = user ? user.email : "";
+ 
 
-  const handleToggleWishlist = () => {
-    if (userEmail) {
-      dispatch(toggleProjectId({ email: userEmail, productId: product.Id }));
+  const toggleWishlist = async (productId: string) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
+        { productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("toggleWishlist", response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to toggle product in wishlist");
     }
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+
+  // useEffect(() => {
+  //   return () => {};
+  // }, []);
 
   return (
     <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
@@ -53,10 +68,11 @@ function ProductCard({ product, wishlist }: ProductProps) {
           )}
         </p>
         <p className="text-gray-500 mb-2">
-          From: <span className="text-black font-bold">{product.CampaignName}</span>{" "}
+          {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
+          From: <span className="text-black font-bold">{product.Manufacturer}</span>{" "}
         </p>
 
-        <button onClick={handleToggleWishlist} type="button" className="absolute top-0 right-0 m-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
+        <button onClick={()=>toggleWishlist(product.Id)} type="button" className="absolute top-0 right-0 m-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
           <FaHeart size={20} className={isInWishlist ? "text-red-500" : ""} />
         </button>
       </div>

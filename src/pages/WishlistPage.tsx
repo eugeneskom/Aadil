@@ -1,17 +1,19 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectWishlist, toggleProjectId } from "../state/wishlist/wishlistSlice";
+import { selectWishlist } from "../state/wishlist/wishlistSlice";
 import { AppDispatch, RootState } from "../state/store";
 import { selectUser } from "../state/user/userSlice";
 import { Product } from "../types/Product";
 import { selectProducts } from "../state/products/productsSlice";
+import axios from "axios";
+import { selectToken } from "../state/token/tokenSlice";
 
 const WishlistPage = () => {
-  // Dummy data for wishlist items
   const user = useSelector(selectUser);
+  const token = useSelector(selectToken)
   const products: Product[] = useSelector(selectProducts);
   const wishlist: string[] = useSelector(selectWishlist);
-
+  console.log('token::::::',token,'wishlist::::',wishlist)
   function getRepeatedProductIds(products: Product[]): { [key: string]: number } {
     const idCounts: { [key: string]: number } = {};
 
@@ -47,9 +49,30 @@ const WishlistPage = () => {
 
   const handleToggleWishlist = (product: Product) => {
     if (userEmail) {
-      dispatch(toggleProjectId({ email: userEmail, productId: product.Id }));
+      toggleWishlist(userEmail, product.Id);
     }
   };
+
+  const toggleWishlist = async (email: string, productId: string) => {
+    try {
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
+        { email, productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log('toggleWishlist', response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to toggle product in wishlist');
+    }
+  };
+
 
   // const wishlist = useSelector(selectWishlist);
 

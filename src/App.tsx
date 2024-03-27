@@ -12,44 +12,86 @@ import WishlistPage from "./pages/WishlistPage";
 import Login from "./components/auth/Login";
 import { useSelector, useDispatch } from "react-redux";
 import LoginCallback from "./components/auth/LoginCallback";
-import { setUser,selectUser } from "./state/user/userSlice";
-import { fetchWishlist } from "./state/wishlist/wishlistSlice";
+import { setUser, selectUser } from "./state/user/userSlice";
 import { RootState, AppDispatch } from "./state/store";
+import { setToken } from "./state/token/tokenSlice";
+import { selectToken } from "./state/token/tokenSlice";
+import { setWishlist } from "./state/wishlist/wishlistSlice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const [wishlist, setWishlist] = useState([])
   const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
   // const wishlist = useSelector(selectWishlist);
-  // console.log("wishlist", wishlist); 
-  console.log("wishlist", wishlist);
-
+  // console.log("wishlist", wishlist);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
         const { data } = await axios.get(url, { withCredentials: true });
-        if(data.success){
+        if (data.success) {
           dispatch(setUser(data.user));
-          setWishlist(data.user.wishlist)
+          dispatch(setToken(data.user.token));
+          localStorage.setItem("jwt", JSON.stringify(data.user.token));
         }
       } catch (error) {
         console.log("getUser: ", error);
       }
     };
 
-    getUser()
+    getUser();
+    const tokenLocal = localStorage.getItem("jwt") ?? "";
+    dispatch(setToken(JSON.parse(tokenLocal)));
 
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (user && user.email) {
-      dispatch(fetchWishlist(user.email));
-    }
-  }, [dispatch, user]);
+    const fetchWishlist = async () => {
+      try {
+        const tokenLocal = localStorage.getItem("jwt");
+        if (!tokenLocal) return; // Return if no token is found in localStorage
   
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/wishlist`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenLocal}`,
+            },
+          }
+        );
+        console.log("fetch wishlist", response.data);
+        dispatch(setWishlist(response.data.wishlist));
+      } catch (error) {
+        throw new Error("Failed to fetch wishlist");
+      }
+    };
+  
+    // fetchWishlist();
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   const fetchWishlist = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${process.env.REACT_APP_API_URL}/api/wishlist`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       console.log("toggleWishlist", response.data);
+  //       dispatch(setWishlist(response.data.wishlist))
+  //       return response.data;
+  //     } catch (error) {
+  //       throw new Error("Failed to fetch wishlist");
+  //     }
+  //   };
+  //   if (!token) return;
+  //   fetchWishlist();
+  // }, [token, dispatch]);
 
   return (
     <>
@@ -62,7 +104,7 @@ function App() {
               <>
                 <Login />
                 <Hero />
-                <ProductSection wishlist={wishlist}/>
+                <ProductSection />
               </>
             }
           />
