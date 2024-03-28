@@ -1,38 +1,95 @@
-.App {
-  text-align: center;
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header__inner {
+  column-gap: 2rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.header__search {
+  max-width: 640px;
+  width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.search__input {
+  width: 100%;
+}
+.product-card {
+  position: relative;
+}
+
+.product-card__list {
+  position: absolute;
+  top: 10%;
+  right: 40px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  row-gap: 1px;
+  background-color: gray;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
-.App-link {
-  color: #61dafb;
+.product-card__header:hover .product-card__list {
+  opacity: 1;
+  visibility: visible;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.product-card__item {
+  background-color: #222222;
+  cursor: pointer;
+}
+
+.hero__inner .col.left,
+.hero__inner .col.right{
+  width: 24%;
+}
+
+.hero__inner .col.center{
+  width: 50%;
+}
+
+.product-popup-close{
+  background-color:#222222;
+}
+
+.product-popup__action{
+  background-color:#222;
+}
+
+.text-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Number of lines to display */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price-sale-color{
+  color:#ff8a5c;
+}
+
+@media (max-width: 768px) {
+  .header__inner {
+    flex-wrap: wrap;
+    position: relative;
   }
-  to {
-    transform: rotate(360deg);
+  .header__inner .search {
+    order: 1;
+  }
+
+  .header__search--mobile {
+    background-color: #fff;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 30px 20px 100px 20px;
+  }
+  .header__search-close {
+    position: absolute;
+    top: 0;
+    right: 20px;
   }
 }

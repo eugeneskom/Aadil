@@ -19,82 +19,92 @@ import { selectToken } from "./state/token/tokenSlice";
 import { setWishlist } from "./state/wishlist/wishlistSlice";
 import { fetchProductsAsync } from "./state/products/productsSlice";
 import { setTokenValidity } from "./state/token/isValidToken";
+import { setScreenWidth } from "./state/screenWidthSlice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
+  const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
+
   // const wishlist = useSelector(selectWishlist);
-  // console.log("wishlist", wishlist);
+  console.log("isValidToken", isValidToken);
   const page = useSelector((state: RootState) => state.products.page);
- 
 
   useEffect(() => {
     dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
   }, [dispatch, page]);
-
 
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         const tokenLocal = localStorage.getItem("jwt") ?? "";
         if (!tokenLocal) return; // Return if no token is found in localStorage
-  
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/wishlist`,
-          {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(tokenLocal)}`,
-            },
-          }
-        );
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(tokenLocal)}`,
+          },
+        });
         console.log("fetch wishlist", response.data);
         dispatch(setWishlist(response.data.wishlist));
       } catch (error) {
         throw new Error("Failed to fetch wishlist");
       }
     };
-  
+
     fetchWishlist();
   }, [dispatch]);
 
- useEffect(() => {
-
-  const token = localStorage.getItem('jwt') || "";
-  // validate user token on load of the page
-  const handleTokenValidate = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/validate-token`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(token)}`
+  useEffect(() => {
+    const token = localStorage.getItem("jwt") || "";
+    // validate user token on load of the page
+    const handleTokenValidate = async () => {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/validate-token`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(token)}`,
+            },
           }
-        }
-      );
-      if (response.data && response.data.status) {
-        dispatch(setTokenValidity({ isValid: true, error: null }));
-        console.log('Token is valid');
-      } else {
-        dispatch(setTokenValidity({ isValid: false, error: null }));
-  
-        console.log('Token validation failed:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Failed to validate token:', error);
-      dispatch(setTokenValidity({ isValid: false, error: null }));
-    }
-  }
-  
-  handleTokenValidate();
-  
- 
-   return () => {
-     
-   }
- }, [])
+        );
+        if (response.data && response.data.success) {
+          dispatch(setTokenValidity({ isValid: true, error: null }));
+          console.log("Token is valid");
+        } else {
+          dispatch(setTokenValidity({ isValid: false, error: null }));
 
+          console.log("Token validation failed:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to validate token:", error);
+        dispatch(setTokenValidity({ isValid: false, error: null }));
+      }
+    };
+
+    handleTokenValidate();
+    if (token) {
+      dispatch(setToken(JSON.parse(token)));
+    }
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      dispatch(setScreenWidth(isMobile));
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener when component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -105,7 +115,7 @@ function App() {
             path="/"
             element={
               <>
-                <Login />
+                {!isValidToken && <Login />}
                 <Hero />
                 <ProductSection />
               </>

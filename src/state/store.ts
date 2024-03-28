@@ -4,6 +4,7 @@ import userRedducer from './user/userSlice'
 import wishlistReducer from "./wishlist/wishlistSlice";
 import authSlice from './token/tokenSlice'
 import isValidtoken from './token/isValidToken'
+import screenWidthReducer from "./screenWidthSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     user: userRedducer,
     wishlist: wishlistReducer,
     auth: authSlice,
-    isValidToken:isValidtoken
+    isValidToken:isValidtoken,
+    screenWidth: screenWidthReducer
     // Add other reducers here if needed
   },
 });
