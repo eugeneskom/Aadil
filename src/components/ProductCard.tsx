@@ -15,19 +15,14 @@ interface ProductProps {
 }
 function ProductCard({ product }: ProductProps) {
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
-
-
-
-  const user = useSelector(selectUser);
+  // const user = useSelector(selectUser);
   const token = useSelector(selectToken);
-
   const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
-  // const wishlist = useSelector(selectWishlist);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
-  // console.log("wishlistItems", wishlistItems);
   const isInWishlist = wishlistItems.includes(product.Id);
 
   useEffect(() => {
+    // Checking if the image url is valid, if not the product card won't be rendered
     const img = new Image();
     img.src = product.ImageUrl;
     img.onload = () => setImageIsLoaded(true);
@@ -50,7 +45,7 @@ function ProductCard({ product }: ProductProps) {
         }
       );
 
-      console.log("toggleWishlist", response.data);
+      // console.log("toggleWishlist", response.data);
       return response.data;
     } catch (error) {
       throw new Error("Failed to toggle product in wishlist");
@@ -58,9 +53,7 @@ function ProductCard({ product }: ProductProps) {
   };
 
 
-  // useEffect(() => {
-  //   return () => {};
-  // }, []);
+
 
   return (
     <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">

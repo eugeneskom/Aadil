@@ -1,8 +1,11 @@
 import React from "react";
 import { BiSearch, BiHeart, BiBell } from "react-icons/bi";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { RootState } from "../state/store";
 
 const Header = () => {
+  const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   return (
     <header className="bg-gray-800 text-white py-4 px-6 flex items-center justify-between">
       {/* Logo */}
@@ -33,7 +36,9 @@ const Header = () => {
         {/* <WishlistPopup /> */}
 
         {/* Sign Up Button */}
-        <button className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">Sign Up</button>
+        {!isValidToken ? (
+          <button className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">Sign Up</button>
+        ) : ""}
       </nav>
     </header>
   );
