@@ -15,6 +15,13 @@ const Header = () => {
   };
   console.log("isMobile", isMobile);
 
+  const googleAuth = () => {
+    window.open(
+      `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+      "_self"
+    )
+  }
+
   return (
     <header className="">
       <div className="container">
@@ -77,7 +84,7 @@ const Header = () => {
             {/* <WishlistPopup /> */}
 
             {/* Sign Up Button */}
-            {!isValidToken ? <button className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">Sign Up</button> : ""}
+            {!isValidToken ? <button type="button" onClick={googleAuth} className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">Sign Up</button> : ""}
           </nav>
         </div>
       </div>
