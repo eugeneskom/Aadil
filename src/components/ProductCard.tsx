@@ -13,6 +13,7 @@ import { selectToken } from "../state/token/tokenSlice";
 import { toggleWishlist } from "../state/wishlist/wishlistSlice";
 import { IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
+import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
 interface ProductProps {
   product: Product;
 }
@@ -36,6 +37,14 @@ function ProductCard({ product }: ProductProps) {
   if (!imageIsLoaded) {
     return null; // Don't render the product if the image is broken
   }
+
+  const handleWislistIconClick = (productId: string) => {
+    if (token) {
+      toggleWishlistHandler(productId)
+    } else {
+      dispatch(toggleAuthPopup());
+    }
+  };
 
   const toggleWishlistHandler = async (productId: string) => {
     try {
@@ -73,7 +82,7 @@ function ProductCard({ product }: ProductProps) {
             </button>
           </li>
           <li className="product-card__item">
-            <button onClick={() => toggleWishlistHandler(product.Id)} type="button" className="a right-0 m-2 ">
+            <button onClick={() => handleWislistIconClick(product.Id)} type="button" className="a right-0 m-2 ">
               {isInWishlist ? <FaHeart size={20} className="text-white" /> : <FaRegHeart size={20} className="text-white" />}
             </button>
           </li>
@@ -95,7 +104,6 @@ function ProductCard({ product }: ProductProps) {
               {product.OriginalPrice} {product.Currency}
             </span>
           )}
-   
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}

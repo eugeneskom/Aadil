@@ -5,6 +5,7 @@ import wishlistReducer from "./wishlist/wishlistSlice";
 import authSlice from './token/tokenSlice'
 import isValidtoken from './token/isValidToken'
 import screenWidthReducer from "./screenWidthSlice";
+import AuthPopupStateSlice from "./AuthPopupStateSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     auth: authSlice,
     isValidToken:isValidtoken,
-    screenWidth: screenWidthReducer
+    screenWidth: screenWidthReducer,
+    authPopupState: AuthPopupStateSlice,
     // Add other reducers here if needed
   },
 });

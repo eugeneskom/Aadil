@@ -20,20 +20,28 @@ import { setWishlist } from "./state/wishlist/wishlistSlice";
 import { fetchProductsAsync } from "./state/products/productsSlice";
 import { setTokenValidity } from "./state/token/isValidToken";
 import { setScreenWidth } from "./state/screenWidthSlice";
+import SignUpPopup from "./components/auth/SignUpPopup";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
-
+  const page = useSelector((state: RootState) => state.products.page);
+  const isAuthPopupOpen = useSelector((state: RootState) => state.authPopupState.isAuthPopupOpen);
   // const wishlist = useSelector(selectWishlist);
   console.log("isValidToken", isValidToken);
-  const page = useSelector((state: RootState) => state.products.page);
+  
+  // const [isAuthPopupOpen, setIsAuthPopupOpen] = useState(false);
+
+  const handleToggleAuthPopup = () => {
+    // setIsAuthPopupOpen(!isAuthPopupOpen);
+  }
+
 
   useEffect(() => {
     dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
-  }, [dispatch, page]);
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -53,16 +61,22 @@ function App() {
       }
     };
 
-
     fetchWishlist();
   }, [dispatch]);
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt") || "";
-    const parsedToken = token ? JSON.parse(token) : null;
     // validate user token on load of the page
     const handleTokenValidate = async () => {
       try {
+        const token = localStorage.getItem("jwt") || "";
+        let parsedToken = null;
+        if (token) {
+          try {
+            parsedToken = JSON.parse(token);
+          } catch (error) {
+            console.error("Error parsing token:", error);
+          }
+        }
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/validate-token`,
           {},
@@ -77,7 +91,6 @@ function App() {
           console.log("Token is valid");
         } else {
           dispatch(setTokenValidity({ isValid: false, error: null }));
-
           console.log("Token validation failed:", response.data.message);
         }
       } catch (error) {
@@ -87,9 +100,6 @@ function App() {
     };
 
     handleTokenValidate();
-    if (token) {
-      dispatch(setToken(JSON.parse(token)));
-    }
 
     return () => {};
   }, []);
@@ -112,21 +122,24 @@ function App() {
     <>
       <Router>
         <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                {/* {!isValidToken && <Login />} */}
-                <Hero />
-                <ProductSection />
-              </>
-            }
-          />
-          <Route path="/login/success" element={<LoginCallback />} />
-          <Route path="/product-page/:id" element={<ProductPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-        </Routes>
+        {isAuthPopupOpen ? <SignUpPopup /> : ""}
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  {/* {!isValidToken && <Login />} */}
+                  <Hero />
+                  <ProductSection />
+                </>
+              }
+            />
+            <Route path="/login/success" element={<LoginCallback />} />
+            <Route path="/product-page/:id" element={<ProductPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+          </Routes>
+        </main>
       </Router>
     </>
   );

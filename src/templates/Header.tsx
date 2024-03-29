@@ -33,7 +33,7 @@ const Header = () => {
     setOpenSubmenu(menu);
   }
 
-  console.log("isMobile", isMobile);
+  // console.log("isMobile", isMobile);
 
   const googleAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, "_self");
@@ -122,7 +122,7 @@ const Header = () => {
             )}
           </nav>
         </div>
-        {isMenuOpen ? (
+        {isMenuOpen || !isMobile ? (
           <nav className="header__bottom px-6 nav-bottom">
             {isMobile ? (
               <button type="button" onClick={handleToggleMenu}>
