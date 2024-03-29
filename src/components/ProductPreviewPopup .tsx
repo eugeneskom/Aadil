@@ -63,7 +63,7 @@ function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
               ""
             )}
             <p className="mb-2">Manufacturer: {product.Manufacturer}</p>
-            <NavLink to={`${product.Url}`} target="_blank" rel="noopener noreferrer" className="  text-white font-bold uppercase px-4 py-2 rounded-md  mt-auto product-popup__action">Buy It Now</NavLink>
+            <NavLink to={`${product.Url}`} target="_blank" rel="noopener noreferrer" className="text-center text-white font-bold uppercase px-4 py-2 rounded-md  mt-auto product-popup__action">Buy It Now</NavLink>
             {/* Add more product details here */}
           </div>
         </div>

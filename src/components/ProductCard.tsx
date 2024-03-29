@@ -78,7 +78,7 @@ function ProductCard({ product }: ProductProps) {
             </button>
           </li>
         </ul>
-        <LazyLoadImage src={product.ImageUrl} height={300} alt={product.Name} className="w-full max-h-[300px] object-contain" />
+        <LazyLoadImage src={product.ImageUrl} height={300} alt={product.Name} className="w-full max-h-[300px] object-cover" />
       </div>
 
       <div className="p-4 flex-grow relative">
@@ -103,7 +103,7 @@ function ProductCard({ product }: ProductProps) {
       </div>
 
       <div className="p-4 bg-gray-50">
-        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="w-full flex justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
           Read more
         </NavLink>
       </div>

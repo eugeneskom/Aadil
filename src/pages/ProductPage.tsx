@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
 import { useParams } from "react-router-dom";
@@ -18,7 +18,9 @@ const SimilarProducts: React.FC<{ products: Product[] }> = ({ products }) => (
           <img src={product.ImageUrl} alt={product.Name} className="w-full h-40 object-cover object-center" />
           <div className="p-4">
             <h3 className="text-gray-900 font-semibold text-lg">{product.Name}</h3>
-            <p className="text-gray-600 mt-2">{product.CurrentPrice} {product.Currency}</p>
+            <p className="text-gray-600 mt-2">
+              {product.CurrentPrice} {product.Currency}
+            </p>
           </div>
         </NavLink>
       ))}
@@ -32,15 +34,32 @@ const ProductPage = () => {
   const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
 
+  useEffect(() => {
+    const container = document.createElement('div');
+    container.innerHTML = product?.Description || '';
+
+    // Find all video elements in the HTML content
+    const videos = container.querySelectorAll('video');
+
+    // Loop through each video element
+    videos.forEach(video => {
+      // Mute the video
+      video.muted = true;
+
+      // Pause the video
+      video.pause();
+    });
+  }, [product?.Description]);
+
   console.log("filteredProducts", filteredProducts);
   if (id === undefined || product === undefined) return <h1>Product id is undefined</h1>;
   // Update your component to use the new selector
   // For example:
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <NavLink to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}  className="block mb-4 go-back-arrow text-gray-600 hover:text-gray-800 transition duration-300">
+      <NavLink to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="block mb-4 go-back-arrow text-gray-600 hover:text-gray-800 transition duration-300">
         <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
       </NavLink>
       <div className="lg:flex lg:-mx-4">
@@ -51,19 +70,42 @@ const ProductPage = () => {
         </div>
         <div className="lg:px-4 lg:w-1/2 mt-8 lg:mt-0">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">{product.Name}</h1>
-          <p className="mt-3 text-xl text-gray-900">{product.CurrentPrice} {product.Currency}</p>
-          <div className="mt-6">
-            <h3 className="sr-only">Description</h3>
-            <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} />
+          <p className="mt-3 text-xl text-gray-900">
+            {product.CurrentPrice} {product.Currency}
+          </p>
+          <p className="text-gray-500 mb-2">
+            {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
+            From: <span className="text-black font-bold">{product.Manufacturer}</span>{" "}
+          </p>
+          {product.Colors.length > 0 ? (
+            <p className="mb-2">
+              Colors:{" "}
+              {product.Colors.map((color) => (
+                <span>{color}</span>
+              ))}
+            </p>
+          ) : (
+            ""
+          )}
 
-            {/* <div className="text-base text-gray-700 space-y-6">{product.Description}</div> */}
-          </div>
-          <div className="mt-8">
-            <button type="button" className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            {product.Category && <p className="text-gray-500 mb-2">Category: <span className="text-black font-bold">{product.Category}</span>{" "}</p>}
+            {product.SubCategory && <p className="text-gray-500 mb-2">Category: <span className="text-black font-bold">{product.SubCategory}</span>{" "}</p>}
+
+          <div className="mt-8 product-page__actions">
+            <button type="button" className="product-page__add-wishlist inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Add to Wishlist
+            </button>
+            <button type="button" className="product-page__buy inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              But it now
             </button>
           </div>
         </div>
+      </div>
+      <div className="mt-6">
+        <h3 className="sr-only">Description</h3>
+        <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} />
+
+        {/* <div className="text-base text-gray-700 space-y-6">{product.Description}</div> */}
       </div>
       {filteredProducts.length > 0 && <SimilarProducts products={filteredProducts.slice(0, 5)} />}
     </div>

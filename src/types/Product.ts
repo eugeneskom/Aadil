@@ -18,4 +18,6 @@ export interface Product {
   ImageUrl:string;
   Url: String;
   Uri: String;
+  Category: String;
+  SubCategory: String;
 }
