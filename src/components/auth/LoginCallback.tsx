@@ -49,8 +49,9 @@ const LoginCallback = () => {
     };
 
     getUser();
-    const tokenLocal = localStorage.getItem("jwt") ?? "";
-    dispatch(setToken(JSON.parse(tokenLocal)));
+    // const tokenLocal = localStorage.getItem("jwt") ?? "";
+
+    // dispatch(setToken(JSON.parse(tokenLocal)));
 
     return () => {};
   }, []);

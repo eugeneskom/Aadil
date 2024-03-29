@@ -7,6 +7,35 @@
   column-gap: 2rem;
 }
 
+.header__action {
+  position: relative;
+  font-size: 20px;
+  height: 55px;
+  width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  background-color: #f1f1f1;
+}
+
+.header__action span.wishlist-counter {
+  font-size: 14px;
+  color: #fff;
+  border-radius: 50px;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  margin: 0;
+  display: flex;
+  background-color: #ff8a5c;
+  align-items: center;
+  justify-content: center;
+}
+
 .header__search {
   max-width: 640px;
   width: 100%;
@@ -15,6 +44,179 @@
 .search__input {
   width: 100%;
 }
+
+.header__bottom {
+  background-color: #ff8a5c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  margin: 0 24px;
+  border-radius: 5px;
+}
+
+.header__action-btns{
+  display: flex;
+}
+
+.header__deals-today {
+  background-color: #fbdf58;
+  color: #383128;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.header__special-prices {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: unset;
+  margin-left: 10px;
+  border-radius: #ffffff;
+  width: 50%;
+  background-color: #ffffff;
+  color: #383128;
+  border-radius: 5px;
+}
+
+.nav__link {
+  color: #fff;
+  padding: 20px 25px;
+  font-size: 16px;
+}
+
+.link-title {
+  position: relative;
+}
+
+.nav__link span.sp-link-title:after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  -moz-transition: width 0.2s linear;
+  -o-transition: width 0.2s linear;
+  -webkit-transition: width 0.2s linear;
+  transition: width 0.2s linear;
+  background-color: #fff;
+}
+.nav__link:hover span.sp-link-title:after {
+  width: 100%;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+}
+
+.nav__link .arrow-down {
+  margin-left: 5px;
+  font-weight: 700;
+}
+
+.nav-bottom__item {
+  position: relative;
+}
+
+.nav-bottom__item ul.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  padding: 40px 0;
+  background-color: #fff;
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-animation-name: DropDownSlide;
+  animation-name: DropDownSlide;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  box-shadow: 0 0 15px #0000001a;
+  left: auto;
+  min-width: 240px;
+  padding: 25px 0px;
+}
+
+.nav-bottom__item .sublink-title {
+  color: #6d6c6c;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  padding: 7px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-bottom__item li.submenu-li {
+  position: relative;
+}
+.nav-bottom__item span.sp-link-title {
+  position: relative;
+}
+
+li.submenu-li ul.supmenu-dropdown {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  padding: 15px 0;
+  -webkit-animation-name: DropDownSlide;
+  animation-name: DropDownSlide;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  box-shadow: 0 0 15px #00000026;
+}
+
+li.supmenu-li .suplink-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color-body);
+  padding: 7px 25px;
+}
+li.submenu-li:hover .sublink-title {
+  color: #222222;
+}
+.submenu-li:hover ul.supmenu-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-bottom__item:hover ul.menu-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+
+ul.supmenu-dropdown li.supmenu-li .suplink-title {
+  color:#6d6c6c;
+}
+ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
+  color:#222;
+}
+
 .product-card {
   position: relative;
 }
@@ -40,6 +242,9 @@
 .product-card__item {
   background-color: #222222;
   cursor: pointer;
+}
+.hero__inner {
+  padding: 16px 24px;
 }
 
 .hero__inner .col.left,
@@ -106,8 +311,6 @@
   .hero__inner .col.center {
     width: 90%;
   }
-
- 
 
   /* .hero__inner .col.center{
   width: 50%;
