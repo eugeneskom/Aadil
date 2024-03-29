@@ -59,6 +59,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt") || "";
+    const parsedToken = token ? JSON.parse(token) : null;
     // validate user token on load of the page
     const handleTokenValidate = async () => {
       try {
@@ -67,7 +68,7 @@ function App() {
           {},
           {
             headers: {
-              Authorization: `Bearer ${JSON.parse(token)}`,
+              Authorization: `Bearer ${parsedToken}`,
             },
           }
         );

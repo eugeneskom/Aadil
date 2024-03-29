@@ -1,20 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
+  font-family: "Sen", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #fff;
+  opacity: 0.6;
 }
-
-.product-btn {
-  /* margin-top: 100%; */
-  display: block;
-  text-align: center;
+.swiper-pagination-bullet.swiper-pagination-bullet {
+  background-color: #fff;
 }
