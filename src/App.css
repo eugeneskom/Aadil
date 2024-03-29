@@ -219,6 +219,11 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
 
 .product-card {
   position: relative;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.product-card:hover{
+  box-shadow: 0 0 25px #33333326;
 }
 
 .product-card__list {
@@ -380,6 +385,10 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
     text-transform: uppercase;
     border-radius: 5px;
     background-color: #f1f1f1;
+}
+
+.price-color-standard{
+  color:#ff8a5c;
 }
 
 @media (max-width: 768px) {

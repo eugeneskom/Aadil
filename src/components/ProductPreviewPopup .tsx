@@ -39,8 +39,7 @@ function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
                 <span className={product.OriginalPrice === product.CurrentPrice ? "text-gray-500" : "price-sale-color text-lg"}>
                   {product.CurrentPrice} {product.Currency}
                 </span>
-              )}
-              {" "}
+              )}{" "}
               {product.OriginalPrice !== product.CurrentPrice && (
                 <span className="text-gray-500 line-through ml-2 text-sm">
                   {product.OriginalPrice} {product.Currency}
@@ -62,8 +61,21 @@ function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
             ) : (
               ""
             )}
+            {product.Category && (
+              <p className="text-gray-500 mb-2">
+                Category: <span className="text-black font-bold">{product.Category}</span>{" "}
+              </p>
+            )}
+            {product.SubCategory && (
+              <p className="text-gray-500 mb-2">
+                Category: <span className="text-black font-bold">{product.SubCategory}</span>{" "}
+              </p>
+            )}
+
             <p className="mb-2">Manufacturer: {product.Manufacturer}</p>
-            <NavLink to={`${product.Url}`} target="_blank" rel="noopener noreferrer" className="text-center text-white font-bold uppercase px-4 py-2 rounded-md  mt-auto product-popup__action">Buy It Now</NavLink>
+            <NavLink to={`${product.Url}`} target="_blank" rel="noopener noreferrer" className="text-center text-white font-bold uppercase px-4 py-2 rounded-md  mt-auto product-popup__action">
+              Buy It Now
+            </NavLink>
             {/* Add more product details here */}
           </div>
         </div>

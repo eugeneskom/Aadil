@@ -85,16 +85,17 @@ function ProductCard({ product }: ProductProps) {
         <h3 className="text-lg font-semibold">{product.Name}</h3>
         <p className="text-gray-600 mb-2 font-bold">
           Price:{" "}
+          {product.CurrentPrice && (
+            <span className={product.OriginalPrice === product.CurrentPrice ? "text-gray-500" : "price-color-standard mr-2"}>
+              {product.CurrentPrice} {product.Currency}
+            </span>
+          )}
           {product.OriginalPrice !== product.CurrentPrice && (
             <span className="text-gray-500 line-through">
               {product.OriginalPrice} {product.Currency}
             </span>
           )}
-          {product.CurrentPrice && (
-            <span className={product.OriginalPrice === product.CurrentPrice ? "text-gray-500" : "text-red-500 ml-2"}>
-              {product.CurrentPrice} {product.Currency}
-            </span>
-          )}
+   
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
@@ -102,7 +103,7 @@ function ProductCard({ product }: ProductProps) {
         </p>
       </div>
 
-      <div className="p-4 bg-gray-50">
+      <div className="p-4 ">
         <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
           Read more
         </NavLink>

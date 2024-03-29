@@ -51,38 +51,80 @@ const ProductSection = () => {
     }, new Map<string, Product[]>());
   }
   
-  function sortProductsWithLimit(products: Product[], limit: number): Product[] {
+  // function sortProductsWithLimit(products: Product[], limit: number): Product[] {
+  //   const productsByManufacturer = groupProductsByManufacturer(products);
+  //   const manufacturers = Array.from(productsByManufacturer.keys());
+  //   const sortedProducts: Product[] = [];
+  
+  //   while (manufacturers.length > 0) {
+  //     const currentManufacturers = [...manufacturers];
+  
+  //     for (const manufacturer of currentManufacturers) {
+  //       const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
+  //       const productsToAdd = productsFromManufacturer.splice(0, limit);
+  //       sortedProducts.push(...productsToAdd);
+  
+  //       if (productsFromManufacturer.length === 0) {
+  //         productsByManufacturer.delete(manufacturer);
+  //         manufacturers.splice(manufacturers.indexOf(manufacturer), 1);
+  //       }
+  //     }
+  //   }
+  
+  //   // Add remaining products from manufacturers with more than 4 products
+  //   for (const products of Array.from(productsByManufacturer.values())) {
+  //     sortedProducts.push(...products);
+  //   }
+  
+  //   return sortedProducts;
+  // }
+   
+  // const limit = 4;
+  // const sortedProducts = sortProductsWithLimit(products, limit);
+
+  function sortProductsByManufacturer(products: Product[]): Product[] {
     const productsByManufacturer = groupProductsByManufacturer(products);
     const manufacturers = Array.from(productsByManufacturer.keys());
     const sortedProducts: Product[] = [];
-  
-    while (manufacturers.length > 0) {
-      const currentManufacturers = [...manufacturers];
-  
-      for (const manufacturer of currentManufacturers) {
+    let currentIndex = 0;
+
+    while (productsByManufacturer.size > 0) {
+        const manufacturer = manufacturers[currentIndex];
         const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
-        const productsToAdd = productsFromManufacturer.splice(0, limit);
-        sortedProducts.push(...productsToAdd);
-  
-        if (productsFromManufacturer.length === 0) {
-          productsByManufacturer.delete(manufacturer);
-          manufacturers.splice(manufacturers.indexOf(manufacturer), 1);
+
+        // Add a product from the current manufacturer
+        if (productsFromManufacturer.length > 0) {
+            sortedProducts.push(productsFromManufacturer.shift()!);
         }
-      }
+
+        // Remove the current manufacturer if it has no more products
+        if (productsFromManufacturer.length === 0) {
+            productsByManufacturer.delete(manufacturer);
+            manufacturers.splice(currentIndex, 1);
+        }
+
+        // Move to the next manufacturer index
+        currentIndex = (currentIndex + 1) % manufacturers.length;
     }
-  
-    // Add remaining products from manufacturers with more than 4 products
-    for (const products of Array.from(productsByManufacturer.values())) {
-      sortedProducts.push(...products);
-    }
-  
+
     return sortedProducts;
-  }
-   
-  const limit = 4;
-  const sortedProducts = sortProductsWithLimit(products, limit);
+}
+
+  const sortedProducts = sortProductsByManufacturer(products)
+
+  function getUniqueManufacturers(products: Product[]): string[] {
+    const uniqueManufacturersSet = new Set<string>();
+
+    products.forEach(product => {
+        uniqueManufacturersSet.add(product.Manufacturer.toLowerCase());
+    });
+
+    return Array.from(uniqueManufacturersSet);
+}
+
+const uniqueManufacturers = getUniqueManufacturers(products);
   
-  console.log(sortedProducts);
+  console.log('uniqueManufacturers: ',uniqueManufacturers);
 
 console.log('sortedProducts',sortedProducts);
 
