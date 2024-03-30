@@ -33,7 +33,7 @@ const ProductPage = () => {
   const productSelector = selectProductById(id || "");
   const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
-
+  console.log("ProductPage:",product)
   useEffect(() => {
     const container = document.createElement('div');
     container.innerHTML = product?.Description || '';

@@ -99,7 +99,7 @@ function ProductCard({ product }: ProductProps) {
               {product.CurrentPrice} {product.Currency}
             </span>
           )}
-          {product.OriginalPrice !== product.CurrentPrice && (
+          {product.OriginalPrice && product.OriginalPrice !== product.CurrentPrice && (
             <span className="text-gray-500 line-through">
               {product.OriginalPrice} {product.Currency}
             </span>
