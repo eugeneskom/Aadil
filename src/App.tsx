@@ -23,27 +23,22 @@ import { setScreenWidth } from "./state/screenWidthSlice";
 import SignUpPopup from "./components/auth/SignUpPopup";
 
 function App() {
+  // const user = useSelector(selectUser);
+  // const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector(selectUser);
-  const token = useSelector(selectToken);
-  const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
-  const page = useSelector((state: RootState) => state.products.page);
   const isAuthPopupOpen = useSelector((state: RootState) => state.authPopupState.isAuthPopupOpen);
-  // const wishlist = useSelector(selectWishlist);
+  const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   console.log("isValidToken", isValidToken);
+  const page = useSelector((state: RootState) => state.products.page);
   
-  // const [isAuthPopupOpen, setIsAuthPopupOpen] = useState(false);
-
-  const handleToggleAuthPopup = () => {
-    // setIsAuthPopupOpen(!isAuthPopupOpen);
-  }
-
 
   useEffect(() => {
-    dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
-  }, [dispatch]);
+      dispatch(fetchProductsAsync({ page: page, limit: 40 }) as any);
+  }, [dispatch, page, ]);
 
   useEffect(() => {
+
+    // Fetch wishlist on load of the current user
     const fetchWishlist = async () => {
       try {
         const tokenLocal = localStorage.getItem("jwt") ?? "";
@@ -69,10 +64,12 @@ function App() {
     const handleTokenValidate = async () => {
       try {
         const token = localStorage.getItem("jwt") || "";
+        
         let parsedToken = null;
         if (token) {
           try {
             parsedToken = JSON.parse(token);
+            dispatch(setToken(parsedToken));
           } catch (error) {
             console.error("Error parsing token:", error);
           }
@@ -105,6 +102,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // setting if mobile or desktop on load for handling different ui templates
     const handleResize = () => {
       const isMobile = window.innerWidth < 768;
       dispatch(setScreenWidth(isMobile));

@@ -1,14 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FaHeart } from "react-icons/fa";
 import { Product } from "../types/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../state/store";
-import { selectPage, incrementPage, fetchProductsAsync, selectProducts, selectProductsStatus, selectProductsError } from "../state/products/productsSlice";
-import { NavLink } from "react-router-dom";
-import Image from "../images/bird.jpg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { incrementPage, selectProducts } from "../state/products/productsSlice";
 import ProductCard from "./ProductCard";
+
 interface ProductSectionProps {
   wishlist: string[];
 }
@@ -16,22 +10,11 @@ const ProductSection = () => {
   const dispatch = useDispatch();
   const products: Product[] = useSelector(selectProducts);
 
-  console.log("products", products);
- 
-  // useEffect(() => {
-  //   dispatch(fetchProductsAsync({ page: page, limit: 100 }) as any);
-  // }, [dispatch, page]);
 
   const handleLoadMore = () => {
     dispatch(incrementPage());
   };
 
-  // useEffect(() => {
-  //   dispatch(incrementPage());
-  //   return () => {};
-  // }, []);
-
- 
 
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;

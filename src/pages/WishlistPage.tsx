@@ -77,15 +77,17 @@ const WishlistPage = () => {
   // const wishlist = useSelector(selectWishlist);
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Wishlist</h1>
+    <section className="wishlist-page  py-8 mt-3">
+      <div className="container mx-auto">
+        <div className="wishlist-page__inner">
+        <h1 className="text-3xl font-bold mb-6">Wishlist</h1>
       {productsWishlist.length === 0 ? (
         <p className="text-gray-600">Your wishlist is empty.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pb-2">
           {productsWishlist.map((product) => (
             <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden grid grid-rows-auto gap-4">
-              <img src={product.ImageUrl} alt={product.Name} className="w-full h-48 object-contain" />
+              <img src={product.ImageUrl} alt={product.Name} className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-2">{product.Name}</h2>
                 <p className="text-gray-600 mb-2 font-bold">
@@ -109,7 +111,10 @@ const WishlistPage = () => {
           ))}
         </div>
       )}
-    </div>
+        </div>
+      </div>
+   
+    </section>
   );
 };
 

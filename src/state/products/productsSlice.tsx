@@ -16,7 +16,7 @@ const initialState: ProductsState = {
   products: [],
   status: 'idle',
   error: null,
-  page: 1, // Initial page value
+  page: 0, // Initial page value
   limit: 100, // Initial limit value
 };
 
@@ -26,17 +26,32 @@ interface FetchProductsPayload {
   limit: number;
 }
 
+// export const fetchProductsAsync = createAsyncThunk(
+//   'products/fetchProducts',
+//   async ({ page, limit }: FetchProductsPayload) => {
+//     try {
+//       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
+//       // const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
+//       console.log('response',response.data)
+//       if (response.status !== 200) {
+//         throw new Error('Failed to fetch products');
+//       }
+//       return response.data.products;
+//     } catch (error) {
+//       throw error;
+//     }
+//   }
+// );
 export const fetchProductsAsync = createAsyncThunk(
   'products/fetchProducts',
   async ({ page, limit }: FetchProductsPayload) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
-      // const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
-      console.log('response',response.data)
+      console.log('response', response.data);
       if (response.status !== 200) {
         throw new Error('Failed to fetch products');
       }
-      return response.data.products;
+      return { products: response.data.products, page: response.data.page };
     } catch (error) {
       throw error;
     }
@@ -58,8 +73,14 @@ const productsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchProductsAsync.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.products = state.products.concat(action.payload);
+        if (action.payload.page === state.page) {
+          // Skip updating the products if the page is the same
+          state.status = 'succeeded';
+        } else {
+          state.status = 'succeeded';
+          state.products = state.products.concat(action.payload.products);
+          state.page = action.payload.page;
+        }
       })
       .addCase(fetchProductsAsync.rejected, (state, action) => {
         state.status = 'failed';

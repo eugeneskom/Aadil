@@ -39,6 +39,8 @@ function ProductCard({ product }: ProductProps) {
   }
 
   const handleWislistIconClick = (productId: string) => {
+
+    console.log('handleWislistIconClick',token)
     if (token) {
       toggleWishlistHandler(productId)
     } else {
