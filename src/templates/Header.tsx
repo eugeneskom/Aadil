@@ -42,7 +42,7 @@ const Header = () => {
   return (
     <header className="">
       <div className="container">
-        <div className="header__inner py-4 px-6 flex items-center justify-between ">
+        <div className="header__inner py-4 flex items-center justify-between ">
           {isMobile ? (
             <button onClick={handleToggleMenu}>
               <RxHamburgerMenu size={30} className="cursor-pointer" />
