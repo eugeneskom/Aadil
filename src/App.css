@@ -222,7 +222,7 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   transition: all 0.3s ease-in-out 0s;
 }
 .product-card .sale-percentage {
-  position:absolute;
+  position: absolute;
   top: 10px;
   left: 10px;
   border-radius: 5px;
@@ -230,7 +230,7 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   background-color: #ff472b;
   display: inline-block;
   padding: 0px 5px;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .product-card:hover {
@@ -401,6 +401,84 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   color: #ff8a5c;
 }
 
+
+
+/* SIGN UP POPUP */
+
+
+.signup-popup__inner{
+  max-width: 960px;
+  width: 100%;
+  display: flex;
+  column-gap: 2rem;
+  position: relative;
+}
+
+.signup-popup__close-btn{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+  color: #222;
+  cursor: pointer;
+}
+
+.signup-popup .social-signup-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+  width: 100%;
+}
+.signup-popup .social-signup-btn .signup-google-btn {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.signup-popup .signup-popup__left {
+  max-width: 50%;
+  /* flex-direction: column;
+  column-gap: 1rem; */
+}
+
+.signup-popup__btns {
+  display: flex;
+  row-gap: 1rem;
+  flex-direction: column;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.divider p {
+  margin: 0 20px;
+}
+
+.signup-popup__right{
+  width: 50%;
+  background-image: url('./assets/img/signup-popup-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 @media (max-width: 768px) {
   .header__inner {
     flex-wrap: wrap;
@@ -528,7 +606,6 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
     opacity: 1;
     visibility: visible;
   }
-  
 }
 
 @media (max-width: 568px) {
