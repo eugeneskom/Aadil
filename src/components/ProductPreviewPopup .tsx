@@ -2,6 +2,7 @@ import React from "react";
 import { Product } from "../types/Product";
 import { IoCloseOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import { calculateSalePercentage } from "../helpers";
 interface ProductPreviewPopupProps {
   product: Product;
   onClick: () => void;
@@ -9,7 +10,8 @@ interface ProductPreviewPopupProps {
 
 function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
   console.log("ProductPreviewPopup", product, product.Colors, product.Colors.length);
-
+  const salePercentage = calculateSalePercentage(product);
+  console.log('salePercentage',salePercentage)
   function extractTextFromHTML(htmlString: string) {
     const tempElement = document.createElement("div");
     tempElement.innerHTML = htmlString;

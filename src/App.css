@@ -221,6 +221,17 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   position: relative;
   transition: all 0.3s ease-in-out 0s;
 }
+.product-card .sale-percentage {
+  position:absolute;
+  top: 10px;
+  left: 10px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #ff472b;
+  display: inline-block;
+  padding: 0px 5px;
+  font-size:13px;
+}
 
 .product-card:hover {
   box-shadow: 0 0 25px #33333326;
@@ -506,12 +517,18 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
     border-bottom: 1px solid rgba(34, 34, 34, 0.1);
   }
 
-  .header__action-btns{
+  .header__action-btns {
     margin-top: 1rem;
   }
-  .header__action-btns .header__special-prices{
+  .header__action-btns .header__special-prices {
     border: 1px solid #222;
   }
+
+  .product-card__header .product-card__list {
+    opacity: 1;
+    visibility: visible;
+  }
+  
 }
 
 @media (max-width: 568px) {
@@ -526,7 +543,7 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   .hero__inner .col.center {
     width: 90%;
   }
-  .header__inner{
+  .header__inner {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }

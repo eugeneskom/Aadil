@@ -11,9 +11,10 @@ import axios from "axios";
 // import { setWishlist, toggleWishlist } from "../state/wishlist/wishlistSlice";
 import { selectToken } from "../state/token/tokenSlice";
 import { toggleWishlist } from "../state/wishlist/wishlistSlice";
-import { IoEyeOutline } from "react-icons/io5";
+import { IoBagAddOutline, IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
+import { calculateSalePercentage } from "../helpers";
 interface ProductProps {
   product: Product;
   isWishlist?: boolean;
@@ -21,14 +22,14 @@ interface ProductProps {
 function ProductCard({ product, isWishlist }: ProductProps) {
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const [showProductPreview, setShowProductPreview] = useState(false);
-  // const user = useSelector(selectUser);
   const token = useSelector(selectToken);
   const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
-
-  // const isInWishlist = wishlistItems.find((item) => item.Id === product.Id);
   const isInWishlist = wishlistItems.includes(product.Id);
 
+  // Calculate the sale percentage
+  const salePercentage = calculateSalePercentage(product);
+  
   useEffect(() => {
     // Checking if the image url is valid, if not the product card won't be rendered
     const img = new Image();
@@ -42,10 +43,9 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   }
 
   const handleWislistIconClick = (productId: string) => {
-
-    console.log('handleWislistIconClick',token)
+    console.log("handleWislistIconClick", token);
     if (token) {
-      toggleWishlistHandler(productId)
+      toggleWishlistHandler(productId);
     } else {
       dispatch(toggleAuthPopup());
     }
@@ -80,11 +80,17 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   return (
     <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
       <div className="product-card__header">
+        {salePercentage !== null && <div className="sale-percentage "> - {salePercentage}%</div>}
         <ul className="product-card__list">
           <li className="product-card__item">
             <button onClick={toggleProductPreview} type="button" className="m-2 text-white">
               <IoEyeOutline size={25} />
             </button>
+          </li>
+          <li className="product-card__item">
+            <NavLink to={`${product.Url}`} target="_blank" type="button" className="a right-0 m-2 ">
+              <IoBagAddOutline size={20} className="text-white" />
+            </NavLink>
           </li>
           <li className="product-card__item">
             <button onClick={() => handleWislistIconClick(product.Id)} type="button" className="a right-0 m-2 ">
@@ -120,9 +126,13 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
           Read more
         </NavLink>
-        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
-          Buy now
-        </NavLink>
+        {isWishlist ? (
+          <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+            Buy now
+          </NavLink>
+        ) : (
+          ""
+        )}
       </div>
       {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}
     </div>

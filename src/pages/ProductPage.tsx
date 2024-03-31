@@ -3,8 +3,11 @@ import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
 import { useParams } from "react-router-dom";
 import { RootState } from "../state/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { toggleWishlist } from "../state/wishlist/wishlistSlice";
+import { selectToken } from "../state/token/tokenSlice";
 interface ProductPageProps {
   product: Product;
 }
@@ -31,18 +34,20 @@ const SimilarProducts: React.FC<{ products: Product[] }> = ({ products }) => (
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
+  const token = useSelector(selectToken);
+  const dispatch = useDispatch();
   const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
-  console.log("ProductPage:",product)
+  console.log("ProductPage:", product);
   useEffect(() => {
-    const container = document.createElement('div');
-    container.innerHTML = product?.Description || '';
+    const container = document.createElement("div");
+    container.innerHTML = product?.Description || "";
 
     // Find all video elements in the HTML content
-    const videos = container.querySelectorAll('video');
+    const videos = container.querySelectorAll("video");
 
     // Loop through each video element
-    videos.forEach(video => {
+    videos.forEach((video) => {
       // Mute the video
       video.muted = true;
 
@@ -51,13 +56,37 @@ const ProductPage = () => {
     });
   }, [product?.Description]);
 
+  const toggleWishlistHandler = async (productId: string) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
+        { productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const { data } = response;
+      if (data.success) {
+        dispatch(toggleWishlist(productId));
+      }
+      console.log("toggleWishlist", response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to toggle product in wishlist");
+    }
+  };
+
   console.log("filteredProducts", filteredProducts);
   if (id === undefined || product === undefined) return <h1>Product id is undefined</h1>;
-  // Update your component to use the new selector
-  // For example:
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <NavLink to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="block mb-4 go-back-arrow text-gray-600 hover:text-gray-800 transition duration-300">
+    <div
+      className="container "
+      // className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+    >
+      <NavLink to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="block mt-5 mb-5 ml-3 go-back-arrow text-gray-600 hover:text-gray-800 transition duration-300">
         <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
@@ -88,16 +117,28 @@ const ProductPage = () => {
             ""
           )}
 
-            {product.Category && <p className="text-gray-500 mb-2">Category: <span className="text-black font-bold">{product.Category}</span>{" "}</p>}
-            {product.SubCategory && <p className="text-gray-500 mb-2">Category: <span className="text-black font-bold">{product.SubCategory}</span>{" "}</p>}
+          {product.Category && (
+            <p className="text-gray-500 mb-2">
+              Category: <span className="text-black font-bold">{product.Category}</span>{" "}
+            </p>
+          )}
+          {product.SubCategory && (
+            <p className="text-gray-500 mb-2">
+              Category: <span className="text-black font-bold">{product.SubCategory}</span>{" "}
+            </p>
+          )}
 
           <div className="mt-8 product-page__actions">
-            <button type="button" className="product-page__add-wishlist inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button
+              onClick={() => toggleWishlistHandler(product.Id)}
+              type="button"
+              className="product-page__add-wishlist inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               Add to Wishlist
             </button>
-            <button type="button" className="product-page__buy inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <NavLink to={`${product.Url}`} target="_blank" className="product-page__buy inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               But it now
-            </button>
+            </NavLink>
           </div>
         </div>
       </div>
