@@ -16,14 +16,17 @@ import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
 interface ProductProps {
   product: Product;
+  isWishlist?: boolean;
 }
-function ProductCard({ product }: ProductProps) {
+function ProductCard({ product, isWishlist }: ProductProps) {
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const [showProductPreview, setShowProductPreview] = useState(false);
   // const user = useSelector(selectUser);
   const token = useSelector(selectToken);
   const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+
+  // const isInWishlist = wishlistItems.find((item) => item.Id === product.Id);
   const isInWishlist = wishlistItems.includes(product.Id);
 
   useEffect(() => {
@@ -113,9 +116,12 @@ function ProductCard({ product }: ProductProps) {
         </p>
       </div>
 
-      <div className="p-4 ">
+      <div className={`p-4 ${isWishlist ? "flex gap-2" : ""}`}>
         <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
           Read more
+        </NavLink>
+        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+          Buy now
         </NavLink>
       </div>
       {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}

@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { RootState } from "../state/store";
-import { selectWishlist } from "../state/wishlist/wishlistSlice";
+import { selectWishlistItems } from "../state/wishlist/wishlistSlice";
 import { FaRegBookmark } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -15,7 +15,7 @@ const Header = () => {
   const isMobile = useSelector((state: RootState) => state.screenWidth.isMobile);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const wishlist: string[] = useSelector(selectWishlist);
+  const wishlist: string[] = useSelector(selectWishlistItems);
   const [openSubmenu, setOpenSubmenu] = useState("");
 
   const handleSearchToggle = () => {

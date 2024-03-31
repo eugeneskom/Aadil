@@ -50,7 +50,7 @@ function App() {
           },
         });
         console.log("fetch wishlist", response.data);
-        dispatch(setWishlist(response.data.wishlist));
+        dispatch(setWishlist(response.data.products));
       } catch (error) {
         throw new Error("Failed to fetch wishlist");
       }
