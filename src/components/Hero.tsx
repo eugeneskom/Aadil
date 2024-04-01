@@ -44,7 +44,7 @@ const HeroSection = () => {
               pagination={{
                 clickable: true,
               }}
-              onSwiper={(swiper: any) => console.log(swiper)}
+              // onSwiper={(swiper: any) => console.log(swiper)}
               modules={[Pagination, Autoplay]}
             >
               <SwiperSlide>
@@ -60,7 +60,7 @@ const HeroSection = () => {
               </SwiperSlide>
 
               <SwiperSlide>
-                <img src={centerImg} height={100} alt="" className="w-full" />
+                <img src={centerImg} height={450} alt="" className="w-full" />
                 <div className="hero__content">
                   <p className="hero__text">All your needs</p>
                   <h2 className="hero__title">Products on sale</h2>
@@ -72,7 +72,7 @@ const HeroSection = () => {
               </SwiperSlide>
 
               <SwiperSlide>
-                <img src={centerImg} height={100} alt="" className="w-full" />
+                <img src={centerImg} height={450} alt="" className="w-full" />
                 <div className="hero__content">
                   <p className="hero__text">All your needs</p>
                   <h2 className="hero__title">Products on sale</h2>
@@ -85,7 +85,7 @@ const HeroSection = () => {
             </Swiper>
           </div>
           <div className="col right w-1/4">
-            <img src={rightImg} height={100} alt="" className="w-full" />
+            <img src={rightImg} height={450} alt="" className="w-full" />
             <div className="hero__content">
               <h2 className="hero__title">On sale</h2>
               <NavLink to={`/`} className="btn-style hero-shop-now">

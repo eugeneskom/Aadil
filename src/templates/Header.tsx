@@ -24,20 +24,20 @@ const Header = () => {
   };
   const handleToggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
-    setOpenSubmenu('');
+    setOpenSubmenu("");
   };
   const handleOpenSubmenu = (menu: string) => {
-    if(menu === openSubmenu) {
-      setOpenSubmenu('');
+    if (menu === openSubmenu) {
+      setOpenSubmenu("");
       return;
     }
     setOpenSubmenu(menu);
-  }
+  };
 
   // console.log("isMobile", isMobile);
 
   const googleAuth = () => {
-    window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, "_self");
+    window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
   };
 
   return (
@@ -115,7 +115,7 @@ const Header = () => {
 
             {/* Sign Up Button */}
             {!isValidToken ? (
-              <button type="button" onClick={googleAuth} className="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition-colors duration-300">
+              <button type="button" onClick={googleAuth} className="bg-black text-white px-4 py-2 rounded hover:opacity-80 transition-opacity duration-300">
                 Sign Up
               </button>
             ) : (
@@ -148,9 +148,7 @@ const Header = () => {
                   <span className="link-title sp-link-title">About</span>
                 </NavLink>
               </li>
-              <li 
-              onClick={() => handleOpenSubmenu('pages')}
-              className={`nav-bottom__item ${openSubmenu === 'pages' ? 'active' : ""}`}>
+              <li onClick={() => handleOpenSubmenu("pages")} className={`nav-bottom__item ${openSubmenu === "pages" ? "active" : ""}`}>
                 <button className="nav__link">
                   <span className="link-title sp-link-title">Pages</span>
                   <IoIosArrowDown className="text-white arrow-down" />
@@ -164,41 +162,16 @@ const Header = () => {
                       </span> */}
                     </NavLink>
 
-                    {/* <ul className="supmenu-dropdown collapse" id="sup-collapse-about-us">
-                      <li className="supmenu-li">
-                        <button type="button" className="suplink-title">
-                          <span className="sp-link-title">About us 01</span>
-                        </button>
-                      </li>
-
-                      <li className="supmenu-li">
-                        <button type="button" className="suplink-title">
-                          <span className="sp-link-title">About us 02</span>
-                        </button>
-                      </li>
-                    </ul> */}
                   </li>
 
                   <li className="submenu-li">
-                    <button type="button"  className="sublink-title">
+                    <button type="button" className="sublink-title">
                       <span className="sp-link-title">Contact us</span>
                       {/* <span className="menu-arrow">
                         <MdKeyboardArrowRight />
                       </span> */}
                     </button>
-                    {/* <ul className="supmenu-dropdown collapse" id="sup-collapse-contact-us">
-                      <li className="supmenu-li">
-                        <NavLink to="/pages/contact" className="suplink-title">
-                          <span className="sp-link-title">Contact us 01</span>
-                        </NavLink>
-                      </li>
-
-                      <li className="supmenu-li">
-                        <NavLink to="/pages/contact-us-02" className="suplink-title">
-                          <span className="sp-link-title">Contact us 02</span>
-                        </NavLink>
-                      </li>
-                    </ul> */}
+               
                   </li>
 
                   <li className="submenu-li">
@@ -243,6 +216,11 @@ const Header = () => {
                     </NavLink>
                   </li>
                 </ul>
+              </li>
+              <li className="nav-bottom__item">
+                <NavLink to="/dashboard" className="nav__link">
+                  <span className="link-title sp-link-title">Dashboard</span>
+                </NavLink>
               </li>
             </ul>
             <div className="header__action-btns">

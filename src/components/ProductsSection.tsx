@@ -10,19 +10,15 @@ const ProductSection = () => {
   const dispatch = useDispatch();
   const products: Product[] = useSelector(selectProducts);
 
-
   const handleLoadMore = () => {
     dispatch(incrementPage());
   };
-
 
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;
   const displayedProductsCount = displayedProducts.length;
   const loadingPercentage = totalProducts === 0 ? 0 : (displayedProductsCount / totalProducts) * 100;
 
-  
-  
   function groupProductsByManufacturer(products: Product[]): Map<string, Product[]> {
     return products.reduce((map, product) => {
       const manufacturer = product.Manufacturer.toLowerCase();
@@ -33,37 +29,6 @@ const ProductSection = () => {
       return map;
     }, new Map<string, Product[]>());
   }
-  
-  // function sortProductsWithLimit(products: Product[], limit: number): Product[] {
-  //   const productsByManufacturer = groupProductsByManufacturer(products);
-  //   const manufacturers = Array.from(productsByManufacturer.keys());
-  //   const sortedProducts: Product[] = [];
-  
-  //   while (manufacturers.length > 0) {
-  //     const currentManufacturers = [...manufacturers];
-  
-  //     for (const manufacturer of currentManufacturers) {
-  //       const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
-  //       const productsToAdd = productsFromManufacturer.splice(0, limit);
-  //       sortedProducts.push(...productsToAdd);
-  
-  //       if (productsFromManufacturer.length === 0) {
-  //         productsByManufacturer.delete(manufacturer);
-  //         manufacturers.splice(manufacturers.indexOf(manufacturer), 1);
-  //       }
-  //     }
-  //   }
-  
-  //   // Add remaining products from manufacturers with more than 4 products
-  //   for (const products of Array.from(productsByManufacturer.values())) {
-  //     sortedProducts.push(...products);
-  //   }
-  
-  //   return sortedProducts;
-  // }
-   
-  // const limit = 4;
-  // const sortedProducts = sortProductsWithLimit(products, limit);
 
   function sortProductsByManufacturer(products: Product[]): Product[] {
     const productsByManufacturer = groupProductsByManufacturer(products);
@@ -72,44 +37,44 @@ const ProductSection = () => {
     let currentIndex = 0;
 
     while (productsByManufacturer.size > 0) {
-        const manufacturer = manufacturers[currentIndex];
-        const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
+      const manufacturer = manufacturers[currentIndex];
+      const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
 
-        // Add a product from the current manufacturer
-        if (productsFromManufacturer.length > 0) {
-            sortedProducts.push(productsFromManufacturer.shift()!);
-        }
+      // Add a product from the current manufacturer
+      if (productsFromManufacturer.length > 0) {
+        sortedProducts.push(productsFromManufacturer.shift()!);
+      }
 
-        // Remove the current manufacturer if it has no more products
-        if (productsFromManufacturer.length === 0) {
-            productsByManufacturer.delete(manufacturer);
-            manufacturers.splice(currentIndex, 1);
-        }
+      // Remove the current manufacturer if it has no more products
+      if (productsFromManufacturer.length === 0) {
+        productsByManufacturer.delete(manufacturer);
+        manufacturers.splice(currentIndex, 1);
+      }
 
-        // Move to the next manufacturer index
-        currentIndex = (currentIndex + 1) % manufacturers.length;
+      // Move to the next manufacturer index
+      currentIndex = (currentIndex + 1) % manufacturers.length;
     }
 
     return sortedProducts;
-}
+  }
 
-  const sortedProducts = sortProductsByManufacturer(products)
+  const sortedProducts = sortProductsByManufacturer(products);
 
   function getUniqueManufacturers(products: Product[]): string[] {
     const uniqueManufacturersSet = new Set<string>();
 
-    products.forEach(product => {
-        uniqueManufacturersSet.add(product.Manufacturer.toLowerCase());
+    products.forEach((product) => {
+      uniqueManufacturersSet.add(product.Manufacturer.toLowerCase());
     });
 
     return Array.from(uniqueManufacturersSet);
-}
+  }
 
-const uniqueManufacturers = getUniqueManufacturers(products);
-  
-  console.log('uniqueManufacturers: ',uniqueManufacturers);
+  const uniqueManufacturers = getUniqueManufacturers(products);
 
-console.log('sortedProducts',sortedProducts);
+  // console.log('uniqueManufacturers: ',uniqueManufacturers);
+
+  // console.log('sortedProducts',sortedProducts);
 
   return (
     <div className="container mx-auto py-8 overflow-hidden">
@@ -127,13 +92,7 @@ console.log('sortedProducts',sortedProducts);
       </div>
 
       {/* Products */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {sortedProducts &&
-          sortedProducts.length > 0 &&
-          sortedProducts.map((product) => (
-            <ProductCard product={product}/>
-          ))}
-      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{sortedProducts && sortedProducts.length > 0 && sortedProducts.map((product) => <ProductCard product={product} />)}</div>
 
       <div className="flex flex-col items-center mt-6">
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">

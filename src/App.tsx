@@ -24,6 +24,7 @@ import SignUpPopup from "./components/auth/SignUpPopup";
 import UserAccount from "./pages/UserAccount";
 import { parse } from "path";
 import { validateToken } from "./state/token/isValidToken";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   // const user = useSelector(selectUser);
@@ -63,47 +64,13 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    // validate user token on load of the page
-    // const handleTokenValidate = async () => {
-    //   try {
-    //     const token = localStorage.getItem("jwt") || "";
+    const token = localStorage.getItem("jwt") || "";
 
-    //     let parsedToken = null;
-    //     if (token) {
-    //       try {
-    //         parsedToken = JSON.parse(token);
-    //         dispatch(setToken(parsedToken));
-    //       } catch (error) {
-    //         parsedToken = "";
-    //         console.error("Error parsing token:", error);
-    //       }
-    //     }
-
-    //     console.log('parsedToken', parsedToken)
-    //     const response = await axios.post(
-    //       `${process.env.REACT_APP_API_URL}/api/validate-token`,
-    //       {},
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${parsedToken}`,
-    //         },
-    //       }
-    //     );
-    //     if (response.data && response.data.success) {
-    //       dispatch(setTokenValidity({ isValid: true, error: null }));
-    //       console.log("Token is valid");
-    //     } else {
-    //       dispatch(setTokenValidity({ isValid: false, error: null }));
-    //       console.log("Token validation failed:", response.data.message);
-    //     }
-    //   } catch (error) {
-    //     console.error("Failed to validate token:", error);
-    //     dispatch(setTokenValidity({ isValid: false, error: null }));
-    //   }
-    // };
-
-    // handleTokenValidate();
-
+    let parsedToken = null;
+    if (token) {
+      parsedToken = JSON.parse(token);
+      dispatch(setToken(parsedToken));
+    }
     return () => {};
   }, []);
 
@@ -112,10 +79,9 @@ function App() {
     let parsedToken = null;
     if (tokenLocal) {
       parsedToken = JSON.parse(tokenLocal);
+      dispatch(validateToken(parsedToken));
+      dispatch(fetchWishlistProducts(parsedToken));
     }
-
-    dispatch(validateToken(parsedToken));
-    dispatch(fetchWishlistProducts(parsedToken));
 
     return () => {};
   }, []);
@@ -152,6 +118,7 @@ function App() {
                 </>
               }
             />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
             <Route path="/product-page/:id" element={<ProductPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
