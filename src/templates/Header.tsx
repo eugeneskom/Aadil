@@ -10,6 +10,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { GoTag } from "react-icons/go";
 import { RxHamburgerMenu } from "react-icons/rx";
+
 const Header = () => {
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   const isMobile = useSelector((state: RootState) => state.screenWidth.isMobile);
@@ -93,7 +94,7 @@ const Header = () => {
               ""
             )}
             {/* Notification Bell */}
-            {!isMobile && (
+            {!isMobile && isValidToken && (
               <button className="header__action hover:text-gray-300 transition-colors duration-300">
                 <BiBell size={24} />
               </button>
@@ -104,7 +105,7 @@ const Header = () => {
               <BiHeart size={24} />
               {wishlist && wishlist.length > 0 ? <span className="wishlist-counter"> {wishlist.length}</span> : ""}
             </NavLink>
-            {!isMobile && (
+            {!isMobile && isValidToken && (
               <NavLink to="/user-account" className="header__action hover:text-gray-300 transition-colors duration-300">
                 <BiUser size={24} />
               </NavLink>

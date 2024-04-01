@@ -16,11 +16,14 @@ import { setUser, selectUser } from "./state/user/userSlice";
 import { RootState, AppDispatch } from "./state/store";
 import { setToken } from "./state/token/tokenSlice";
 import { selectToken } from "./state/token/tokenSlice";
-import { setWishlist } from "./state/wishlist/wishlistSlice";
+import { fetchWishlistProducts } from "./state/wishlist/wishlistSlice";
 import { fetchProductsAsync } from "./state/products/productsSlice";
-import { setTokenValidity } from "./state/token/isValidToken";
+// import { setTokenValidity } from "./state/token/isValidToken";
 import { setScreenWidth } from "./state/screenWidthSlice";
 import SignUpPopup from "./components/auth/SignUpPopup";
+import UserAccount from "./pages/UserAccount";
+import { parse } from "path";
+import { validateToken } from "./state/token/isValidToken";
 
 function App() {
   // const user = useSelector(selectUser);
@@ -30,14 +33,12 @@ function App() {
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   console.log("isValidToken", isValidToken);
   const page = useSelector((state: RootState) => state.products.page);
-  
 
   useEffect(() => {
-      dispatch(fetchProductsAsync({ page: page, limit: 40 }) as any);
-  }, [dispatch, page, ]);
+    dispatch(fetchProductsAsync({ page: page, limit: 40 }) as any);
+  }, [dispatch, page]);
 
   useEffect(() => {
-
     // Fetch wishlist on load of the current user
     const fetchWishlist = async () => {
       try {
@@ -50,53 +51,71 @@ function App() {
           },
         });
         console.log("fetch wishlist", response.data);
-        dispatch(setWishlist(response.data.products));
+        // dispatch(setWishlist(response.data.products));
       } catch (error) {
         throw new Error("Failed to fetch wishlist");
       }
     };
 
     fetchWishlist();
+
+    // dispatch(fetchWishlistProducts(token));
   }, [dispatch]);
 
   useEffect(() => {
     // validate user token on load of the page
-    const handleTokenValidate = async () => {
-      try {
-        const token = localStorage.getItem("jwt") || "";
-        
-        let parsedToken = null;
-        if (token) {
-          try {
-            parsedToken = JSON.parse(token);
-            dispatch(setToken(parsedToken));
-          } catch (error) {
-            console.error("Error parsing token:", error);
-          }
-        }
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/validate-token`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${parsedToken}`,
-            },
-          }
-        );
-        if (response.data && response.data.success) {
-          dispatch(setTokenValidity({ isValid: true, error: null }));
-          console.log("Token is valid");
-        } else {
-          dispatch(setTokenValidity({ isValid: false, error: null }));
-          console.log("Token validation failed:", response.data.message);
-        }
-      } catch (error) {
-        console.error("Failed to validate token:", error);
-        dispatch(setTokenValidity({ isValid: false, error: null }));
-      }
-    };
+    // const handleTokenValidate = async () => {
+    //   try {
+    //     const token = localStorage.getItem("jwt") || "";
 
-    handleTokenValidate();
+    //     let parsedToken = null;
+    //     if (token) {
+    //       try {
+    //         parsedToken = JSON.parse(token);
+    //         dispatch(setToken(parsedToken));
+    //       } catch (error) {
+    //         parsedToken = "";
+    //         console.error("Error parsing token:", error);
+    //       }
+    //     }
+
+    //     console.log('parsedToken', parsedToken)
+    //     const response = await axios.post(
+    //       `${process.env.REACT_APP_API_URL}/api/validate-token`,
+    //       {},
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${parsedToken}`,
+    //         },
+    //       }
+    //     );
+    //     if (response.data && response.data.success) {
+    //       dispatch(setTokenValidity({ isValid: true, error: null }));
+    //       console.log("Token is valid");
+    //     } else {
+    //       dispatch(setTokenValidity({ isValid: false, error: null }));
+    //       console.log("Token validation failed:", response.data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error("Failed to validate token:", error);
+    //     dispatch(setTokenValidity({ isValid: false, error: null }));
+    //   }
+    // };
+
+    // handleTokenValidate();
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const tokenLocal = localStorage.getItem("jwt") ?? "";
+    let parsedToken = null;
+    if (tokenLocal) {
+      parsedToken = JSON.parse(tokenLocal);
+    }
+
+    dispatch(validateToken(parsedToken));
+    dispatch(fetchWishlistProducts(parsedToken));
 
     return () => {};
   }, []);
@@ -136,6 +155,7 @@ function App() {
             <Route path="/login/success" element={<LoginCallback />} />
             <Route path="/product-page/:id" element={<ProductPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/user-account" element={<UserAccount />} />
           </Routes>
         </main>
       </Router>

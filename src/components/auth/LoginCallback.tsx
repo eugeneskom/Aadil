@@ -6,11 +6,14 @@ import { AppDispatch } from "../../state/store";
 import { setUser } from "../../state/user/userSlice";
 import { setToken } from "../../state/token/tokenSlice";
 import { useNavigate } from "react-router-dom";
+import { validateToken } from "../../state/token/isValidToken";
+import { fetchWishlistProducts } from "../../state/wishlist/wishlistSlice";
+
 const LoginCallback = () => {
   const [userData, setUserData] = useState<UserType | {}>({});
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -25,12 +28,24 @@ const LoginCallback = () => {
 
   //   fetchUserData();
 
-
   // }, []);
 
   // console.log('userData',userData)
 
-  
+  // useEffect(() => {
+  //   const tokenLocal = localStorage.getItem("jwt") ?? "";
+  //   let parsedToken = null;
+  //   if (tokenLocal) {
+  //     parsedToken = JSON.parse(tokenLocal);
+  //   }
+  //   console.log('parsedToken',parsedToken)
+  //   dispatch(validateToken(parsedToken));
+
+  //   return () => {
+
+  //   }
+  // }, [])
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -41,7 +56,14 @@ const LoginCallback = () => {
           dispatch(setToken(data.user.token));
           localStorage.setItem("jwt", JSON.stringify(data.user.token));
           localStorage.setItem("user", JSON.stringify(data.user));
-          navigate('/')
+          console.log("parseToken", data.user.token, data.user);
+          // let parsedToken = null;
+          // parsedToken = JSON.parse(data.user.token);
+          // console.log("parseToken", parsedToken);
+          dispatch(validateToken(data.user.token));
+          dispatch(fetchWishlistProducts(data.user.token));
+
+          navigate("/");
         }
       } catch (error) {
         console.log("getUser: ", error);
@@ -49,9 +71,6 @@ const LoginCallback = () => {
     };
 
     getUser();
-    // const tokenLocal = localStorage.getItem("jwt") ?? "";
-
-    // dispatch(setToken(JSON.parse(tokenLocal)));
 
     return () => {};
   }, []);
