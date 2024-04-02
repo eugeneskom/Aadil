@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { toggleWishlistAsync } from "../state/wishlist/wishlistSlice";
 import { selectToken } from "../state/token/tokenSlice";
+import CountdownTimer from "../components/CountDownTimer";
+import ShareComponent from "../components/ShareComponent";
+
 interface ProductPageProps {
   product: Product;
 }
@@ -40,7 +43,7 @@ const ProductPage = () => {
   console.log("ProductPage:", product);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const isInWishlist = wishlistItems.includes(id ?? "");
-
+  const isSale = product && product.CurrentPrice && product.OriginalPrice && product.CurrentPrice < product.OriginalPrice;
   useEffect(() => {
     const container = document.createElement("div");
     container.innerHTML = product?.Description || "";
@@ -68,8 +71,7 @@ const ProductPage = () => {
 
   return (
     <div
-      className="container "
-      // className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      className="container  overflow-hidden"
     >
       <NavLink to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="block mt-5 mb-5 ml-3 go-back-arrow text-gray-600 hover:text-gray-800 transition duration-300">
         <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,21 +80,30 @@ const ProductPage = () => {
       </NavLink>
       <div className="lg:flex lg:-mx-4">
         <div className="lg:px-4 lg:w-1/2">
-          <div className="aspect-w-3 aspect-h-4 rounded-lg overflow-hidden">
-            <img src={product.ImageUrl} alt={product.Name} className="object-center object-cover" />
+          <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
+            <img src={product.ImageUrl} alt={product.Name} className="object-center object-cover w-full h-auto" />
           </div>
         </div>
         <div className="lg:px-4 lg:w-1/2 mt-8 lg:mt-0">
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">{product.Name}</h1>
-          <p className="mt-3 text-xl text-gray-900">
-            {product.CurrentPrice} {product.Currency}
-          </p>
-          <p className="text-gray-500 mb-2">
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-5">{product.Name}</h1>
+          <div className="product-page__price mb-5">
+            {product.CurrentPrice && (
+              <span className={product.OriginalPrice === product.CurrentPrice ? "current text-gray-500" : " current price-color-standard mr-2"}>
+                {product.CurrentPrice} {product.Currency}
+              </span>
+            )}
+            {product.OriginalPrice && product.OriginalPrice !== product.CurrentPrice && (
+              <span className="text-gray-500 line-through">
+                {product.OriginalPrice} {product.Currency}
+              </span>
+            )}
+          </div>
+          <p className="text-gray-500 mb-5">
             {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
             From: <span className="text-black font-bold">{product.Manufacturer}</span>{" "}
           </p>
           {product.Colors.length > 0 ? (
-            <p className="mb-2">
+            <p className="mb-3">
               Colors:{" "}
               {product.Colors.map((color) => (
                 <span>{color}</span>
@@ -103,35 +114,43 @@ const ProductPage = () => {
           )}
 
           {product.Category && (
-            <p className="text-gray-500 mb-2">
+            <p className="text-gray-500 mb-5">
               Category: <span className="text-black font-bold">{product.Category}</span>{" "}
             </p>
           )}
           {product.SubCategory && (
-            <p className="text-gray-500 mb-2">
+            <p className="text-gray-500 mb-5">
               Category: <span className="text-black font-bold">{product.SubCategory}</span>{" "}
             </p>
           )}
 
-          <div className="mt-8 product-page__actions">
+          <div className="mt-8 product-page__actions flex space-x-4 mb-5">
             <button
               onClick={() => toggleWishlistHandler(product.Id)}
               type="button"
-              className="product-page__add-wishlist inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="product-page__add-wishlist flex-1 inline-flex items-center justify-center px-6 py-5 border border-transparent text-base font-medium rounded-md text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
             </button>
-            <NavLink to={`${product.Url}`} target="_blank" className="product-page__buy inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              But it now
+            <NavLink to={`${product.Url}`} target="_blank" className="product-page__buy flex-1 inline-flex items-center justify-center px-6 py-5 border border-transparent text-base font-medium rounded-md text-black bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              Buy it now
             </NavLink>
+          </div>
+          {/* {isSale ? ( */}
+            <div className="mb-5">
+              <CountdownTimer />
+            </div>
+          {/* ) : ( */}
+            {/* "" */}
+          {/* )} */}
+          <div className="mb-5">
+            <ShareComponent />
           </div>
         </div>
       </div>
       <div className="mt-6">
         <h3 className="sr-only">Description</h3>
         <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: product.Description }} />
-
-        {/* <div className="text-base text-gray-700 space-y-6">{product.Description}</div> */}
       </div>
       {filteredProducts.length > 0 && <SimilarProducts products={filteredProducts.slice(0, 5)} />}
     </div>

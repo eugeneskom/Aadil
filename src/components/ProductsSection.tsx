@@ -2,6 +2,7 @@ import { Product } from "../types/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { incrementPage, selectProducts } from "../state/products/productsSlice";
 import ProductCard from "./ProductCard";
+import { useState } from "react";
 
 interface ProductSectionProps {
   wishlist: string[];
@@ -75,6 +76,11 @@ const ProductSection = () => {
   // console.log('uniqueManufacturers: ',uniqueManufacturers);
 
   // console.log('sortedProducts',sortedProducts);
+  const [value, setValue] = useState<number[]>([20, 37]);
+
+  const handleChange = (event: Event, newValue: number | number[]) => {
+    setValue(newValue as number[]);
+  };
 
   return (
     <div className="container mx-auto py-8 overflow-hidden">

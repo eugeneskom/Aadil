@@ -15,6 +15,7 @@ import { IoBagAddOutline, IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
 import { calculateSalePercentage } from "../helpers";
+import imagePlaceholer from "../assets/img/placeholder.svg";
 interface ProductProps {
   product: Product;
   isWishlist?: boolean;
@@ -29,7 +30,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
 
   // Calculate the sale percentage
   const salePercentage = calculateSalePercentage(product);
-  
+
   useEffect(() => {
     // Checking if the image url is valid, if not the product card won't be rendered
     const img = new Image();
@@ -46,35 +47,13 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     console.log("handleWislistIconClick", token);
     if (token) {
       // toggleWishlistHandler(productId);
-      dispatch(toggleWishlistAsync({ productId, token}));
+      dispatch(toggleWishlistAsync({ productId, token }));
     } else {
       //save product id before registration to add it to the user account once created
-      localStorage.setItem('productIdWishlist', productId)
+      localStorage.setItem("productIdWishlist", productId);
       dispatch(toggleAuthPopup());
     }
   };
-
-  // const toggleWishlistHandler = async (productId: string) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
-  //       { productId },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     const { data } = response;
-  //     if (data.success) {
-  //       dispatch(toggleWishlist(productId));
-  //     }
-  //     console.log("toggleWishlist", response.data);
-  //     return response.data;
-  //   } catch (error) {
-  //     throw new Error("Failed to toggle product in wishlist");
-  //   }
-  // };
 
   const toggleProductPreview = () => {
     setShowProductPreview(!showProductPreview);
@@ -101,7 +80,9 @@ function ProductCard({ product, isWishlist }: ProductProps) {
             </button>
           </li>
         </ul>
-        <LazyLoadImage src={product.ImageUrl} height={300} alt={product.Name} className="w-full max-h-[300px] object-cover" />
+        <div style={{ height: "300px" }}>
+          <LazyLoadImage src={product.ImageUrl} height={300} alt={product.Name} className="w-full max-h-[300px] object-cover" />
+        </div>
       </div>
 
       <div className="p-4 flex-grow relative">
@@ -130,7 +111,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
           Read more
         </NavLink>
         {isWishlist ? (
-          <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+          <NavLink to={`${product.Url}`} target="_blank" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
             Buy now
           </NavLink>
         ) : (
