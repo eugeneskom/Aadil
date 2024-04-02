@@ -10,7 +10,7 @@ import { RootState } from "../state/store";
 import axios from "axios";
 // import { setWishlist, toggleWishlist } from "../state/wishlist/wishlistSlice";
 import { selectToken } from "../state/token/tokenSlice";
-import { toggleWishlist } from "../state/wishlist/wishlistSlice";
+import { toggleWishlist, toggleWishlistAsync } from "../state/wishlist/wishlistSlice";
 import { IoBagAddOutline, IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
@@ -45,33 +45,36 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   const handleWislistIconClick = (productId: string) => {
     console.log("handleWislistIconClick", token);
     if (token) {
-      toggleWishlistHandler(productId);
+      // toggleWishlistHandler(productId);
+      dispatch(toggleWishlistAsync({ productId, token}));
     } else {
+      //save product id before registration to add it to the user account once created
+      localStorage.setItem('productIdWishlist', productId)
       dispatch(toggleAuthPopup());
     }
   };
 
-  const toggleWishlistHandler = async (productId: string) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
-        { productId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const { data } = response;
-      if (data.success) {
-        dispatch(toggleWishlist(productId));
-      }
-      console.log("toggleWishlist", response.data);
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to toggle product in wishlist");
-    }
-  };
+  // const toggleWishlistHandler = async (productId: string) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
+  //       { productId },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const { data } = response;
+  //     if (data.success) {
+  //       dispatch(toggleWishlist(productId));
+  //     }
+  //     console.log("toggleWishlist", response.data);
+  //     return response.data;
+  //   } catch (error) {
+  //     throw new Error("Failed to toggle product in wishlist");
+  //   }
+  // };
 
   const toggleProductPreview = () => {
     setShowProductPreview(!showProductPreview);

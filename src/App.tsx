@@ -16,7 +16,7 @@ import { setUser, selectUser } from "./state/user/userSlice";
 import { RootState, AppDispatch } from "./state/store";
 import { setToken } from "./state/token/tokenSlice";
 import { selectToken } from "./state/token/tokenSlice";
-import { fetchWishlistProducts } from "./state/wishlist/wishlistSlice";
+import { fetchWishlistProducts, toggleWishlist, toggleWishlistAsync } from "./state/wishlist/wishlistSlice";
 import { fetchProductsAsync } from "./state/products/productsSlice";
 // import { setTokenValidity } from "./state/token/isValidToken";
 import { setScreenWidth } from "./state/screenWidthSlice";
@@ -71,6 +71,18 @@ function App() {
       parsedToken = JSON.parse(token);
       dispatch(setToken(parsedToken));
     }
+
+    // when user clicks on add to wishlist but not registered, save the productId and then toggle it here and remove on first page load
+    const savedProdId = localStorage.getItem('productIdWishlist') || '';
+    if(savedProdId) {
+      // dispatch(toggleWishlist(savedProdId));
+      dispatch(toggleWishlistAsync({ productId: savedProdId, token}));
+
+      localStorage.removeItem('productIdWishlist');
+
+    }
+
+
     return () => {};
   }, []);
 

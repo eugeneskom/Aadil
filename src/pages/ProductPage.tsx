@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
 import { useParams } from "react-router-dom";
-import { RootState } from "../state/store";
+import { AppDispatch, RootState } from "../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
-import { toggleWishlist } from "../state/wishlist/wishlistSlice";
+import { toggleWishlistAsync } from "../state/wishlist/wishlistSlice";
 import { selectToken } from "../state/token/tokenSlice";
 interface ProductPageProps {
   product: Product;
@@ -35,10 +34,13 @@ const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
   console.log("ProductPage:", product);
+  const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+  const isInWishlist = wishlistItems.includes(id ?? "");
+
   useEffect(() => {
     const container = document.createElement("div");
     container.innerHTML = product?.Description || "";
@@ -57,25 +59,8 @@ const ProductPage = () => {
   }, [product?.Description]);
 
   const toggleWishlistHandler = async (productId: string) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/wishlist/toggle`,
-        { productId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const { data } = response;
-      if (data.success) {
-        dispatch(toggleWishlist(productId));
-      }
-      console.log("toggleWishlist", response.data);
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to toggle product in wishlist");
-    }
+    if (!token) return;
+    dispatch(toggleWishlistAsync({ productId, token }));
   };
 
   console.log("filteredProducts", filteredProducts);
@@ -134,7 +119,7 @@ const ProductPage = () => {
               type="button"
               className="product-page__add-wishlist inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Add to Wishlist
+              {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
             </button>
             <NavLink to={`${product.Url}`} target="_blank" className="product-page__buy inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-black bg-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               But it now
