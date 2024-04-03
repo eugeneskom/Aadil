@@ -1,15 +1,28 @@
 import { Product } from "../types/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { incrementPage, selectProducts } from "../state/products/productsSlice";
+import { fetchProductsAsync, incrementPage, selectMaxPrice, selectMinPrice, selectProducts } from "../state/products/productsSlice";
 import ProductCard from "./ProductCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
+import { AppDispatch, RootState } from "../state/store";
 
-interface ProductSectionProps {
-  wishlist: string[];
-}
 const ProductSection = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const products: Product[] = useSelector(selectProducts);
+  const page = useSelector((state: RootState) => state.products.page);
+  const minPrice = useSelector(selectMinPrice);
+  const maxPrice = useSelector(selectMaxPrice);
+  const [value, setValue] = useState<number[]>([0, 0]);
+  console.log("minPrice", minPrice, maxPrice, "maxPrice", value);
+  const handleChange = (event: Event, newValue: number | number[]) => {
+    const [minPrice, maxPrice] = newValue as [number, number];
+    setValue([Number(minPrice), Number(maxPrice)] as number[]);
+  };
+
+  useEffect(() => {
+    setValue([Number(minPrice), Number(maxPrice)]);
+  }, [minPrice, maxPrice]);
 
   const handleLoadMore = () => {
     dispatch(incrementPage());
@@ -72,16 +85,23 @@ const ProductSection = () => {
   }
 
   const uniqueManufacturers = getUniqueManufacturers(products);
+  function valuetext(value: number) {
+    return `${value}°C`;
+  }
+  const handleChangeCommitted = (newValue: number | number[]) => {
+    // Function to be executed when the slider handles are released
+    console.log("Slider value changed:", newValue);
 
-  // console.log('uniqueManufacturers: ',uniqueManufacturers);
+    if (!Array.isArray(newValue)) return;
 
-  // console.log('sortedProducts',sortedProducts);
-  const [value, setValue] = useState<number[]>([20, 37]);
+    const [minPrice, maxPrice] = newValue as [number, number];
+    fetchProductsByPriceRange(minPrice, maxPrice)
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
   };
 
+  const fetchProductsByPriceRange = (min: number, max: number) => {
+    dispatch(fetchProductsAsync({ minPrice: min, maxPrice: max }));
+  };
   return (
     <div className="container mx-auto py-8 overflow-hidden">
       {/* Filters */}
@@ -96,6 +116,17 @@ const ProductSection = () => {
           </div>
         </div>
       </div>
+      <Box sx={{ width: 300 }}>
+  <Slider
+    value={value}
+    min={Number(minPrice)}
+    max={Number(maxPrice)}
+    onChange={handleChange}
+    valueLabelDisplay="on"
+    // getAriaValueText={valuetext}
+    onChangeCommitted={(event, newValue) => handleChangeCommitted(newValue)}
+  />
+</Box>
 
       {/* Products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{sortedProducts && sortedProducts.length > 0 && sortedProducts.map((product) => <ProductCard product={product} />)}</div>

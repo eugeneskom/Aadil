@@ -228,7 +228,7 @@ const Header = () => {
                 <FaRegBookmark />
                 <span>Deals today</span>
               </button>
-              <button className="header__special-prices">
+              <button className="header__special-prices cursor-pointer">
                 <GoTag />
                 <span>Special offers</span>
               </button>

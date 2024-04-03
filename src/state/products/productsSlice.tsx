@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { fetchProducts } from '../../api/fetchProducts'; // Import your API function
-import { Product } from '../../types/Product';
 import axios from 'axios';
+import { Product } from '../../types/Product';
 
 interface ProductsState {
   products: Product[];
@@ -10,54 +9,54 @@ interface ProductsState {
   error: string | null;
   page: number;
   limit: number;
+  minPrice: number | null;
+  maxPrice: number | null;
+  totalProducts: number;
 }
 
 const initialState: ProductsState = {
   products: [],
   status: 'idle',
   error: null,
-  page: 0, // Initial page value
+  page: 1, // Initial page value
   limit: 100, // Initial limit value
+  minPrice: null,
+  maxPrice: null,
+  totalProducts: 0,
 };
 
-
 interface FetchProductsPayload {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
-// export const fetchProductsAsync = createAsyncThunk(
-//   'products/fetchProducts',
-//   async ({ page, limit }: FetchProductsPayload) => {
-//     try {
-//       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
-//       // const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
-//       console.log('response',response.data)
-//       if (response.status !== 200) {
-//         throw new Error('Failed to fetch products');
-//       }
-//       return response.data.products;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
 export const fetchProductsAsync = createAsyncThunk(
   'products/fetchProducts',
-  async ({ page, limit }: FetchProductsPayload) => {
+  async ({ page, limit, minPrice, maxPrice }: FetchProductsPayload) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products?page=${page}&limit=${limit}`);
-      console.log('response', response.data);
+      let url = `${process.env.REACT_APP_API_URL}/api/products`;
+
+      if (minPrice !== undefined && maxPrice !== undefined) {
+        url = `${process.env.REACT_APP_API_URL}/api/products/price-range`;
+        url += `?min=${minPrice}&max=${maxPrice}`;
+      } else {
+        url += `?page=${page}&limit=${limit}`;
+      }
+
+      const response = await axios.get(url);
+
       if (response.status !== 200) {
         throw new Error('Failed to fetch products');
       }
-      return { products: response.data.products, page: response.data.page };
+
+      return response.data;
     } catch (error) {
       throw error;
     }
   }
 );
-
 
 const productsSlice = createSlice({
   name: 'products',
@@ -73,14 +72,18 @@ const productsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchProductsAsync.fulfilled, (state, action) => {
-        if (action.payload.page === state.page) {
-          // Skip updating the products if the page is the same
-          state.status = 'succeeded';
+        if (action.payload.page && action.payload.page === 1) {
+          // If it's the first page, replace the products array
+          state.products = action.payload.products;
         } else {
-          state.status = 'succeeded';
-          state.products = state.products.concat(action.payload.products);
-          state.page = action.payload.page;
+          // If it's a subsequent page or fetching by price range, replace the products array
+          state.products = action.payload.products;
         }
+        state.status = 'succeeded';
+        state.page = action.payload.page || state.page;
+        state.minPrice = action.payload.minPrice || null;
+        state.maxPrice = action.payload.maxPrice || null;
+        state.totalProducts = action.payload.totalProducts || 0;
       })
       .addCase(fetchProductsAsync.rejected, (state, action) => {
         state.status = 'failed';
@@ -90,21 +93,20 @@ const productsSlice = createSlice({
 });
 
 export const { incrementPage } = productsSlice.actions;
-
 export const selectProducts = (state: RootState) => state.products.products;
 export const selectProductsStatus = (state: RootState) => state.products.status;
 export const selectProductsError = (state: RootState) => state.products.error;
 export const selectPage = (state: RootState) => state.products.page;
+export const selectMinPrice = (state: RootState) => state.products.minPrice;
+export const selectMaxPrice = (state: RootState) => state.products.maxPrice;
+export const selectTotalProducts = (state: RootState) => state.products.totalProducts;
 export const selectProductById = (productId: string) => (state: RootState) =>
   state.products.products.find((product) => product.Id === productId);
-// Define a new selector to filter products by the manufacturer name of a specific product
 export const selectProductsByManufacturer = (productId: string) => (state: RootState) => {
   const product = state.products.products.find((product) => product.Id === productId);
-  if (!product) return []; // Return an empty array if the product is not found
-  const manufacturerName = product.Manufacturer; // Assuming the manufacturer name is stored in a property called 'manufacturer'
+  if (!product) return [];
+  const manufacturerName = product.Manufacturer;
   return state.products.products.filter((product) => product.Manufacturer === manufacturerName);
 };
-
-
 
 export default productsSlice.reducer;
