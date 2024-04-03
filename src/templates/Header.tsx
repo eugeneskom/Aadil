@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { BiSearch, BiHeart, BiBell, BiUser } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { RootState } from "../state/store";
+import { AppDispatch, RootState } from "../state/store";
 import { selectWishlistItems } from "../state/wishlist/wishlistSlice";
 import { FaRegBookmark } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { GoTag } from "react-icons/go";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { fetchProductsAsync } from "../state/products/productsSlice";
 
 const Header = () => {
+
+  const dispatch = useDispatch<AppDispatch>();
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   const isMobile = useSelector((state: RootState) => state.screenWidth.isMobile);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -34,8 +37,12 @@ const Header = () => {
     setOpenSubmenu(menu);
   };
 
-  // console.log("isMobile", isMobile);
 
+  const handleSearchProducts = (searchQuery: string) => {
+    dispatch(fetchProductsAsync({ searchQuery: searchQuery }));
+  }
+
+  
   const googleAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
   };
@@ -60,7 +67,7 @@ const Header = () => {
               <button className=" px-4 h-10 rounded-r-md  transition-colors duration-300">
                 <BiSearch size={24} />
               </button>
-              <input type="text" placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
+              <input type="search" onChange={(e) => handleSearchProducts(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
             </div>
           ) : (
             ""

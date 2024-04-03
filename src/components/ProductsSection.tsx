@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from "../state/store";
 const ProductSection = () => {
   const dispatch = useDispatch<AppDispatch>();
   const products: Product[] = useSelector(selectProducts);
+  console.log('products__update',products)
   const page = useSelector((state: RootState) => state.products.page);
   const minPrice = useSelector(selectMinPrice);
   const maxPrice = useSelector(selectMaxPrice);
@@ -95,8 +96,7 @@ const ProductSection = () => {
     if (!Array.isArray(newValue)) return;
 
     const [minPrice, maxPrice] = newValue as [number, number];
-    fetchProductsByPriceRange(minPrice, maxPrice)
-
+    fetchProductsByPriceRange(minPrice, maxPrice);
   };
 
   const fetchProductsByPriceRange = (min: number, max: number) => {
@@ -117,16 +117,16 @@ const ProductSection = () => {
         </div>
       </div>
       <Box sx={{ width: 300 }}>
-  <Slider
-    value={value}
-    min={Number(minPrice)}
-    max={Number(maxPrice)}
-    onChange={handleChange}
-    valueLabelDisplay="on"
-    // getAriaValueText={valuetext}
-    onChangeCommitted={(event, newValue) => handleChangeCommitted(newValue)}
-  />
-</Box>
+        <Slider
+          value={value}
+          min={Number(minPrice)}
+          max={Number(maxPrice)}
+          onChange={handleChange}
+          valueLabelDisplay="on"
+          // getAriaValueText={valuetext}
+          onChangeCommitted={(event, newValue) => handleChangeCommitted(newValue)}
+        />
+      </Box>
 
       {/* Products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{sortedProducts && sortedProducts.length > 0 && sortedProducts.map((product) => <ProductCard product={product} />)}</div>

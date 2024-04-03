@@ -30,27 +30,29 @@ interface FetchProductsPayload {
   limit?: number;
   minPrice?: number;
   maxPrice?: number;
+  searchQuery?: string;
 }
 
 export const fetchProductsAsync = createAsyncThunk(
   'products/fetchProducts',
-  async ({ page, limit, minPrice, maxPrice }: FetchProductsPayload) => {
+  async ({ page, limit, minPrice, maxPrice, searchQuery }: FetchProductsPayload) => {
+
+    console.log('Fetch products async:', page, limit, minPrice, maxPrice, searchQuery);
     try {
       let url = `${process.env.REACT_APP_API_URL}/api/products`;
-
-      if (minPrice !== undefined && maxPrice !== undefined) {
+      if (searchQuery) {
+        url = `${process.env.REACT_APP_API_URL}/api/products/search?search=${searchQuery}`;
+      } else if (minPrice !== undefined && maxPrice !== undefined) {
         url = `${process.env.REACT_APP_API_URL}/api/products/price-range`;
         url += `?min=${minPrice}&max=${maxPrice}`;
-      } else {
+      } else if (page && limit) {
         url += `?page=${page}&limit=${limit}`;
       }
 
       const response = await axios.get(url);
-
       if (response.status !== 200) {
         throw new Error('Failed to fetch products');
       }
-
       return response.data;
     } catch (error) {
       throw error;
@@ -72,23 +74,29 @@ const productsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchProductsAsync.fulfilled, (state, action) => {
-        if (action.payload.page && action.payload.page === 1) {
-          // If it's the first page, replace the products array
-          state.products = action.payload.products;
+        console.log('Fulfilled action payload:', action.payload);
+      
+        const { products, page, minPrice, maxPrice, totalProducts } = action.payload;
+        const searchQuery = action.payload.searchQuery;
+      
+        console.log('Products:', products, 'searchQuery:', searchQuery, 'action.payload',action.payload);
+      
+        if (searchQuery) {
+          console.log('searchQuery', searchQuery)
+          state.products = products;
+        } else
+         if (page && page === 1) {
+          state.products = products;
         } else {
-          // If it's a subsequent page or fetching by price range, replace the products array
-          state.products = action.payload.products;
+          state.products = [...state.products, ...products];
         }
+      
         state.status = 'succeeded';
-        state.page = action.payload.page || state.page;
-        state.minPrice = action.payload.minPrice || null;
-        state.maxPrice = action.payload.maxPrice || null;
-        state.totalProducts = action.payload.totalProducts || 0;
+        state.page = page || state.page;
+        state.minPrice = minPrice || null;
+        state.maxPrice = maxPrice || null;
+        state.totalProducts = totalProducts || 0;
       })
-      .addCase(fetchProductsAsync.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message ?? null;
-      });
   },
 });
 
