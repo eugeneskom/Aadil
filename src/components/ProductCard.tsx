@@ -69,11 +69,11 @@ function ProductCard({ product, isWishlist }: ProductProps) {
               <IoEyeOutline size={25} />
             </button>
           </li>
-          <li className="product-card__item">
+          {/* <li className="product-card__item">
             <NavLink to={`${product.Url}`} target="_blank" type="button" className="a right-0 m-2 ">
               <IoBagAddOutline size={20} className="text-white" />
             </NavLink>
-          </li>
+          </li> */}
           <li className="product-card__item">
             <button onClick={() => handleWislistIconClick(product.Id)} type="button" className="a right-0 m-2 ">
               {isInWishlist ? <FaHeart size={20} className="text-white" /> : <FaRegHeart size={20} className="text-white" />}

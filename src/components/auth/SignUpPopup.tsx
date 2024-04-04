@@ -33,6 +33,10 @@ const SignUpPopup = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
   };
 
+  const facebookAuth = () => {
+    window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, "_self");
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-75 signup-popup">
       <div className="bg-white rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3 p-6 signup-popup__inner">
@@ -91,6 +95,7 @@ const SignUpPopup = () => {
                   // Handle continue with Google, Apple, or Facebook logic here
                   console.log("Continue with Google, Apple, or Facebook");
                   // setShowPopup(false);
+                  facebookAuth()
                   togglePopup();
                 }}
               >

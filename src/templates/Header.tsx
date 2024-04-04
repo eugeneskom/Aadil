@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { BiSearch, BiHeart, BiBell, BiUser } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,13 +7,15 @@ import { AppDispatch, RootState } from "../state/store";
 import { selectWishlistItems } from "../state/wishlist/wishlistSlice";
 import { FaRegBookmark } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-import { MdKeyboardArrowRight } from "react-icons/md";
 import { GoTag } from "react-icons/go";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { fetchProductsAsync } from "../state/products/productsSlice";
+import { Product } from "../types/Product";
+import axios from "axios";
+import SearchResults from "../components/search-results/SearchResults";
+// import debounce from 'lodash/debounce';
+import { debounce } from "lodash";
 
 const Header = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   const isMobile = useSelector((state: RootState) => state.screenWidth.isMobile);
@@ -21,7 +23,9 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const wishlist: string[] = useSelector(selectWishlistItems);
   const [openSubmenu, setOpenSubmenu] = useState("");
-
+  const [searchResults, setSearchResults] = useState<Product[] | []>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  console.log("searchResults", searchResults);
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
   };
@@ -37,14 +41,40 @@ const Header = () => {
     setOpenSubmenu(menu);
   };
 
+  // const handleSearchProducts = (searchQuery: string) => {
+  //   dispatch(fetchProductsAsync({ searchQuery: searchQuery }));
+  // }
 
-  const handleSearchProducts = (searchQuery: string) => {
-    dispatch(fetchProductsAsync({ searchQuery: searchQuery }));
-  }
-
-  
   const googleAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
+  };
+
+  const handleSearchProducts = useCallback(
+    debounce(async (searchQuery) => {
+      if (searchQuery.length < 2) {
+        setSearchResults([]);
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/search?search=${searchQuery}`);
+        const data = response.data;
+        setSearchResults(data.products);
+      } catch (error) {
+        console.error("Error searching products:", error);
+      }
+    }, 500),
+    []
+  );
+
+  const handleInputChange = (query: string) => {
+    setSearchQuery(query);
+    handleSearchProducts(query);
+  };
+
+  const emptySearchResults = () => {
+    setSearchResults([]);
+    setSearchQuery("");
   };
 
   return (
@@ -61,28 +91,36 @@ const Header = () => {
           <div className="text-2xl font-bold">
             <NavLink to={"/"}>Your Logo</NavLink>
           </div>
-          {/* Search Desktop*/}
+ 
+
           {!isMobile ? (
-            <div className="flex items-center border border-solid border-gray-200 rounded-lg overflow-hidden header__search search">
-              <button className=" px-4 h-10 rounded-r-md  transition-colors duration-300">
+            <div className="flex items-center border border-solid border-gray-200 rounded-lg header__search search">
+              <button className=" px-4 h-10 rounded-r-md transition-colors duration-300">
                 <BiSearch size={24} />
               </button>
-              <input type="search" onChange={(e) => handleSearchProducts(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
+              <input type="search" value={searchQuery} onChange={(e) => handleInputChange(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
+              {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults}/>}
             </div>
           ) : (
             ""
           )}
+
+ 
 
           {isSearchOpen && isMobile ? (
             <div className="header__search--mobile">
               <button className="header__search-close" type="button" onClick={handleSearchToggle}>
                 <IoMdClose size={24} />
               </button>
-              <div className="flex items-center border border-solid border-gray-200 rounded-lg overflow-hidden header__search search">
-                <button className=" px-4 h-10 rounded-r-md  transition-colors duration-300">
+              <div className="flex items-center border border-solid border-gray-200 rounded-lg  header__search search">
+                <button className=" px-4 h-10 rounded-r-md transition-colors duration-300">
                   <BiSearch size={24} />
                 </button>
-                <input type="text" placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
+                <input type="search" value={searchQuery} onChange={(e) => handleSearchProducts(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
+                {searchResults.length > 0 && (
+                  <SearchResults results={searchResults} onClick={emptySearchResults}/>
+        
+                )}
               </div>
               <div className=" inset-0 bg-gray-500 bg-opacity-50 z-50"></div>
             </div>
@@ -168,7 +206,6 @@ const Header = () => {
                         <MdKeyboardArrowRight />
                       </span> */}
                     </NavLink>
-
                   </li>
 
                   <li className="submenu-li">
@@ -178,7 +215,6 @@ const Header = () => {
                         <MdKeyboardArrowRight />
                       </span> */}
                     </button>
-               
                   </li>
 
                   <li className="submenu-li">
