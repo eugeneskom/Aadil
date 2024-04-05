@@ -25,6 +25,7 @@ import UserAccount from "./pages/UserAccount";
 import { parse } from "path";
 import { validateToken } from "./state/token/isValidToken";
 import Dashboard from "./pages/Dashboard";
+import Overlay from "./components/Overlay";
 
 function App() {
   // const user = useSelector(selectUser);
@@ -34,7 +35,6 @@ function App() {
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   console.log("isValidToken", isValidToken);
   const page = useSelector((state: RootState) => state.products.page);
-
   useEffect(() => {
     dispatch(fetchProductsAsync({ page: page, limit: 40 }) as any);
   }, [dispatch, page]);
@@ -73,15 +73,13 @@ function App() {
     }
 
     // when user clicks on add to wishlist but not registered, save the productId and then toggle it here and remove on first page load
-    const savedProdId = localStorage.getItem('productIdWishlist') || '';
-    if(savedProdId) {
+    const savedProdId = localStorage.getItem("productIdWishlist") || "";
+    if (savedProdId) {
       // dispatch(toggleWishlist(savedProdId));
-      dispatch(toggleWishlistAsync({ productId: savedProdId, token}));
+      dispatch(toggleWishlistAsync({ productId: savedProdId, token }));
 
-      localStorage.removeItem('productIdWishlist');
-
+      localStorage.removeItem("productIdWishlist");
     }
-
 
     return () => {};
   }, []);
@@ -124,7 +122,6 @@ function App() {
               path="/"
               element={
                 <>
-                  {/* {!isValidToken && <Login />} */}
                   <Hero />
                   <ProductSection />
                 </>

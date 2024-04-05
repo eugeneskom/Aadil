@@ -576,6 +576,24 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   margin-top: 1rem;
 }
 
+
+/* FILTERS */
+
+.filter-arrow.active{
+  transform: rotate(180deg);
+}
+
+.filter-arrow{
+  transition: all 0.3s ease-in-out 0s;
+}
+/* PRICE RANGE SLIDER */
+.MuiBox-root .css-188mx6n-MuiSlider-root{
+  color:#000;
+}
+.css-188mx6n-MuiSlider-root .css-ttgsjq-MuiSlider-track{
+  background-color:#000;
+}
+
 @media (max-width: 768px) {
   .header__inner {
     flex-wrap: wrap;

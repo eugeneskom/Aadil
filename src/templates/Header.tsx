@@ -18,6 +18,7 @@ import { debounce } from "lodash";
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
   const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
+  const user = useSelector((state: RootState) => state.user.user);
   const isMobile = useSelector((state: RootState) => state.screenWidth.isMobile);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +26,7 @@ const Header = () => {
   const [openSubmenu, setOpenSubmenu] = useState("");
   const [searchResults, setSearchResults] = useState<Product[] | []>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log("searchResults", searchResults);
+  console.log("user", user);
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
   };
@@ -91,7 +92,6 @@ const Header = () => {
           <div className="text-2xl font-bold">
             <NavLink to={"/"}>Your Logo</NavLink>
           </div>
- 
 
           {!isMobile ? (
             <div className="flex items-center border border-solid border-gray-200 rounded-lg header__search search">
@@ -99,13 +99,11 @@ const Header = () => {
                 <BiSearch size={24} />
               </button>
               <input type="search" value={searchQuery} onChange={(e) => handleInputChange(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
-              {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults}/>}
+              {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults} />}
             </div>
           ) : (
             ""
           )}
-
- 
 
           {isSearchOpen && isMobile ? (
             <div className="header__search--mobile">
@@ -117,10 +115,7 @@ const Header = () => {
                   <BiSearch size={24} />
                 </button>
                 <input type="search" value={searchQuery} onChange={(e) => handleSearchProducts(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
-                {searchResults.length > 0 && (
-                  <SearchResults results={searchResults} onClick={emptySearchResults}/>
-        
-                )}
+                {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults} />}
               </div>
               <div className=" inset-0 bg-gray-500 bg-opacity-50 z-50"></div>
             </div>
@@ -260,11 +255,13 @@ const Header = () => {
                   </li>
                 </ul>
               </li>
-              <li className="nav-bottom__item">
-                <NavLink to="/dashboard" className="nav__link">
-                  <span className="link-title sp-link-title">Dashboard</span>
-                </NavLink>
-              </li>
+              {user?.isAdmin && (
+                <li className="nav-bottom__item">
+                  <NavLink to="/dashboard" className="nav__link">
+                    <span className="link-title sp-link-title">Dashboard</span>
+                  </NavLink>
+                </li>
+              )}
             </ul>
             <div className="header__action-btns">
               <button className="header__deals-today">

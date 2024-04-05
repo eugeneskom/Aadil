@@ -15,7 +15,14 @@ function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users-with-wishlist`);
+        const tokenLocal = localStorage.getItem("jwt") ?? "";
+        if (!tokenLocal) return; // Return if no token is found in localStorage
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users-with-wishlist`,{
+          headers: {
+            Authorization: `Bearer ${JSON.parse(tokenLocal)}`,
+          },
+        });
         setUsers(response.data.users);
       } catch (error) {
         console.error("Error fetching users:", error);
