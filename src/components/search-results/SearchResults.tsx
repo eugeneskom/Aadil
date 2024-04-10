@@ -1,18 +1,20 @@
-import React from 'react';
-import SearchResultItem from './SearchResultItem';
-import { Product } from '../../types/Product';
+import React from "react";
+import SearchResultItem from "./SearchResultItem";
+import { Product } from "../../types/Product";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
 
 interface SearchResultsProps {
-  results: Product[];
   onClick: () => void;
 }
 
+const SearchResults = ({ onClick }: SearchResultsProps) => {
+  const results = useSelector((state: RootState) => state.search.searchResults);
 
-const SearchResults = ({ results, onClick }:SearchResultsProps) => {
   return (
     <div className="search-results">
-      {results.map((product:Product) => (
-        <SearchResultItem key={product.Id} product={product} onClick={onClick}/>
+      {results.map((product: Product) => (
+        <SearchResultItem key={product.Id} product={product} onClick={onClick} />
       ))}
     </div>
   );

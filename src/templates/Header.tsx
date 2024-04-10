@@ -14,6 +14,7 @@ import axios from "axios";
 import SearchResults from "../components/search-results/SearchResults";
 // import debounce from 'lodash/debounce';
 import { debounce } from "lodash";
+import { setSearchResults } from "../state/products/searchResultSlice";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,16 +25,56 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const wishlist: string[] = useSelector(selectWishlistItems);
   const [openSubmenu, setOpenSubmenu] = useState("");
-  const [searchResults, setSearchResults] = useState<Product[] | []>([]);
+  const searchResults = useSelector((state: RootState) => state.search.searchResults);
   const [searchQuery, setSearchQuery] = useState("");
   console.log("user", user);
-  const handleSearchToggle = () => {
-    setIsSearchOpen((prev) => !prev);
+
+
+
+  // search products by query string using debounce to prevent multiple requests in a short time frame
+  const handleSearchProducts = useCallback(
+    debounce(async (searchQuery) => {
+      if (searchQuery.length < 2) {
+        dispatch(setSearchResults([]));
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/search?search=${searchQuery}`);
+        const data = response.data;
+        dispatch(setSearchResults(data.products));
+      } catch (error) {
+        console.error("Error searching products:", error);
+      }
+    }, 500),
+    []
+  );
+
+  // handles the input change in the search bar
+  const handleInputChange = (query: string) => {
+    setSearchQuery(query);
+    handleSearchProducts(query);
   };
+
+  // empties the search results and search query
+  const emptySearchResults = () => {
+    dispatch(setSearchResults([]));
+    setSearchQuery("");
+  };
+
+
+    // toggles the search bar on mobile
+    const handleSearchToggle = () => {
+      setIsSearchOpen((prev) => !prev);
+    };
+
+  // toggles the menu on mobile
   const handleToggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
     setOpenSubmenu("");
   };
+
+  // opens the submenu
   const handleOpenSubmenu = (menu: string) => {
     if (menu === openSubmenu) {
       setOpenSubmenu("");
@@ -42,40 +83,9 @@ const Header = () => {
     setOpenSubmenu(menu);
   };
 
-  // const handleSearchProducts = (searchQuery: string) => {
-  //   dispatch(fetchProductsAsync({ searchQuery: searchQuery }));
-  // }
-
+  // Google Auth
   const googleAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
-  };
-
-  const handleSearchProducts = useCallback(
-    debounce(async (searchQuery) => {
-      if (searchQuery.length < 2) {
-        setSearchResults([]);
-        return;
-      }
-
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/search?search=${searchQuery}`);
-        const data = response.data;
-        setSearchResults(data.products);
-      } catch (error) {
-        console.error("Error searching products:", error);
-      }
-    }, 500),
-    []
-  );
-
-  const handleInputChange = (query: string) => {
-    setSearchQuery(query);
-    handleSearchProducts(query);
-  };
-
-  const emptySearchResults = () => {
-    setSearchResults([]);
-    setSearchQuery("");
   };
 
   return (
@@ -99,7 +109,7 @@ const Header = () => {
                 <BiSearch size={24} />
               </button>
               <input type="search" value={searchQuery} onChange={(e) => handleInputChange(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
-              {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults} />}
+              {searchResults.length > 0 && <SearchResults  onClick={emptySearchResults} />}
             </div>
           ) : (
             ""
@@ -115,7 +125,7 @@ const Header = () => {
                   <BiSearch size={24} />
                 </button>
                 <input type="search" value={searchQuery} onChange={(e) => handleSearchProducts(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
-                {searchResults.length > 0 && <SearchResults results={searchResults} onClick={emptySearchResults} />}
+                {searchResults.length > 0 && <SearchResults onClick={emptySearchResults} />}
               </div>
               <div className=" inset-0 bg-gray-500 bg-opacity-50 z-50"></div>
             </div>

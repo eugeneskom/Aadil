@@ -14,37 +14,7 @@ const LoginCallback = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       // Make a GET request to your server's /auth/login/success endpoint
-  //       const response = await axios.get("/api/auth/login/success", { withCredentials: true });
-  //       setUserData(response.data.user);
-  //     } catch (error: any) {
-  //       setError(error.response.data.message);
-  //     }
-  //   };
-
-  //   fetchUserData();
-
-  // }, []);
-
-  // console.log('userData',userData)
-
-  // useEffect(() => {
-  //   const tokenLocal = localStorage.getItem("jwt") ?? "";
-  //   let parsedToken = null;
-  //   if (tokenLocal) {
-  //     parsedToken = JSON.parse(tokenLocal);
-  //   }
-  //   console.log('parsedToken',parsedToken)
-  //   dispatch(validateToken(parsedToken));
-
-  //   return () => {
-
-  //   }
-  // }, [])
+ 
 
   useEffect(() => {
     const getUser = async () => {

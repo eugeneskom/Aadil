@@ -1,21 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
 import productSlice from "../state/products/productsSlice";
-import userRedducer from './user/userSlice'
+import userRedducer from "./user/userSlice";
 import wishlistReducer from "./wishlist/wishlistSlice";
-import authSlice from './token/tokenSlice'
-import isValidtoken from './token/isValidToken'
+import authSlice from "./token/tokenSlice";
+import isValidtoken from "./token/isValidToken";
 import screenWidthReducer from "./screenWidthSlice";
 import AuthPopupStateSlice from "./AuthPopupStateSlice";
-
+import searchResultSlice from "./products/searchResultSlice";
+import categoriesSlice from "./categories/categoriesSlice";
 export const store = configureStore({
   reducer: {
     products: productSlice,
     user: userRedducer,
     wishlist: wishlistReducer,
     auth: authSlice,
-    isValidToken:isValidtoken,
+    isValidToken: isValidtoken,
     screenWidth: screenWidthReducer,
     authPopupState: AuthPopupStateSlice,
+    search: searchResultSlice,
+    categories: categoriesSlice,
     // Add other reducers here if needed
   },
 });

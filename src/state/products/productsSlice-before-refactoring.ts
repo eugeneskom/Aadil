@@ -99,11 +99,12 @@ const productsSlice = createSlice({
 
 export const { incrementPage } = productsSlice.actions;
 export const selectProducts = (state: RootState) => state.products.products;
+export const selectProductsLength = (state: RootState) => state.products.products.length;
 export const selectProductsStatus = (state: RootState) => state.products.status;
 export const selectProductsError = (state: RootState) => state.products.error;
 export const selectPage = (state: RootState) => state.products.page;
-export const selectMinPrice = (state: RootState) => state.products.minPrice;
-export const selectMaxPrice = (state: RootState) => state.products.maxPrice;
+// export const selectMinPrice = (state: RootState) => state.products.minPrice;
+// export const selectMaxPrice = (state: RootState) => state.products.maxPrice;
 export const selectTotalProducts = (state: RootState) => state.products.totalProducts;
 export const selectProductById = (productId: string) => (state: RootState) => state.products.products.find((product) => product.Id === productId);
 export const selectProductsByManufacturer = (productId: string) => (state: RootState) => {

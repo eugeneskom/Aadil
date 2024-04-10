@@ -1,20 +1,24 @@
 import { Product } from "../types/Product";
 import { useDispatch, useSelector } from "react-redux";
-import {  incrementPage, selectProducts } from "../state/products/productsSlice";
-import ProductCard from "./ProductCard"; 
-import { AppDispatch, RootState } from "../state/store"; 
+import { fetchProductsAsync, selectPage, selectProducts, selectProductsStatus, selectTotalPages } from "../state/products/productsSlice";
+import ProductCard from "./ProductCard";
+import { AppDispatch, RootState } from "../state/store";
 import Filters from "./filters/Filters";
 const ProductSection = () => {
   const dispatch = useDispatch<AppDispatch>();
   const products: Product[] = useSelector(selectProducts);
   console.log("products__update", products);
-  const page = useSelector((state: RootState) => state.products.page);
+  // const page = useSelector((state: RootState) => state.products.page);
+  const page = useSelector(selectPage);
+  const totalPages = useSelector(selectTotalPages);
 
+  const status = useSelector(selectProductsStatus);
 
   const handleLoadMore = () => {
-    dispatch(incrementPage());
+    if (page < totalPages) {
+      dispatch(fetchProductsAsync({ page: page + 1, limit: 100 }));
+    }
   };
-
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;
   const displayedProductsCount = displayedProducts.length;
@@ -72,7 +76,6 @@ const ProductSection = () => {
   }
 
   const uniqueManufacturers = getUniqueManufacturers(products);
-
 
   return (
     <div className="container mx-auto py-8 overflow-hidden">

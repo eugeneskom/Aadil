@@ -21,7 +21,7 @@ const HeroSection = () => {
       <div className="container">
         <div className="hero__inner flex justify-between">
           <div className="col left w-1/4">
-            <img src={leftImg} height={100} alt="" className="w-full" />
+            <img src={leftImg} height={450} alt="" className="w-full" />
             <div className="hero__content">
               <h2 className="hero__title">On sale</h2>
               <NavLink to={`/`} className="btn-style hero-shop-now">
@@ -48,7 +48,7 @@ const HeroSection = () => {
               modules={[Pagination, Autoplay]}
             >
               <SwiperSlide>
-                <img src={centerImg} height={100} alt="" className="w-full" />
+                <img src={centerImg} height={450} alt="" className="w-full" />
                 <div className="hero__content">
                   <p className="hero__text">All your needs</p>
                   <h2 className="hero__title">Products on sale</h2>
