@@ -15,6 +15,7 @@ import SearchResults from "../components/search-results/SearchResults";
 // import debounce from 'lodash/debounce';
 import { debounce } from "lodash";
 import { setSearchResults } from "../state/products/searchResultSlice";
+import { selectSearchQuery, setSearchQuery } from "../state/products/productsSlice";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,10 +27,10 @@ const Header = () => {
   const wishlist: string[] = useSelector(selectWishlistItems);
   const [openSubmenu, setOpenSubmenu] = useState("");
   const searchResults = useSelector((state: RootState) => state.search.searchResults);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useSelector(selectSearchQuery);
+
   console.log("user", user);
-
-
 
   // search products by query string using debounce to prevent multiple requests in a short time frame
   const handleSearchProducts = useCallback(
@@ -52,21 +53,21 @@ const Header = () => {
 
   // handles the input change in the search bar
   const handleInputChange = (query: string) => {
-    setSearchQuery(query);
+    dispatch(setSearchQuery(query));
+    // setSearchQuery(query);
     handleSearchProducts(query);
   };
 
   // empties the search results and search query
   const emptySearchResults = () => {
     dispatch(setSearchResults([]));
-    setSearchQuery("");
+    dispatch(setSearchQuery(""));
   };
 
-
-    // toggles the search bar on mobile
-    const handleSearchToggle = () => {
-      setIsSearchOpen((prev) => !prev);
-    };
+  // toggles the search bar on mobile
+  const handleSearchToggle = () => {
+    setIsSearchOpen((prev) => !prev);
+  };
 
   // toggles the menu on mobile
   const handleToggleMenu = () => {
@@ -109,7 +110,7 @@ const Header = () => {
                 <BiSearch size={24} />
               </button>
               <input type="search" value={searchQuery} onChange={(e) => handleInputChange(e.target.value)} placeholder="Search..." className=" text-white px-4 py-2 h-10 rounded-l-md focus:outline-none search__input" />
-              {searchResults.length > 0 && <SearchResults  onClick={emptySearchResults} />}
+              {searchResults.length > 0 && <SearchResults onClick={emptySearchResults} />}
             </div>
           ) : (
             ""

@@ -586,6 +586,22 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
 .filter-arrow {
   transition: all 0.3s ease-in-out 0s;
 }
+.filters__category-count{
+  border-radius: 50%;
+  background-color:#84681e;
+  color: #fff;
+  margin-left: 3.5px;
+  text-align: center;
+  width: 17px;
+  height: 17px;
+  font-size: 12px;
+}
+
+.filters__tab-btn.selected{
+  border-color: #84681e;
+  color: #84681e;
+}
+
 /* PRICE RANGE SLIDER */
 .MuiBox-root .css-188mx6n-MuiSlider-root {
   color: #000;

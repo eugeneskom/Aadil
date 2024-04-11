@@ -13,7 +13,8 @@ function Filters() {
   const filterTabRef = useRef<HTMLDivElement>(null);
   const minPrice = useSelector(selectMinPriceRange);
   const maxPrice = useSelector(selectMaxPriceRange);
-  const selectedCategories  = useSelector(selectCategories);
+  const selectedCategories = useSelector(selectCategories);
+  const [priceFilterCount, setPriceFilterCount] = useState<number>(0);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     const [minPrice, maxPrice] = newValue as [number, number];
@@ -33,6 +34,21 @@ function Filters() {
 
     // dispatch(fetchProductsAsync({ minPrice: min, maxPrice: max }));
   };
+
+  useEffect(() => {
+    // const selectedValues = value.filter((val) => {
+    //   return val !== 0;
+    // });
+    const selectedValues = value.filter((val) => {
+      return val !== minPrice && val !== maxPrice && val !== 0;
+    });
+    setPriceFilterCount(selectedValues.length);
+  
+    return () => {
+      
+    }
+  }, [value])
+  
 
   useEffect(() => {
     setValue([Number(minPrice), Number(maxPrice)]);
@@ -63,14 +79,27 @@ function Filters() {
       <div className="mb-6 ml-6">
         <h2 className="text-2xl font-bold mb-4">Filters</h2>
         <ul className="flex flex-wrap mx-2">
-          <li className="px-2">
-            <button onClick={handleActiveTab} name="price" className="flex items-center gap-1 border border-solid border-gray-200 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300">
-              Price <MdArrowDropDown className={`filter-arrow ${activeTab === "price" ? "active" : ""}`} />
+          <li className={`px-2 `}>
+            <button onClick={handleActiveTab} name="price" className={`filters__tab-btn  ${priceFilterCount > 0 ? 'selected' : ''} flex items-center gap-1 border border-solid border-gray-200 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300`}>
+              Price {priceFilterCount > 0 ? (
+                <div className="filters__category-count">
+                  <span>{priceFilterCount}</span>
+                </div>
+              ) : (
+                <MdArrowDropDown className={`filter-arrow ${activeTab === "price" ? "active" : ""}`} />
+              )}
             </button>
           </li>
-          <li className="px-2">
-            <button onClick={handleActiveTab} name="category" className="flex items-center gap-1 border border-solid border-gray-200 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300">
-              Sale <MdArrowDropDown className={`filter-arrow ${activeTab === "category" ? "active" : ""}`} />
+          <li className={`px-2`}>
+            <button onClick={handleActiveTab} name="category" className={`filters__tab-btn ${selectedCategories.length > 0 ? 'selected' : ''} flex items-center gap-1 border border-solid border-gray-200 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300`}>
+              Categories
+              {selectedCategories.length > 0 ? (
+                <div className="filters__category-count">
+                  <span>{selectedCategories.length}</span>
+                </div>
+              ) : (
+                <MdArrowDropDown className={`filter-arrow ${activeTab === "category" ? "active" : ""}`} />
+              )}
             </button>
           </li>
         </ul>

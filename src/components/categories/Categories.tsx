@@ -20,17 +20,6 @@ function Categories({ categories }: { categories: singleCategoryType[] }) {
   const handleSelectedCategories = (category: string) => {
     dispatch(toggleCategory(category));
   };
-  // const handleSelectedCategories = (category: string) => {
-  //   console.log("category", category);
-  //   setSelectedCategories((prevSelectedCategories) => {
-  //     const categoryIndex = prevSelectedCategories.indexOf(category);
-  //     if (categoryIndex !== -1) {
-  //       return prevSelectedCategories.filter((item) => item !== category);
-  //     } else {
-  //       return [...prevSelectedCategories, category];
-  //     }
-  //   });
-  // };
 
   return (
     <div className="categories-block">
