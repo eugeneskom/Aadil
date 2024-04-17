@@ -66,22 +66,41 @@ const ProductPage = () => {
     return () => {};
   }, [id, product]);
 
+
+  
   useEffect(() => {
     const container = document.createElement("div");
     container.innerHTML = product?.Description || "";
-
-    // Find all video elements in the HTML content
-    const videos = container.querySelectorAll("video");
-
-    // Loop through each video element
-    videos.forEach((video) => {
-      // Mute the video
-      video.muted = true;
-
-      // Pause the video
-      video.pause();
+  
+    // Find all iframe elements in the HTML content
+    const iframes = container.querySelectorAll("iframe");
+  
+    // Loop through each iframe element
+    iframes.forEach((iframe) => {
+      // Remove the autoplay attribute from the iframe
+      iframe.removeAttribute("autoplay");
+      
+      // Remove the allow attribute or remove 'autoplay' from the allow attribute
+      const allowAttr = iframe.getAttribute("allow");
+      if (allowAttr) {
+        const allowValues = allowAttr.split("; ");
+        const updatedAllowValues = allowValues.filter((value) => value !== "autoplay");
+        iframe.setAttribute("allow", updatedAllowValues.join("; "));
+      }
     });
+  
+    // Find the description container in the DOM
+    const descriptionContainer = document.querySelector(".text-gray-700");
+  
+    // Clear the existing content
+    if (descriptionContainer) {
+      descriptionContainer.innerHTML = "";
+  
+      // Append the modified HTML content to the description container
+      descriptionContainer.appendChild(container);
+    }
   }, [product?.Description]);
+
 
   const toggleWishlistHandler = async (productId: string) => {
     if (!token) return;
@@ -180,7 +199,9 @@ const ProductPage = () => {
       </div>
       <div className="mt-6">
         <h3 className="sr-only">Description</h3>
-        <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: productToRender.Description }} />
+        <div className="text-gray-700" 
+        // dangerouslySetInnerHTML={{ __html: productToRender.Description }}
+         />
       </div>
       {filteredProducts.length > 0 && <SimilarProducts products={filteredProducts.slice(0, 5)} />}
     </div>

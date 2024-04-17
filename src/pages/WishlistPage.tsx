@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectWishlistProducts } from "../state/wishlist/wishlistSlice";
+import { fetchWishlistProducts, selectWishlistError, selectWishlistLoading, selectWishlistProducts } from "../state/wishlist/wishlistSlice";
 import { AppDispatch, RootState } from "../state/store";
 import { selectUser } from "../state/user/userSlice";
 import { Product } from "../types/Product";
@@ -13,6 +13,18 @@ const WishlistPage = () => {
   const token = useSelector(selectToken);
   const wishlist: Product[] = useSelector(selectWishlistProducts);
   console.log("token::::::", token, "wishlist::::", wishlist);
+  const dispatch = useDispatch<AppDispatch>();
+  const wishlistProducts = useSelector(selectWishlistProducts);
+  const loading = useSelector(selectWishlistLoading);
+  const error = useSelector(selectWishlistError);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt'); // Assuming you have the token stored in local storage
+    if (token) {
+      const parsedToken = JSON.parse(token);
+      dispatch(fetchWishlistProducts(parsedToken));
+    }
+  }, [dispatch]);
 
   return (
     <section className="wishlist-page  py-8 mt-3">

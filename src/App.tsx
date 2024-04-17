@@ -61,9 +61,11 @@ function App() {
       }
     };
 
-    fetchWishlist();
-
-    // dispatch(fetchWishlistProducts(token));
+    // fetchWishlist();
+    const tokenLocal = localStorage.getItem("jwt") ?? "";
+    if (!tokenLocal) return; // Return if no token is found in localStorage
+    const token = JSON.parse(tokenLocal)
+    dispatch(fetchWishlistProducts(token));
   }, [dispatch]);
 
   useEffect(() => {
