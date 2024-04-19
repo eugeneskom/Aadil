@@ -78,7 +78,7 @@ const ProductSection = () => {
   const uniqueManufacturers = getUniqueManufacturers(products);
 
   return (
-    <div className="container mx-auto py-8 overflow-hidden">
+    <section className="container pb-11 mx-auto py-8 overflow-hidden">
       {/* Filters */}
       <Filters />
       {/* Products */}
@@ -95,7 +95,7 @@ const ProductSection = () => {
           Show More
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

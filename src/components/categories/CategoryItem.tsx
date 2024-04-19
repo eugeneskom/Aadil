@@ -23,7 +23,7 @@ function CategoryItem({
         }`}
       >
         <label
-          className="inline-flex items-center categories-block__label"
+          className="inline-flex items-center categories-block__label justify-between gap-4"
           onClick={() => onClick(category.category)}
         >
           <input

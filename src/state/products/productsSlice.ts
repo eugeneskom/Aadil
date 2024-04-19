@@ -16,6 +16,7 @@ interface ProductsState {
     minPrice: number | null;
     maxPrice: number | null;
     categories: string[];
+    subcategories: string[];
   };
   minPriceRange: number;
   maxPriceRange: number;
@@ -34,6 +35,7 @@ const initialState: ProductsState = {
     minPrice: null,
     maxPrice: null,
     categories: [],
+    subcategories: [],
   },
   minPriceRange: 0,
   maxPriceRange: 0,
@@ -48,7 +50,7 @@ export const fetchProductsAsync = createAsyncThunk("products/fetchProducts", asy
   try {
     const { products } = getState() as { products: ProductsState };
     const { filters, searchQuery } = products;
-    const { minPrice, maxPrice, categories } = filters;
+    const { minPrice, maxPrice, categories, subcategories } = filters;
 
     let url = `${process.env.REACT_APP_API_URL}/api/products`;
     const params: any = {};
@@ -61,7 +63,16 @@ export const fetchProductsAsync = createAsyncThunk("products/fetchProducts", asy
       if (limit) params.limit = limit;
       if (minPrice !== null) params.min = minPrice;
       if (maxPrice !== null) params.max = maxPrice;
-      if (categories.length > 0) params.categories = categories;
+      if (categories.length > 0) {
+        params.categories = categories;
+      } else {
+        delete params.categories;
+      }
+      if (subcategories.length > 0) {
+        params.subcategories = subcategories;
+      } else {
+        delete params.subcategories;
+      }
     }
 
     const response = await axios.get(url, { params });
@@ -87,16 +98,35 @@ const productsSlice = createSlice({
     setCategories: (state, action: PayloadAction<string[]>) => {
       state.filters.categories = action.payload;
     },
+
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
     toggleCategory: (state, action: PayloadAction<string>) => {
       const category = action.payload;
+      if (category === "") {
+        state.filters.categories = [];
+        state.filters.subcategories = [];
+        return;
+      }
       const categoryIndex = state.filters.categories.indexOf(category);
       if (categoryIndex !== -1) {
         state.filters.categories = state.filters.categories.filter((item) => item !== category);
       } else {
-        state.filters.categories.push(category);
+        state.filters.categories = [category];
+      }
+    },
+    toggleSubcategory: (state, action: PayloadAction<string>) => {
+      const subcategory = action.payload;
+      if (subcategory === "") {
+        state.filters.subcategories = [];
+        return;
+      }
+      const subcategoryIndex = state.filters.subcategories.indexOf(subcategory);
+      if (subcategoryIndex !== -1) {
+        state.filters.subcategories = state.filters.subcategories.filter((item) => item !== subcategory);
+      } else {
+        state.filters.subcategories.push(subcategory);
       }
     },
   },
@@ -119,8 +149,8 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setMinPrice, setMaxPrice, setCategories, setSearchQuery, toggleCategory } = productsSlice.actions;
-
+export const { setMinPrice, setMaxPrice, setCategories, setSearchQuery, toggleCategory, toggleSubcategory } = productsSlice.actions;
+export const selectSubcategories = (state: RootState) => state.products.filters.subcategories;
 export const selectProducts = (state: RootState) => state.products.products;
 export const selectProductsStatus = (state: RootState) => state.products.status;
 export const selectProductsError = (state: RootState) => state.products.error;
