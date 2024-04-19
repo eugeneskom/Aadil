@@ -15,7 +15,7 @@ export const fetchCategories = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
-      return response.data.categoryCounts; // Assuming the response is an object with categoryCounts property
+      return response.data.categories; // Assuming the response is an object with categoryCounts property
     } catch (error) {
       throw error;
     }

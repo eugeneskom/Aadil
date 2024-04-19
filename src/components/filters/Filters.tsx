@@ -32,13 +32,10 @@ function Filters() {
   const fetchProductsByPriceRange = (min: number, max: number) => {
     dispatch(fetchProductsAsync({ page: 1, limit: 20 }));
 
-    // dispatch(fetchProductsAsync({ minPrice: min, maxPrice: max }));
   };
 
   useEffect(() => {
-    // const selectedValues = value.filter((val) => {
-    //   return val !== 0;
-    // });
+
     const selectedValues = value.filter((val) => {
       return val !== minPrice && val !== maxPrice && val !== 0;
     });

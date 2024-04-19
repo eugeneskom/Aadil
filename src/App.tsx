@@ -125,39 +125,7 @@ function App() {
     };
   }, []);
 
-  // test query by category
-
-  useEffect(() => {
-    //   axios.post(`${process.env.REACT_APP_API_URL}/api/products/filter-categories`, { categories: ['Sofa', 'Loveseats','Sectional Sofa','curtain', 'mops'] })
-    // .then(response => {
-    //   const filteredProducts = response.data;
-    //   // Handle the filtered products on the front-end
-    // })
-    // .catch(error => {
-    //   console.error('Error filtering products:', error);
-    //   // Handle the error on the front-end
-    // });
-
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/products`, {
-        params: {
-          page: 1,
-          limit: 100,
-          min: 10,
-          max: 1550,
-          // categories: ['Sofa', 'Loveseats','Sectional Sofa','curtain', 'mops'],
-        },
-      })
-      .then((response) => {
-        const filteredProducts = response.data;
-        console.log("filteredProducts", filteredProducts);
-        // Handle the filtered products on the front-end
-      })
-      .catch((error) => {
-        console.log("error filtering products", error);
-      });
-    return () => {};
-  }, []);
+ 
 
   return (
     <>
