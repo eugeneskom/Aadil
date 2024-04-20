@@ -75,19 +75,7 @@ const SignUpPopup = () => {
                 <FcGoogle size={20} className="signup-google-btn" />
                 Continue with Google
               </button>
-              <button
-                className="social-signup-btn bg-white hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded border border-gray-400 focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick={() => {
-                  // Handle continue with Google, Apple, or Facebook logic here
-                  console.log("Continue with Google, Apple, or Facebook");
-                  // setShowPopup(false);
-                  togglePopup();
-                }}
-              >
-                <FaApple size={20} className="signup-google-btn" />
-                Continue with Apple
-              </button>
+
               <button
                 className="social-signup-btn bg-white hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded border border-gray-400 focus:outline-none focus:shadow-outline"
                 type="button"

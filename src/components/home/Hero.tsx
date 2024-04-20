@@ -1,7 +1,7 @@
 import React from "react";
-import leftImg from "../assets/img/grocery-banner4.webp";
-import centerImg from "../assets/img/grocery-slider1.webp";
-import rightImg from "../assets/img/grocery-banner5.webp";
+import leftImg from "../../assets/img/grocery-banner4.webp";
+import centerImg from "../../assets/img/grocery-slider1.webp";
+import rightImg from "../../assets/img/grocery-banner5.webp";
 import { LuShoppingBag } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,8 +13,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/swiper-bundle.css";
 
-const HeroSection = () => {
-  const heroImageUrl = "https://cdna.lystit.com/cms/DESKTOP_1_0c9ccdced9.jpg";
+const Hero = () => {
 
   return (
     <section className="w-full hero">
@@ -100,4 +99,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default Hero;

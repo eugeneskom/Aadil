@@ -152,10 +152,12 @@ const Header = () => {
             )}
 
             {/* Wishlist Heart */}
-            <NavLink to="/wishlist" className="header__action hover:text-gray-300 transition-colors duration-300">
-              <BiHeart size={24} />
-              {wishlist && wishlist.length > 0 ? <span className="wishlist-counter"> {wishlist.length}</span> : ""}
-            </NavLink>
+            {isValidToken && (
+              <NavLink to="/wishlist" className="header__action hover:text-gray-300 transition-colors duration-300">
+                <BiHeart size={24} />
+                {wishlist && wishlist.length > 0 ? <span className="wishlist-counter"> {wishlist.length}</span> : ""}
+              </NavLink>
+            )}
             {!isMobile && isValidToken && (
               <NavLink to="/user-account" className="header__action hover:text-gray-300 transition-colors duration-300">
                 <BiUser size={24} />
@@ -166,8 +168,8 @@ const Header = () => {
 
             {/* Sign Up Button */}
             {!isValidToken ? (
-              <button type="button" onClick={googleAuth} className="bg-black text-white px-4 py-2 rounded hover:opacity-80 transition-opacity duration-300">
-                Sign Up
+              <button type="button" onClick={googleAuth} className=" header__action hover:text-gray-300 transition-colors duration-300">
+                <BiUser size={24} />
               </button>
             ) : (
               ""

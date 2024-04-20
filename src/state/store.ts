@@ -8,6 +8,7 @@ import screenWidthReducer from "./screenWidthSlice";
 import AuthPopupStateSlice from "./AuthPopupStateSlice";
 import searchResultSlice from "./products/searchResultSlice";
 import categoriesSlice from "./categories/categoriesSlice";
+import groupedProductsSlice from "./products/groupedProductsSlice";
 export const store = configureStore({
   reducer: {
     products: productSlice,
@@ -19,6 +20,7 @@ export const store = configureStore({
     authPopupState: AuthPopupStateSlice,
     search: searchResultSlice,
     categories: categoriesSlice,
+    groupedProducts: groupedProductsSlice,
     // Add other reducers here if needed
   },
 });

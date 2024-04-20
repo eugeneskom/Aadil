@@ -1,21 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { NavLink } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser } from "../state/user/userSlice";
 import { AppDispatch } from "../state/store";
 import { RootState } from "../state/store";
-import axios from "axios";
 // import { setWishlist, toggleWishlist } from "../state/wishlist/wishlistSlice";
 import { selectToken } from "../state/token/tokenSlice";
-import { toggleWishlist, toggleWishlistAsync } from "../state/wishlist/wishlistSlice";
-import { IoBagAddOutline, IoEyeOutline } from "react-icons/io5";
+import { toggleWishlistAsync } from "../state/wishlist/wishlistSlice";
+import { IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
 import { calculateSalePercentage } from "../helpers";
-import imagePlaceholer from "../assets/img/placeholder.svg";
 interface ProductProps {
   product: Product;
   isWishlist?: boolean;
@@ -68,7 +65,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
             <button onClick={toggleProductPreview} type="button" className="m-2 text-white">
               <IoEyeOutline size={25} />
             </button>
-          </li> 
+          </li>
           <li className="product-card__item">
             <button onClick={() => handleWislistIconClick(product.Id)} type="button" className="a right-0 m-2 ">
               {isInWishlist ? <FaHeart size={20} className="text-white" /> : <FaRegHeart size={20} className="text-white" />}
@@ -83,17 +80,8 @@ function ProductCard({ product, isWishlist }: ProductProps) {
       <div className="p-4 flex-grow relative">
         <h3 className="text-lg font-semibold">{product.Name}</h3>
         <p className="text-gray-600 mb-2 font-bold">
-          Price:{" "}
-          {product.CurrentPrice && (
-            <span className={product.OriginalPrice === product.CurrentPrice ? "text-gray-500" : "price-color-standard mr-2"}>
-              {product.CurrentPrice} {product.Currency}
-            </span>
-          )}
-          {product.OriginalPrice && product.OriginalPrice !== product.CurrentPrice && (
-            <span className="text-gray-500 line-through">
-              {product.OriginalPrice} {product.Currency}
-            </span>
-          )}
+          Price: {product.CurrentPrice && <span className={product.OriginalPrice === product.CurrentPrice ? "text-gray-500" : "price-color-standard mr-2"}>${product.CurrentPrice}</span>}
+          {product.OriginalPrice && product.OriginalPrice !== product.CurrentPrice && <span className="text-gray-500 line-through">${product.OriginalPrice}</span>}
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}

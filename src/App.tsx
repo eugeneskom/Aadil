@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "./templates/Header";
 import ProductSection from "./components/ProductsSection";
 import ProductPage from "./pages/ProductPage";
-import Hero from "./components/Hero";
+import Hero from "./components/home/Hero";
 import WishlistPage from "./pages/WishlistPage";
 import { useSelector, useDispatch } from "react-redux";
 import LoginCallback from "./components/auth/LoginCallback";
@@ -20,6 +20,8 @@ import UserAccount from "./pages/UserAccount";
 import { validateToken } from "./state/token/isValidToken";
 import Dashboard from "./pages/Dashboard";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
+import Home from "./pages/Home";
+import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
 
 function App() {
   // const token = useSelector(selectToken);
@@ -31,10 +33,7 @@ function App() {
   const categories = useSelector(selectCategories);
   const status = useSelector(selectProductsStatus);
   console.log("categories", categories);
-
-  // useEffect(() => {
-  //   dispatch(fetchProductsAsync({ page: page, limit: 40 }) as any);
-  // }, [dispatch, page]);
+ 
 
   useEffect(() => {
     if (status === "idle") {
@@ -64,7 +63,7 @@ function App() {
     // fetchWishlist();
     const tokenLocal = localStorage.getItem("jwt") ?? "";
     if (!tokenLocal) return; // Return if no token is found in localStorage
-    const token = JSON.parse(tokenLocal)
+    const token = JSON.parse(tokenLocal);
     dispatch(fetchWishlistProducts(token));
   }, [dispatch]);
 
@@ -106,9 +105,30 @@ function App() {
       dispatch(setUser(user));
     }
   }, [user]);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
+
+
+  // useEffect(() => {
+  //   const getGroupedProducts = async () => {
+  //     try {
+  //       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/grouped`);
+  //       console.log("grouped products", response.data);
+  //     } catch (error) {
+  //       throw new Error("Failed to fetch grouped products");
+  //     }
+  //   }
+
+  //   getGroupedProducts()
+  
+  //   return () => {
+      
+  //   }
+  // }, [])
+  
+
 
   useEffect(() => {
     // setting if mobile or desktop on load for handling different ui templates
@@ -125,8 +145,6 @@ function App() {
     };
   }, []);
 
- 
-
   return (
     <>
       <Router>
@@ -134,15 +152,7 @@ function App() {
         {isAuthPopupOpen ? <SignUpPopup /> : ""}
         <main>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Hero />
-                  <ProductSection />
-                </>
-              }
-            />
+            <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
             <Route path="/product-page/:id" element={<ProductPage />} />

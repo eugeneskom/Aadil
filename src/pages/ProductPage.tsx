@@ -160,7 +160,7 @@ const ProductPage = () => {
 
           {productToRender.Category && (
             <p className="text-gray-500 mb-5">
-              Category: <span className="text-black font-bold">{productToRender.Category}</span>{" "}
+              Category: <span className="text-black font-bold">{productToRender.Category.join(', ')}</span>{" "}
             </p>
           )}
           {productToRender.SubCategory && (
