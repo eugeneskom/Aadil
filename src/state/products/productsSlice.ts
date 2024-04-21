@@ -104,15 +104,22 @@ const productsSlice = createSlice({
     },
     toggleCategory: (state, action: PayloadAction<string>) => {
       const category = action.payload;
+      console.log("toggleCategory_category", category);
       if (category === "") {
         state.filters.categories = [];
         state.filters.subcategories = [];
+        console.log("toggleCategory_category return", category);
+
         return;
       }
       const categoryIndex = state.filters.categories.indexOf(category);
       if (categoryIndex !== -1) {
+        console.log("toggleCategory_category return filter", category);
+
         state.filters.categories = state.filters.categories.filter((item) => item !== category);
       } else {
+        console.log("toggleCategory_category return set", category);
+
         state.filters.categories = [category];
       }
     },

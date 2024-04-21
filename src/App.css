@@ -671,6 +671,18 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   display: block;
 }
 
+
+
+.categories-section .swiper-slide{
+  height: auto;
+}
+.categories-section .swiper-wrapper{
+  padding: 20px 0;
+}
+.categories-section .swiper-slide > div{
+  height: 100%;
+}
+
 @media (max-width: 1200px){
   .hero__inner .col {
     position: relative;

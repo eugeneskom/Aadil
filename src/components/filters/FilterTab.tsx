@@ -5,6 +5,7 @@ import { selectMaxPriceRange, selectMinPriceRange, selectProductsLength } from "
 import { selectCategories } from "../../state/categories/categoriesSlice";
 import { singleCategoryType } from "../../types/singleCategoryType";
 import Categories from "../categories/Categories";
+import { useParams } from "react-router-dom";
 interface FilterTabProps {
   activeTab: string;
   minPrice: number | null;
@@ -16,10 +17,8 @@ interface FilterTabProps {
 
 const FilterTab: React.FC<FilterTabProps> = ({ activeTab, minPrice, maxPrice, value, handleChange, handleChangeCommitted }) => {
   const filteredResultLength = useSelector(selectProductsLength);
-  const categories = useSelector(selectCategories);
-  const minPriceRange = useSelector(selectMinPriceRange);
-  const maxPriceRange = useSelector(selectMaxPriceRange);
-  console.log("categories", categories);
+  const categories = useSelector(selectCategories); 
+  // console.log("categories", categories);
 
   return (
     <div className="filters">

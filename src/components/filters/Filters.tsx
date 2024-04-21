@@ -2,9 +2,16 @@ import { Box, Slider } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAsync, selectCategories, selectMaxPriceRange, selectMinPriceRange, setMaxPrice, setMinPrice } from "../../state/products/productsSlice";
+import { fetchProductsAsync, selectCategories, selectMaxPriceRange, selectMinPriceRange, setMaxPrice, setMinPrice, toggleCategory } from "../../state/products/productsSlice";
 import { AppDispatch } from "../../state/store";
 import FilterTab from "./FilterTab"; // Import the new FilterTab component
+import { useParams } from "react-router-dom";
+
+const capitalizeWords = (str: string) => {
+  return str.replace(/\b\w/g, (char: string) => char.toUpperCase());
+};
+
+
 
 function Filters() {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,6 +22,25 @@ function Filters() {
   const maxPrice = useSelector(selectMaxPriceRange);
   const selectedCategories = useSelector(selectCategories);
   const [priceFilterCount, setPriceFilterCount] = useState<number>(0);
+
+  const { categoryName } = useParams();
+
+useEffect(() => {
+  // if we are on the category product page, we need to fetch the products based on the category name
+  const normalizedCategoryName = categoryName ? capitalizeWords(categoryName.replace(/-/g, " ")) : "";
+  // setCurrentCategory(normalizedCategoryName);
+  if(normalizedCategoryName){
+    console.log('categoryName',categoryName)
+    // dispatch(toggleCategory(normalizedCategoryName));
+    dispatch(fetchProductsAsync({}));
+    console.log('fetchProductsAsync useEffect')
+  }
+
+  return () => {
+    
+  }
+}, [selectedCategories])
+
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     const [minPrice, maxPrice] = newValue as [number, number];
@@ -27,11 +53,13 @@ function Filters() {
     dispatch(setMinPrice(minPrice));
     dispatch(setMaxPrice(maxPrice));
     fetchProductsByPriceRange(minPrice, maxPrice);
+    console.log('fetchProductsAsync useEffect')
+
   };
 
   const fetchProductsByPriceRange = (min: number, max: number) => {
+    console.log('fetchProductsAsync fetchProductsByPriceRange')
     dispatch(fetchProductsAsync({ page: 1, limit: 20 }));
-
   };
 
   useEffect(() => {
@@ -69,7 +97,7 @@ function Filters() {
     };
   }, []);
 
-  console.log("ACTIVE_TAB", activeTab);
+  // console.log("ACTIVE_TAB", activeTab);
   return (
     <section className="filters relative z-10 " ref={filterTabRef}>
       {/* Filters */}

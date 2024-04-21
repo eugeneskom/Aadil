@@ -22,6 +22,8 @@ import Dashboard from "./pages/Dashboard";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
 import Home from "./pages/Home";
 import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
+import Footer from "./templates/Footer";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   // const token = useSelector(selectToken);
@@ -32,35 +34,17 @@ function App() {
   const page = useSelector((state: RootState) => state.products.page);
   const categories = useSelector(selectCategories);
   const status = useSelector(selectProductsStatus);
-  console.log("categories", categories);
+  // console.log("categories", categories);
  
 
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchProductsAsync({ page, limit: 100 }));
-    }
-  }, [dispatch, page, status]);
+  // useEffect(() => {
+  //   if (status === "idle") {
+  //     dispatch(fetchProductsAsync({ page, limit: 100 }));
+  //   }
+  // }, [dispatch, page, status]);
 
   useEffect(() => {
     // Fetch wishlist on load of the current user
-    const fetchWishlist = async () => {
-      try {
-        const tokenLocal = localStorage.getItem("jwt") ?? "";
-        if (!tokenLocal) return; // Return if no token is found in localStorage
-
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wishlist`, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(tokenLocal)}`,
-          },
-        });
-        console.log("fetch wishlist", response.data);
-        // dispatch(setWishlist(response.data.products));
-      } catch (error) {
-        throw new Error("Failed to fetch wishlist");
-      }
-    };
-
-    // fetchWishlist();
     const tokenLocal = localStorage.getItem("jwt") ?? "";
     if (!tokenLocal) return; // Return if no token is found in localStorage
     const token = JSON.parse(tokenLocal);
@@ -110,24 +94,7 @@ function App() {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-
-  // useEffect(() => {
-  //   const getGroupedProducts = async () => {
-  //     try {
-  //       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/grouped`);
-  //       console.log("grouped products", response.data);
-  //     } catch (error) {
-  //       throw new Error("Failed to fetch grouped products");
-  //     }
-  //   }
-
-  //   getGroupedProducts()
-  
-  //   return () => {
-      
-  //   }
-  // }, [])
-  
+ 
 
 
   useEffect(() => {
@@ -156,10 +123,12 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
             <Route path="/product-page/:id" element={<ProductPage />} />
+            <Route path="/products-category/:categoryName" element={<CategoryPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/user-account" element={<UserAccount />} />
           </Routes>
         </main>
+        <Footer />
       </Router>
     </>
   );

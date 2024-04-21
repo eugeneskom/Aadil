@@ -84,7 +84,7 @@ const ProductSection = () => {
       {/* Products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{sortedProducts && sortedProducts.length > 0 && sortedProducts.map((product) => <ProductCard product={product} />)}</div>
 
-      <div className="flex flex-col items-center mt-6">
+      {/* <div className="flex flex-col items-center mt-6">
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
           <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${loadingPercentage}%` }}></div>
         </div>
@@ -94,7 +94,7 @@ const ProductSection = () => {
         <button onClick={handleLoadMore} className="bg-white text-black border border-black px-8 py-3 rounded-md hover:bg-gray-100 transition-colors duration-300">
           Show More
         </button>
-      </div>
+      </div> */}
     </section>
   );
 };

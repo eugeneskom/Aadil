@@ -14,13 +14,15 @@ function Featured() {
   const { featuredProducts } = useSelector((state: RootState) => state.groupedProducts);
 
   return (
-    <section className="container pb-11 mx-auto py-8 overflow-hidden">
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-bold mb-4">Featured products</h2>
-        <NavLink to="featured">View deals</NavLink>
-      </div>
+    <section className=" pb-11 mx-auto py-11 overflow-x-hidden ">
+      <div className="container">
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold mb-4">Featured products</h2>
+          <NavLink to="featured">View deals</NavLink>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{featuredProducts && featuredProducts.length > 0 && featuredProducts.slice(0, 8).map((product: Product) => <ProductCard key={product.Id} product={product} />)}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{featuredProducts && featuredProducts.length > 0 && featuredProducts.slice(0, 8).map((product: Product) => <ProductCard key={product.Id} product={product} />)}</div>
+      </div>
     </section>
   );
 }

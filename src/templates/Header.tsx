@@ -30,7 +30,7 @@ const Header = () => {
   // const [searchQuery, setSearchQuery] = useState("");
   const searchQuery = useSelector(selectSearchQuery);
 
-  console.log("user", user);
+  // console.log("user", user);
 
   // search products by query string using debounce to prevent multiple requests in a short time frame
   const handleSearchProducts = useCallback(
