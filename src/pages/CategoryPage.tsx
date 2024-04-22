@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { useParams } from "react-router-dom";
 import Filters from "../components/filters/Filters";
-import { selectCategories, selectProducts, toggleCategory } from "../state/products/productsSlice";
+import { selectCategories, selectProducts, setCategories, toggleCategory } from "../state/products/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../state/store";
 import { Product } from "../types/Product";
@@ -20,8 +20,7 @@ function CategoryPage() {
     const title = categoryName?.replace("-", " ") || "Category";
     if (title) {
       setTitle(title);
-      dispatch(toggleCategory(capitalizeWords(title)));
-
+      dispatch(setCategories([capitalizeWords(title)]));
     }
 
     return () => {};

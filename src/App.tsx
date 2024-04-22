@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
 import Header from "./templates/Header";
@@ -24,6 +24,18 @@ import Home from "./pages/Home";
 import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
 import Footer from "./templates/Footer";
 import CategoryPage from "./pages/CategoryPage";
+
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  return null;
+}
+
 
 function App() {
   // const token = useSelector(selectToken);
@@ -115,6 +127,7 @@ function App() {
   return (
     <>
       <Router>
+        <ScrollToTop />
         <Header />
         {isAuthPopupOpen ? <SignUpPopup /> : ""}
         <main>
