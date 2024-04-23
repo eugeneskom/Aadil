@@ -24,6 +24,7 @@ import Home from "./pages/Home";
 import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
 import Footer from "./templates/Footer";
 import CategoryPage from "./pages/CategoryPage";
+import ProductCardPreloader from "./components/ProductCardPreloader";
 
 
 function ScrollToTop() {

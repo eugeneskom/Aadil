@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import ProductCard from "../ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-
+import ProductCardPreloader from "../ProductCardPreloader";
 
 interface ProductsByCategoryProps {
   products: Product[];
@@ -14,6 +14,7 @@ interface ProductsByCategoryProps {
 }
 
 function ProductsByCategory({ products, title, actionLinkText, navigateTo }: ProductsByCategoryProps) {
+  console.log("Products_count", products.length);
   return (
     <section className=" pb-11 mx-auto py-11  overflow-x-hidden categories-section">
       <div className="container">
@@ -46,13 +47,19 @@ function ProductsByCategory({ products, title, actionLinkText, navigateTo }: Pro
               },
             }}
           >
-            {products &&
-              products.length > 0 &&
-              products.map((product) => (
-                <SwiperSlide key={product.Id} className="swiper-slide">
-                  <ProductCard product={product} />
-                </SwiperSlide>
-              ))}
+            {products && products.length > 0
+              ? products.map((product) => (
+                  <SwiperSlide key={product.Id} className="swiper-slide">
+                    <ProductCard product={product} />
+                  </SwiperSlide>
+                ))
+              : Array(8)
+                  .fill(null)
+                  .map((_, index) => (
+                    <SwiperSlide key={index} className="swiper-slide">
+                      <ProductCardPreloader />
+                    </SwiperSlide>
+                  ))}
           </Swiper>
         </div>
       </div>

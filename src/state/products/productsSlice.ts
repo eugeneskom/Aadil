@@ -98,6 +98,9 @@ const productsSlice = createSlice({
     setCategories: (state, action: PayloadAction<string[]>) => {
       state.filters.categories = action.payload;
     },
+    setSubCategories: (state, action: PayloadAction<string[]>) => {
+      state.filters.subcategories = action.payload;
+    },
 
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
@@ -156,7 +159,7 @@ const productsSlice = createSlice({
   },
 });
 
-export const { setMinPrice, setMaxPrice, setCategories, setSearchQuery, toggleCategory, toggleSubcategory } = productsSlice.actions;
+export const { setMinPrice, setMaxPrice, setCategories, setSubCategories, setSearchQuery, toggleCategory, toggleSubcategory } = productsSlice.actions;
 export const selectSubcategories = (state: RootState) => state.products.filters.subcategories;
 export const selectProducts = (state: RootState) => state.products.products;
 export const selectProductsStatus = (state: RootState) => state.products.status;

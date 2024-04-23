@@ -134,12 +134,12 @@ const ProductPage = () => {
           <div className="product-page__price mb-7 pb-5">
             {productToRender.CurrentPrice && (
               <span className={productToRender.OriginalPrice === productToRender.CurrentPrice ? "current text-gray-500" : " current price-color-standard mr-2"}>
-                {productToRender.CurrentPrice} {productToRender.Currency}
+                $ {productToRender.CurrentPrice} 
               </span>
             )}
             {productToRender.OriginalPrice && productToRender.OriginalPrice !== productToRender.CurrentPrice && (
               <span className="text-gray-500 line-through">
-                {productToRender.OriginalPrice} {productToRender.Currency}
+                $ {productToRender.OriginalPrice} 
               </span>
             )}
           </div>
