@@ -4,6 +4,7 @@ import { fetchProductsAsync, selectPage, selectProducts, selectProductsStatus, s
 import ProductCard from "./ProductCard";
 import { AppDispatch, RootState } from "../state/store";
 import Filters from "./filters/Filters";
+import { useEffect } from "react";
 const ProductSection = () => {
   const dispatch = useDispatch<AppDispatch>();
   const products: Product[] = useSelector(selectProducts);
@@ -19,48 +20,62 @@ const ProductSection = () => {
       dispatch(fetchProductsAsync({ page: page + 1, limit: 100 }));
     }
   };
+  
+
+  useEffect(() => {
+    dispatch(fetchProductsAsync({ page: page + 1, limit: 100 }));
+  
+    return () => {
+      
+    }
+  }, [])
+  
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;
   const displayedProductsCount = displayedProducts.length;
   const loadingPercentage = totalProducts === 0 ? 0 : (displayedProductsCount / totalProducts) * 100;
 
-  function groupProductsByManufacturer(products: Product[]): Map<string, Product[]> {
-    return products.reduce((map, product) => {
-      const manufacturer = product.Manufacturer.toLowerCase();
-      if (!map.has(manufacturer)) {
-        map.set(manufacturer, []);
-      }
-      map.get(manufacturer)?.push(product);
-      return map;
-    }, new Map<string, Product[]>());
+  function groupProductsByManufacturer(products: Product[]): Product[] {
+  // function groupProductsByManufacturer(products: Product[]): Map<string, Product[]> {
+    // test
+    return products;
+    // return products.reduce((map, product) => {
+    //   const manufacturer = product.Manufacturer.toLowerCase();
+    //   if (!map.has(manufacturer)) {
+    //     map.set(manufacturer, []);
+    //   }
+    //   map.get(manufacturer)?.push(product);
+    //   return map;
+    // }, new Map<string, Product[]>());
   }
 
   function sortProductsByManufacturer(products: Product[]): Product[] {
-    const productsByManufacturer = groupProductsByManufacturer(products);
-    const manufacturers = Array.from(productsByManufacturer.keys());
-    const sortedProducts: Product[] = [];
-    let currentIndex = 0;
+    return products;
+    // const productsByManufacturer = groupProductsByManufacturer(products);
+    // const manufacturers = Array.from(productsByManufacturer.keys());
+    // const sortedProducts: Product[] = [];
+    // let currentIndex = 0;
 
-    while (productsByManufacturer.size > 0) {
-      const manufacturer = manufacturers[currentIndex];
-      const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
+    // while (productsByManufacturer.size > 0) {
+    //   const manufacturer = manufacturers[currentIndex];
+    //   const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
 
-      // Add a product from the current manufacturer
-      if (productsFromManufacturer.length > 0) {
-        sortedProducts.push(productsFromManufacturer.shift()!);
-      }
+    //   // Add a product from the current manufacturer
+    //   if (productsFromManufacturer.length > 0) {
+    //     sortedProducts.push(productsFromManufacturer.shift()!);
+    //   }
 
-      // Remove the current manufacturer if it has no more products
-      if (productsFromManufacturer.length === 0) {
-        productsByManufacturer.delete(manufacturer);
-        manufacturers.splice(currentIndex, 1);
-      }
+    //   // Remove the current manufacturer if it has no more products
+    //   if (productsFromManufacturer.length === 0) {
+    //     productsByManufacturer.delete(manufacturer);
+    //     manufacturers.splice(currentIndex, 1);
+    //   }
 
-      // Move to the next manufacturer index
-      currentIndex = (currentIndex + 1) % manufacturers.length;
-    }
+    //   // Move to the next manufacturer index
+    //   currentIndex = (currentIndex + 1) % manufacturers.length;
+    // }
 
-    return sortedProducts;
+    // return sortedProducts;
   }
 
   const sortedProducts = sortProductsByManufacturer(products);

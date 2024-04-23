@@ -25,7 +25,7 @@ const SimilarProducts: React.FC<{ products: Product[] }> = ({ products }) => (
           <div className="p-4">
             <h3 className="text-gray-900 font-semibold text-lg">{product.Name}</h3>
             <p className="text-gray-600 mt-2">
-              {product.CurrentPrice} {product.Currency}
+             $ {product.CurrentPrice} 
             </p>
           </div>
         </NavLink>
@@ -113,7 +113,7 @@ const ProductPage = () => {
   const productToRender = product || fetchedProduct;
 
   if (!productToRender) {
-    return <div>Loading...</div>;
+    return <div className="container">Loading...</div>;
   }
 
   return (
