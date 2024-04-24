@@ -73,7 +73,7 @@ function App() {
       dispatch(setToken(parsedToken));
     }
 
-    // when user clicks on add to wishlist but not registered, save the productId and then toggle it here and remove on first page load
+    // when user clicks on add to wishlist but not registered, save the productId and then toggle it here and remove on first page loads
     const savedProdId = localStorage.getItem("productIdWishlist") || "";
     if (savedProdId) {
       // dispatch(toggleWishlist(savedProdId));
