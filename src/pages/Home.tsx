@@ -50,7 +50,7 @@ function Home() {
       <ProductsByCategory products={livingRoomProducts} title={"Living Room category"} actionLinkText="View Deals" navigateTo={"/products-category/living-room"} />
       <ProductsByCategory products={kitchetProducts} title={"Kitchen category"} actionLinkText="View Deals" navigateTo={"/products-category/kitchen"} />
       <ProductsByCategory products={bedroomProducts} title={"Bedroom category"} actionLinkText="View Deals" navigateTo={"/products-category/bedroom"} />
-      <ProductSection />
+      {/* <ProductSection /> */}
     </>
   );
 }
