@@ -17,6 +17,12 @@ interface ProductProps {
   product: Product;
   isWishlist?: boolean;
 }
+
+function capitalizeWords(str: string): string {
+  return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}
+
+
 function ProductCard({ product, isWishlist }: ProductProps) {
   const navigate = useNavigate();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
@@ -95,7 +101,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
-          From: <NavLink to ={`brand/${product.Manufacturer}`} className="text-black font-bold">{product.Manufacturer}</NavLink>{" "}
+          From: <NavLink to ={`brand/${capitalizeWords(product.Manufacturer)}`} className="text-black font-bold">{product.Manufacturer}</NavLink>{" "}
         </p>
       </div>
 
