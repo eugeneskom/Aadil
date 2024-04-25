@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../state/store";
@@ -18,6 +18,7 @@ interface ProductProps {
   isWishlist?: boolean;
 }
 function ProductCard({ product, isWishlist }: ProductProps) {
+  const navigate = useNavigate();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const [showProductPreview, setShowProductPreview] = useState(false);
   const token = useSelector(selectToken);
@@ -56,8 +57,18 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     setShowProductPreview(!showProductPreview);
   };
 
+  const handleViewProduct = (product: Product) => {
+    navigate(`/product-page/${product.Id}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleBuyNow = (product: Product) => {
+    window.open(product.Url, "_blank");
+  };
+
+
   return (
-    <div key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
+    <NavLink to={`/product-page/${product.Id}`} key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
       <div className="product-card__header">
         {salePercentage !== null && <div className="sale-percentage "> - {salePercentage}%</div>}
         <ul className="product-card__list">
@@ -90,19 +101,25 @@ function ProductCard({ product, isWishlist }: ProductProps) {
       </div>
 
       <div className={`p-4 ${isWishlist ? "flex gap-2" : ""}`}>
-        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
-          Read more
-        </NavLink>
+        <button
+          onClick={(e) => handleViewProduct(product)}
+          className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+        >
+          View Product
+        </button>
         {isWishlist ? (
-          <NavLink to={`${product.Url}`} target="_blank" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+          <button
+            onClick={(e) => handleBuyNow(product)}
+            className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+          >
             Buy now
-          </NavLink>
+          </button>
         ) : (
           ""
         )}
       </div>
       {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}
-    </div>
+    </NavLink>
   );
 }
 

@@ -9,6 +9,7 @@ import AuthPopupStateSlice from "./AuthPopupStateSlice";
 import searchResultSlice from "./products/searchResultSlice";
 import categoriesSlice from "./categories/categoriesSlice";
 import groupedProductsSlice from "./products/groupedProductsSlice";
+import BrandsSlice from "./BrandsSlice";
 export const store = configureStore({
   reducer: {
     products: productSlice,
@@ -21,6 +22,7 @@ export const store = configureStore({
     search: searchResultSlice,
     categories: categoriesSlice,
     groupedProducts: groupedProductsSlice,
+    brands: BrandsSlice,
     // Add other reducers here if needed
   },
 });

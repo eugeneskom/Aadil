@@ -193,7 +193,7 @@ const ProductPage = () => {
             {/* "" */}
             {/* )} */}
             <div className="mb-5">
-              <ShareComponent />
+              <ShareComponent title={productToRender.Name} imageUrl={productToRender.ImageUrl}/>
             </div>
           </div>
         </div>

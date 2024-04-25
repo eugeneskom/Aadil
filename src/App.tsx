@@ -25,6 +25,8 @@ import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
 import Footer from "./templates/Footer";
 import CategoryPage from "./pages/CategoryPage";
 import ProductCardPreloader from "./components/ProductCardPreloader";
+import { fetchBrands } from "./state/BrandsSlice";
+import BrandPage from "./pages/BrandPage";
 
 
 function ScrollToTop() {
@@ -62,6 +64,7 @@ function App() {
     if (!tokenLocal) return; // Return if no token is found in localStorage
     const token = JSON.parse(tokenLocal);
     dispatch(fetchWishlistProducts(token));
+    dispatch(fetchBrands());
   }, [dispatch]);
 
   useEffect(() => {
@@ -140,6 +143,8 @@ function App() {
             <Route path="/products-category/:categoryName" element={<CategoryPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/user-account" element={<UserAccount />} />
+            <Route path="/brand/:brandId" element={<BrandPage />} />
+
           </Routes>
         </main>
         <Footer />
