@@ -2,7 +2,7 @@ import React from 'react';
 
 const ProductCardPreloader = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card animate-pulse">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card animate-pulse product-card">
       <div className="product-card__header">
         <div className="w-full h-64 bg-gray-300"></div>
       </div>

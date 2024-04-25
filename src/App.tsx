@@ -143,7 +143,7 @@ function App() {
             <Route path="/products-category/:categoryName" element={<CategoryPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/user-account" element={<UserAccount />} />
-            <Route path="/brand/:brandId" element={<BrandPage />} />
+            <Route path="/brand/:brandName" element={<BrandPage />} />
 
           </Routes>
         </main>
