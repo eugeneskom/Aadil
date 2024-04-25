@@ -16,6 +16,11 @@ interface ProductPageProps {
   product: Product;
 }
 
+
+function capitalizeWords(str: string): string {
+  return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}
+
 const SimilarProducts: React.FC<{ products: Product[] }> = ({ products }) => (
   <div className="mt-8">
     <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Products</h2>
@@ -145,7 +150,7 @@ const ProductPage = () => {
             </div>
             <p className="text-gray-500 mb-5">
               {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
-              From: <span className="text-black font-bold">{productToRender.Manufacturer}</span>{" "}
+              From: <NavLink to ={`/brand/${capitalizeWords(productToRender.Manufacturer)}`} className="text-black font-bold">{productToRender.Manufacturer}</NavLink>{" "}
             </p>
             {productToRender.Colors.length > 0 ? (
               <p className="mb-3">
