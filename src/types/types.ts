@@ -5,5 +5,6 @@ export interface Brand {
   Name: string;
   URL: string;
   Logo: string;
+  Description: string;
   _id: string;
 }

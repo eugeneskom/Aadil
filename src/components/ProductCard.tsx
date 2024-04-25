@@ -37,9 +37,9 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     img.onerror = () => setImageIsLoaded(false);
   }, [product.ImageUrl]);
 
-  if (!imageIsLoaded) {
-    return null; // Don't render the product if the image is broken
-  }
+  // if (!imageIsLoaded) {
+  //   return null; // Don't render the product if the image is broken
+  // }
 
   const handleWislistIconClick = (productId: string) => {
     console.log("handleWislistIconClick", token);
@@ -65,7 +65,6 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   const handleBuyNow = (product: Product) => {
     window.open(product.Url, "_blank");
   };
-
 
   return (
     <NavLink to={`/product-page/${product.Id}`} key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
@@ -96,26 +95,19 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
-          From: <span className="text-black font-bold">{product.Manufacturer}</span>{" "}
+          From: <NavLink to ={`brand/${product.Manufacturer}`} className="text-black font-bold">{product.Manufacturer}</NavLink>{" "}
         </p>
       </div>
 
       <div className={`p-4 ${isWishlist ? "flex gap-2" : ""}`}>
-        <button
-          onClick={(e) => handleViewProduct(product)}
-          className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-        >
-          View Product
-        </button>
         {isWishlist ? (
-          <button
-            onClick={(e) => handleBuyNow(product)}
-            className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-          >
+          <button onClick={(e) => handleBuyNow(product)} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
             Buy now
           </button>
         ) : (
-          ""
+          <button onClick={(e) => handleViewProduct(product)} className="product-card__open w-full flex justify-cente text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+            View Product
+          </button>
         )}
       </div>
       {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}

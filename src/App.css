@@ -683,10 +683,50 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   height: 100%;
 }
 
+
+/* Brand page */
+
+.brand-page__top{
+  position:relative;
+  margin-bottom: 150px;
+}
+.brand-page__side{
+  max-width: 300px;
+  padding: 50px 20px 20px;
+}
+
+.brand-page__content{
+  display: flex;
+}
+.brand-page__logo{
+  position:absolute;
+  bottom: 0;
+  transform: translateY(50%);
+}
+.brand-page__subtitle{
+  font-size: 48px;
+  margin-bottom: 40px;
+  line-height: 1.3;
+}
+
+.shadow-bottom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 @media (max-width: 1200px){
   .hero__inner .col {
     position: relative;
     min-height: 300px; 
+  }
+
+  .brand-page__side{
+    order: 1
+    
+  }
+  
+  .brand-page__content{
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -835,8 +875,5 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
-
-  /* .hero__inner .col.center{
-  width: 50%;
-} */
+ 
 }
