@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Brand } from "../types/types";
 import { getBrands } from "../state/BrandsSlice";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import { Product } from "../types/Product";
 import ProductCardPreloader from "../components/ProductCardPreloader";
+import Breadcrumb from "../components/Breadcrumbs";
 function BrandPage() {
   const { brandName } = useParams();
   const brands: Brand[] = useSelector(getBrands);
@@ -15,6 +16,7 @@ function BrandPage() {
   const [productsSale, setProductsSale] = useState<Product[] | []>([]);
   const [displayedProductsNoSale, setDisplayedProductsNoSale] = useState<Product[] | []>([]);
   const [displayedProductsSale, setDisplayedProductsSale] = useState<Product[] | []>([]);
+  const location = useLocation();
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -62,7 +64,18 @@ function BrandPage() {
     return null;
   }
 
-  console.log("displayedProductsSale", displayedProductsSale);
+ 
+  const breadcrumbItems = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: `${currentBrand.Name}`,
+      path: "/brands",
+    },
+ 
+  ]
 
   return (
     <section className="brand-page">
@@ -72,6 +85,9 @@ function BrandPage() {
           <div className="overflow-hidden brand-page__logo">
             <img src={currentBrand.Logo} alt={currentBrand.Name} className="rounded-full bg-blue-500 h-40 w-40" />
           </div>
+        </div>
+        <div className="brand-page__breadcrumbs">
+          <Breadcrumb items={breadcrumbItems} />
         </div>
 
         <div className="brand-page__content">
@@ -110,7 +126,6 @@ function BrandPage() {
                   View more
                 </button>
               )}
-          
             </div>
           </div>
         </div>

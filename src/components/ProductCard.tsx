@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../state/store";
@@ -19,19 +19,22 @@ interface ProductProps {
 }
 
 function capitalizeWords(str: string): string {
-  return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 }
-
 
 function ProductCard({ product, isWishlist }: ProductProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const [showProductPreview, setShowProductPreview] = useState(false);
   const token = useSelector(selectToken);
   const dispatch: AppDispatch = useDispatch(); // Cast the dispatch to AppDispatch
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const isInWishlist = wishlistItems.includes(product.Id);
-
+  console.log(location.pathname, "location.pathname");
   // Calculate the sale percentage
   const salePercentage = calculateSalePercentage(product);
 
@@ -72,8 +75,35 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     window.open(product.Url, "_blank");
   };
 
+  const navigateToLocation = (location: string) => {
+    let link = "/";
+    if (location.includes("brand")) {
+      link = `${location}/product-page/${product.Id}}`;
+      console.log(link, "link");
+    } else if (location.includes("products-category")) {
+      link = `${location}/product-page/${product.Id}`;
+      console.log(link, "link");
+    } else if (location.includes("category")) {
+      link = `/category/${product.Category}/${product.SubCategory}`;
+      console.log(link, "link");
+    } else {
+      link = `/product-page/${product.Id}`;
+    }
+    navigate(`${location}/product-page/${product.Id}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const currentPath = location.pathname;
+
+  // Define the regex pattern to match "/products-category/{word}/product-page/"
+  const pattern = /^\/products-category\/\w+\/product-page\/\d+$/;
+
+  // Check if the current URL matches the pattern
+  const isproductCatProduct = pattern.test(currentPath);
+  console.log(isproductCatProduct, "isproductCatProduct");
+
   return (
-    <NavLink to={`/product-page/${product.Id}`} key={product.Id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
+    <div onClick={() => navigateToLocation(location.pathname)} key={product.Id} className="cursor-pointer bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
       <div className="product-card__header">
         {salePercentage !== null && <div className="sale-percentage "> - {salePercentage}%</div>}
         <ul className="product-card__list">
@@ -101,7 +131,10 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         </p>
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
-          From: <NavLink to ={`brand/${capitalizeWords(product.Manufacturer)}`} className="text-black font-bold">{product.Manufacturer}</NavLink>{" "}
+          From:{" "}
+          <NavLink to={`brand/${capitalizeWords(product.Manufacturer)}`} className="text-black font-bold">
+            {product.Manufacturer}
+          </NavLink>{" "}
         </p>
       </div>
 
@@ -117,7 +150,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         )}
       </div>
       {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}
-    </NavLink>
+    </div>
   );
 }
 

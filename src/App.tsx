@@ -28,7 +28,6 @@ import ProductCardPreloader from "./components/ProductCardPreloader";
 import { fetchBrands } from "./state/BrandsSlice";
 import BrandPage from "./pages/BrandPage";
 
-
 function ScrollToTop() {
   const location = useLocation();
 
@@ -39,6 +38,20 @@ function ScrollToTop() {
   return null;
 }
 
+export function capitalizeWords(str: string): string {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+// BREADCRUMBS MAP
+export const breadcrumbItems = [
+  { label: "Home", path: "/" },
+  { label: "Category", path: "/category" },
+  { label: "Subcategory", path: "/category/subcategory" },
+  { label: "Product", path: "/category/subcategory/product" },
+];
 
 function App() {
   // const token = useSelector(selectToken);
@@ -50,7 +63,6 @@ function App() {
   const categories = useSelector(selectCategories);
   const status = useSelector(selectProductsStatus);
   // console.log("categories", categories);
- 
 
   // useEffect(() => {
   //   if (status === "idle") {
@@ -110,9 +122,6 @@ function App() {
     dispatch(fetchCategories());
   }, [dispatch]);
 
- 
-
-
   useEffect(() => {
     // setting if mobile or desktop on load for handling different ui templates
     const handleResize = () => {
@@ -128,6 +137,26 @@ function App() {
     };
   }, []);
 
+  const breadcrumbsProdPageHome = [
+    { label: "Home", path: "/" },
+    { label: "Product", path: "/product-page" },
+  ];
+
+  const breadcrumbsProdCategoryHome = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Category",
+      path: "/category",
+    },
+    {
+      label: "Subcategory",
+      path: "/category/subcategory",
+    },
+  ];
+
   return (
     <>
       <Router>
@@ -139,12 +168,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
-            <Route path="/product-page/:id" element={<ProductPage />} />
+            <Route path="/product-page/:id" element={<ProductPage breadcrList={breadcrumbsProdPageHome} />} />
             <Route path="/products-category/:categoryName" element={<CategoryPage />} />
+            <Route path="/products-category/:categoryName/product-page/:id" element={<ProductPage breadcrList={breadcrumbsProdCategoryHome} />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/user-account" element={<UserAccount />} />
             <Route path="/brand/:brandName" element={<BrandPage />} />
-
           </Routes>
         </main>
         <Footer />

@@ -52,9 +52,10 @@ function Home() {
       </Helmet>
       <Hero />
       <Featured featuredProducts={featured} />
-      <ProductsByCategory products={livingRoomProducts} title={"Living Room category"} actionLinkText="View Deals" navigateTo={"/products-category/living-room"} />
-      <ProductsByCategory products={kitchetProducts} title={"Kitchen category"} actionLinkText="View Deals" navigateTo={"/products-category/kitchen"} />
-      <ProductsByCategory products={bedroomProducts} title={"Bedroom category"} actionLinkText="View Deals" navigateTo={"/products-category/bedroom"} />
+      <ProductsByCategory products={featured} title={"Featured products"} actionLinkText="View Deals" navigateTo={"/category/featured"} />
+      <ProductsByCategory products={livingRoomProducts} title={"Living Room category"} actionLinkText="View Deals" navigateTo={"/category/living-room"} />
+      <ProductsByCategory products={kitchetProducts} title={"Kitchen category"} actionLinkText="View Deals" navigateTo={"/category/kitchen"} />
+      <ProductsByCategory products={bedroomProducts} title={"Bedroom category"} actionLinkText="View Deals" navigateTo={"/category/bedroom"} />
 
       <BrandsSection />
       {/* <ProductSection /> */}

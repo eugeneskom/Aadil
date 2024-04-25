@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../state/store";
 import { Product } from "../types/Product";
 import ProductCardPreloader from "../components/ProductCardPreloader";
+import Breadcrumb from "../components/Breadcrumbs";
 const capitalizeWords = (str: string) => {
   return str.replace(/\b\w/g, (char: string) => char.toUpperCase());
 };
@@ -28,11 +29,26 @@ function CategoryPage() {
     return () => {};
   }, []);
 
+  const breadcrumbItems = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: `${capitalizeWords(title)}`,
+      path: "/brands",
+    },
+ 
+  ]
+
   return (
     <section className="category-page ">
       <div className="container">
         <div className="category-page__inner py-11">
           <h1 className="category-page__title capitalize font-bold text-center mb-5 text-3xl">{title}</h1>
+
+          <Breadcrumb items={breadcrumbItems} />
+
           <Filters />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{products && products.length > 0 ? products.map((product) => <ProductCard product={product} />) : Array(8)
                   .fill(null)
