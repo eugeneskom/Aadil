@@ -47,7 +47,7 @@ interface ProductPageProps {
   breadcrList: itemProp[];
   parent?: string;
 }
-const ProductPageCategory = ({ breadcrList }: ProductPageProps) => {
+const ProductPageCategory = () => {
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
@@ -126,7 +126,24 @@ const ProductPageCategory = ({ breadcrList }: ProductPageProps) => {
     return null;
   }
 
-  console.log("breadcrList", breadcrList);
+  // console.log("breadcrList", breadcrList);
+
+  
+  const breadcrumbsProdCategoryHome = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Category",
+      path: "/category",
+    },
+    {
+      label: "Subcategory",
+      path: "/category/subcategory",
+    },
+  ];
+
 
   return (
     <>
@@ -141,7 +158,7 @@ const ProductPageCategory = ({ breadcrList }: ProductPageProps) => {
         <meta property="product:price:currency" content="USD" />
         <meta property="product:availability" content="instock" />
       </Helmet>
-      <Breadcrumb items={breadcrList} />
+      <Breadcrumb items={breadcrumbsProdCategoryHome} />
       <div className="container  overflow-hidden">
         {/* <div className="my-11"> */}
         {/* </div> */}
