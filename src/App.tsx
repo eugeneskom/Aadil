@@ -27,6 +27,7 @@ import CategoryPage from "./pages/CategoryPage";
 import ProductCardPreloader from "./components/ProductCardPreloader";
 import { fetchBrands } from "./state/BrandsSlice";
 import BrandPage from "./pages/BrandPage";
+import ProductPageCategory from "./pages/ProductPageCategory";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -168,9 +169,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
-            <Route path="/product-page/:id" element={<ProductPage breadcrList={breadcrumbsProdPageHome} />} />
+            <Route path="/product-page/:id" element={<ProductPage />} />
             <Route path="/products-category/:categoryName" element={<CategoryPage />} />
-            <Route path="/products-category/:categoryName/product-page/:id" element={<ProductPage breadcrList={breadcrumbsProdCategoryHome} />} />
+            <Route path="/products-category/:categoryName/product-page/:id" element={<ProductPageCategory />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/user-account" element={<UserAccount />} />
             <Route path="/brand/:brandName" element={<BrandPage />} />
