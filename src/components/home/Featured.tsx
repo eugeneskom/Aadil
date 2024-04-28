@@ -19,7 +19,7 @@ function Featured({featuredProducts}: {featuredProducts: Product[]}) {
       <div className="container">
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold mb-4">Featured products</h2>
-          <NavLink to="products-category/featured">View deals</NavLink>
+          <NavLink to="category/featured">View deals</NavLink>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{featuredProducts && featuredProducts.length > 0 ? featuredProducts.slice(0, 8).map((product: Product) => <ProductCard key={product.Id} product={product} />) : Array(8)

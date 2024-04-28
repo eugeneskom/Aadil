@@ -9,39 +9,36 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   console.log(items, "Breadcrumb items")
 
   const currentPath = window.location.pathname;
-  const pathParts = currentPath.split('/').filter(part => part.trim() !== ''); // Split the path and remove empty parts
 
   // Generate breadcrumb items
-  const breadcrumbItems = pathParts.map((part, index) => {
-    const label = part.replace(/-/g, ' '); // Convert dash-separated words to space-separated
-    const path = `/${pathParts.slice(0, index + 1).join('/')}`; // Construct path up to the current part
-    return { label, path };
-  });
 
 
-  console.log('breadcrumbItems')
+  console.log('breadcrumbItems',items)
 
   return (
-    <div className=" ">
-    <ul  >
+<div className="bg-gray-100 py-4">
+  <div className="container mx-auto">
+    <ul className="flex items-center">
       {items.map((item, index) => (
-        <li key={index}  >
+        <li key={index} className="flex items-center">
           {index === items.length - 1 ? (
-            <span >{item.label}</span>
+            <span className="text-gray-600">{item.label}</span>
           ) : (
             <NavLink
-              to={item.path} 
+              to={item.path}
+              className="text-white-500 hover:text-orange-500 font-medium"
             >
               {item.label}
             </NavLink>
           )}
           {index !== items.length - 1 && (
-            <span  >/</span>
+            <span className="mx-2 text-gray-400">/</span>
           )}
-          </li>
+        </li>
       ))}
     </ul>
   </div>
+</div>
     
   );
 };

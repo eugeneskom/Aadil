@@ -38,23 +38,24 @@ function CategoryPage() {
       label: `${capitalizeWords(title)}`,
       path: "/brands",
     },
- 
-  ]
+  ];
 
   return (
     <section className="category-page ">
       <div className="container">
+        <div className="mt-11">
+          <Breadcrumb items={breadcrumbItems} />
+        </div>
         <div className="category-page__inner py-11">
           <h1 className="category-page__title capitalize font-bold text-center mb-5 text-3xl">{title}</h1>
-
-          <Breadcrumb items={breadcrumbItems} />
-
           <Filters />
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{products && products.length > 0 ? products.map((product) => <ProductCard product={product} />) : Array(8)
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products && products.length > 0
+              ? products.map((product) => <ProductCard product={product} />)
+              : Array(8)
                   .fill(null)
-                  .map((_, index) => (
-                      <ProductCardPreloader />
-                  ))}</div>
+                  .map((_, index) => <ProductCardPreloader />)}
+          </div>
         </div>
       </div>
     </section>

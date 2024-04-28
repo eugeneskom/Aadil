@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { calculateSalePercentage } from "../helpers";
 interface ProductPreviewPopupProps {
   product: Product;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {

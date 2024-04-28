@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
-import axios from "axios";
 import Header from "./templates/Header";
-import ProductSection from "./components/ProductsSection";
-import ProductPage from "./pages/ProductPage";
-import Hero from "./components/home/Hero";
-import WishlistPage from "./pages/WishlistPage";
 import { useSelector, useDispatch } from "react-redux";
 import LoginCallback from "./components/auth/LoginCallback";
 import { setUser } from "./state/user/userSlice";
 import { RootState, AppDispatch } from "./state/store";
 import { setToken } from "./state/token/tokenSlice";
 import { fetchWishlistProducts, toggleWishlistAsync } from "./state/wishlist/wishlistSlice";
-import { fetchProductsAsync, selectProductsStatus } from "./state/products/productsSlice";
+import { selectProductsStatus } from "./state/products/productsSlice";
 import { setScreenWidth } from "./state/screenWidthSlice";
 import SignUpPopup from "./components/auth/SignUpPopup";
-import UserAccount from "./pages/UserAccount";
+import { UserAccount, Dashboard, CategoryPage, BrandPage, ProductPageCategory, ProductPageBrand, ProductPageWishlist, ProductPage, WishlistPage, Home, AuthenticationPage } from "./pages/index";
 import { validateToken } from "./state/token/isValidToken";
-import Dashboard from "./pages/Dashboard";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
-import Home from "./pages/Home";
-import { fetchGroupedProducts } from "./state/products/groupedProductsSlice";
 import Footer from "./templates/Footer";
-import CategoryPage from "./pages/CategoryPage";
-import ProductCardPreloader from "./components/ProductCardPreloader";
 import { fetchBrands } from "./state/BrandsSlice";
-import BrandPage from "./pages/BrandPage";
-import ProductPageCategory from "./pages/ProductPageCategory";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -46,30 +34,12 @@ export function capitalizeWords(str: string): string {
     .join(" ");
 }
 
-// BREADCRUMBS MAP
-export const breadcrumbItems = [
-  { label: "Home", path: "/" },
-  { label: "Category", path: "/category" },
-  { label: "Subcategory", path: "/category/subcategory" },
-  { label: "Product", path: "/category/subcategory/product" },
-];
-
 function App() {
   // const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
   const isAuthPopupOpen = useSelector((state: RootState) => state.authPopupState.isAuthPopupOpen);
-  const isValidToken = useSelector((state: RootState) => state.isValidToken.isValidToken);
   const user = useSelector((state: RootState) => state.isValidToken.user);
-  const page = useSelector((state: RootState) => state.products.page);
-  const categories = useSelector(selectCategories);
-  const status = useSelector(selectProductsStatus);
   // console.log("categories", categories);
-
-  // useEffect(() => {
-  //   if (status === "idle") {
-  //     dispatch(fetchProductsAsync({ page, limit: 100 }));
-  //   }
-  // }, [dispatch, page, status]);
 
   useEffect(() => {
     // Fetch wishlist on load of the current user
@@ -138,26 +108,6 @@ function App() {
     };
   }, []);
 
-  const breadcrumbsProdPageHome = [
-    { label: "Home", path: "/" },
-    { label: "Product", path: "/product-page" },
-  ];
-
-  const breadcrumbsProdCategoryHome = [
-    {
-      label: "Home",
-      path: "/",
-    },
-    {
-      label: "Category",
-      path: "/category",
-    },
-    {
-      label: "Subcategory",
-      path: "/category/subcategory",
-    },
-  ];
-
   return (
     <>
       <Router>
@@ -167,14 +117,21 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<AuthenticationPage />}>
+              <Route path="login" element={<AuthenticationPage />} />
+              <Route path="register" element={<AuthenticationPage />} />
+              <Route path="password" element={<AuthenticationPage />} />
+            </Route>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
-            <Route path="/product-page/:id" element={<ProductPage />} />
-            <Route path="/products-category/:categoryName" element={<CategoryPage />} />
-            <Route path="/products-category/:categoryName/product-page/:id" element={<ProductPageCategory />} />
-            <Route path="/wishlist" element={<WishlistPage />} />
-            <Route path="/user-account" element={<UserAccount />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/brand/:brandName/product/:id" element={<ProductPageBrand />} />
             <Route path="/brand/:brandName" element={<BrandPage />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route path="/category/:categoryName/product/:id" element={<ProductPageCategory />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/wishlist/product/:id" element={<ProductPageWishlist />} />
+            <Route path="/user-account" element={<UserAccount />} />
           </Routes>
         </main>
         <Footer />

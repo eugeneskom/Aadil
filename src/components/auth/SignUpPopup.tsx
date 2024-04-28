@@ -16,6 +16,8 @@ const SignUpPopup = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +37,7 @@ const SignUpPopup = () => {
 
   const facebookAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, "_self");
-  }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-75 signup-popup">
@@ -47,19 +49,49 @@ const SignUpPopup = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Sign up to save the items you love. We’ll let you know when they go on sale.</h2>
           </div>
-          <form >
+          <form>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
                 Email
               </label>
               <input className=" mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Enter your email address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  className=" mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
+                  Name
+                </label>
+                <input
+                  className=" mb-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  required
+                />
+              </div>
               <button className="bg-black text-white w-full px-3 py-3 text-sm font-bold">Save product</button>
+
               <div className="flex items-center my-5">
                 <div className="flex-grow bg-gray-400 h-px"></div>
                 <p className="mx-4 text-black">OR</p>
                 <div className="flex-grow bg-gray-400 h-px"></div>
               </div>
             </div>
+
             <div className="signup-popup__btns">
               <button
                 className="social-signup-btn bg-white hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded border border-gray-400 focus:outline-none focus:shadow-outline"
@@ -68,7 +100,7 @@ const SignUpPopup = () => {
                   // Handle continue with Google, Apple, or Facebook logic here
                   console.log("Continue with Google, Apple, or Facebook");
                   // setShowPopup(false);
-                  googleAuth()
+                  googleAuth();
                   // togglePopup();
                 }}
               >
@@ -83,7 +115,7 @@ const SignUpPopup = () => {
                   // Handle continue with Google, Apple, or Facebook logic here
                   console.log("Continue with Google, Apple, or Facebook");
                   // setShowPopup(false);
-                  facebookAuth()
+                  facebookAuth();
                   togglePopup();
                 }}
               >

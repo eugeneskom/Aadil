@@ -45,7 +45,7 @@ function BrandsSection() {
           >
             {brands.map((brand) => (
               <SwiperSlide key={brand.Name} className="swiper-slide">
-                <NavLink to={`brand/${brand.Name}`}  className="flex items-center justify-center overflow-hidden">
+                <NavLink to={`/brand/${brand.Name}`}  className="flex items-center justify-center overflow-hidden">
                   <img src={brand.Logo} alt={brand.Name} className="rounded-full bg-blue-500 h-24 w-24" />
                   {/* <h2>{brand.Name}</h2> */}
                 </NavLink>

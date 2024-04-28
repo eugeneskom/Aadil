@@ -11,7 +11,8 @@ import Breadcrumb from "../components/Breadcrumbs";
 function BrandPage() {
   const { brandName } = useParams();
   const brands: Brand[] = useSelector(getBrands);
-  const currentBrand = brands.find((brand) => brand.Name === brandName);
+  const currentBrand = brands.find((brand) => brand.Name.toLowerCase() === brandName?.toLowerCase());
+  console.log('brandName', brandName, brands);
   const [productsNoSale, setProductsNoSale] = useState<Product[] | []>([]);
   const [productsSale, setProductsSale] = useState<Product[] | []>([]);
   const [displayedProductsNoSale, setDisplayedProductsNoSale] = useState<Product[] | []>([]);
@@ -82,7 +83,7 @@ function BrandPage() {
       <div className="container">
         <div className="brand-page__top  py-11 shadow-bottom mb-11">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-5 text-center">{currentBrand.Name}</h1>
-          <div className="overflow-hidden brand-page__logo">
+          <div className="rounded-full border-black overflow-hidden brand-page__logo">
             <img src={currentBrand.Logo} alt={currentBrand.Name} className="rounded-full bg-blue-500 h-40 w-40" />
           </div>
         </div>

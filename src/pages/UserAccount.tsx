@@ -1,15 +1,15 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-// import { setWishlist } from "../state/wishlist/wishlistSlice";
-import { AppDispatch } from "../state/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../state/store";
+import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../state/token/tokenSlice";
 import { validateToken } from "../state/token/isValidToken";
 import { emptyWishlist } from "../state/wishlist/wishlistSlice";
-// import { setTokenValidity } from "../state/token/isValidToken";
+import { UserType } from "../types/UserType";
 function UserAccount() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const user: UserType | null = useSelector((state: RootState) => state.isValidToken.user);
+
   const logout = () => {
     // Handle logout logic here
     localStorage.removeItem("jwt");
@@ -29,10 +29,9 @@ function UserAccount() {
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
               <div className="p-4">
                 <h3 className="text-gray-900 font-semibold text-lg">Personal Information</h3>
-                <p className="text-gray-600 mt-2">Name: John Doe</p>
-                <p className="text-gray-600 mt-2">Email:</p>
-                <p className="text-gray-600 mt-2">Phone:</p>
-                <p className="text-gray-600 mt-2">Address:</p>
+                <p className="text-gray-600 mt-2">Name: {user?.firstName}</p>
+                <p className="text-gray-600 mt-2">Last Name: {user?.lastName}</p>
+                <p className="text-gray-600 mt-2">Email: {user?.email}</p>
                 <button onClick={logout} className="bg-blue-500 text-white px-4 py-2 mt-4 rounded-md">Log out</button>
               </div>
             </div>

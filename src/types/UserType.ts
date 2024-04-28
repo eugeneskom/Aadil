@@ -5,5 +5,7 @@ export interface UserType {
   isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
+  firstName: string;
+  lastName: string;
   __v: number;
 }

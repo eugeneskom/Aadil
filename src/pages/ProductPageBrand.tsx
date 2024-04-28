@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -47,7 +47,8 @@ interface ProductPageProps {
   breadcrList: itemProp[];
   parent?: string;
 }
-const ProductPage = () => {
+const ProductPageBrand = () => {
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
@@ -126,9 +127,29 @@ const ProductPage = () => {
     return null;
   }
 
-  const breadcrumbsProdPageHome = [
-    { label: "Home", path: "/" },
-    { label: `${productToRender.Name}`, path: "/product" },
+  
+  const extractBrandNameFromUrl = (url: string): string | null => {
+    const match = url.match(/\/brand\/([^/]+)\/product/);
+    return match ? match[1] : null;
+  };
+  
+  // Example usage:
+  const url = location.pathname;
+  const brandName = extractBrandNameFromUrl(url);
+  
+  const breadcrumbsProdCategoryHome = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: `${brandName}`,
+      path: `/brand/${brandName}`,
+    },
+    {
+      label: `${productToRender.Name}`,
+      path: "/category/subcategory",
+    },
   ];
 
   return (
@@ -145,10 +166,9 @@ const ProductPage = () => {
         <meta property="product:availability" content="instock" />
       </Helmet>
       <div className="container  overflow-hidden">
-        <div className="my-11">
-          <Breadcrumb items={breadcrumbsProdPageHome} />
+        <div className="my-11 mb-11">
+      <Breadcrumb items={breadcrumbsProdCategoryHome} />
         </div>
-
         <div className="div">
           <div className="lg:flex lg:-mx-4">
             <div className="lg:px-4 lg:w-1/2">
@@ -242,4 +262,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default ProductPageBrand;

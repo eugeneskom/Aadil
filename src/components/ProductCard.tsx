@@ -50,7 +50,8 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   //   return null; // Don't render the product if the image is broken
   // }
 
-  const handleWislistIconClick = (productId: string) => {
+  const handleWislistIconClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>,productId: string) => {
+    e.stopPropagation();
     console.log("handleWislistIconClick", token);
     if (token) {
       // toggleWishlistHandler(productId);
@@ -62,12 +63,14 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     }
   };
 
-  const toggleProductPreview = () => {
+  const toggleProductPreview = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     setShowProductPreview(!showProductPreview);
   };
 
   const handleViewProduct = (product: Product) => {
-    navigate(`/product-page/${product.Id}`);
+    console.log('Product_card handleViewProduct')
+    navigate(`/product/${product.Id}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -75,45 +78,35 @@ function ProductCard({ product, isWishlist }: ProductProps) {
     window.open(product.Url, "_blank");
   };
 
-  const navigateToLocation = (location: string) => {
-    let link = "/";
-    if (location.includes("brand")) {
-      link = `${location}/product-page/${product.Id}}`;
-      console.log(link, "link");
-    } else if (location.includes("products-category")) {
-      link = `${location}/product-page/${product.Id}`;
-      console.log(link, "link");
-    } else if (location.includes("category")) {
-      link = `/category/${product.Category}/${product.SubCategory}`;
-      console.log(link, "link");
-    } else {
-      link = `/product-page/${product.Id}`;
-    }
-    navigate(`${location}/product-page/${product.Id}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const navigateToLocation = () => {
+    navigate(`product/${product.Id}`);
   };
 
-  const currentPath = location.pathname;
+  const navigateToBrand = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    const brandPage = isBrandPage(location.pathname);
+    if(brandPage) return;
+    navigate(`/brand/${product.Manufacturer.toLowerCase().replace(/\s+/g, '-')}`);
+  }
 
-  // Define the regex pattern to match "/products-category/{word}/product-page/"
-  const pattern = /^\/products-category\/\w+\/product-page\/\d+$/;
+  const isBrandPage = (url: string): boolean => {
+  const pattern = /^\/brand\/[^/]+$/;
+  return pattern.test(url);
+};
 
-  // Check if the current URL matches the pattern
-  const isproductCatProduct = pattern.test(currentPath);
-  console.log(isproductCatProduct, "isproductCatProduct");
 
   return (
-    <div onClick={() => navigateToLocation(location.pathname)} key={product.Id} className="cursor-pointer bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
+    <div onClick={navigateToLocation} key={product.Id} className="cursor-pointer bg-white rounded-lg shadow-md overflow-hidden flex flex-col product-card">
       <div className="product-card__header">
         {salePercentage !== null && <div className="sale-percentage "> - {salePercentage}%</div>}
         <ul className="product-card__list">
           <li className="product-card__item">
-            <button onClick={toggleProductPreview} type="button" className="m-2 text-white">
+            <button onClick={(e) => toggleProductPreview(e)} type="button" className="m-2 text-white">
               <IoEyeOutline size={25} />
             </button>
           </li>
           <li className="product-card__item">
-            <button onClick={() => handleWislistIconClick(product.Id)} type="button" className="a right-0 m-2 ">
+            <button onClick={(e) => handleWislistIconClick(e,product.Id)} type="button" className="a right-0 m-2 ">
               {isInWishlist ? <FaHeart size={20} className="text-white" /> : <FaRegHeart size={20} className="text-white" />}
             </button>
           </li>
@@ -132,9 +125,10 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         <p className="text-gray-500 mb-2">
           {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
           From:{" "}
-          <NavLink to={`brand/${capitalizeWords(product.Manufacturer)}`} className="text-black font-bold">
+          {/* <NavLink to={`brand/${capitalizeWords(product.Manufacturer)}`} className="text-black font-bold"> */}
+          <button onClick={navigateToBrand} className="text-black font-bold">
             {product.Manufacturer}
-          </NavLink>{" "}
+          </button>{" "}
         </p>
       </div>
 
@@ -149,7 +143,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
           </button>
         )}
       </div>
-      {showProductPreview ? <ProductPreviewPopup product={product} onClick={toggleProductPreview} /> : ""}
+      {showProductPreview ? <ProductPreviewPopup product={product} onClick={(e) => toggleProductPreview(e)} /> : ""}
     </div>
   );
 }

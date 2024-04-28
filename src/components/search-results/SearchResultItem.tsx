@@ -41,7 +41,7 @@ const SearchResultItem = ({ product,onClick }:SearchResultItemProps) => {
   };
 
   return (
-    <NavLink to={`/product-page/${product.Id}`} className="search-result" onClick={onClick}>
+    <NavLink to={`/product/${product.Id}`} className="search-result" onClick={onClick}>
       <img src={product.ImageUrl} alt={product.Name} className="search-result__image" />
       <div className="search-result__info">
         <h3 className="search-result__name">{highlightText(product.Name)}</h3>

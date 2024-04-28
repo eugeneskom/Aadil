@@ -51,7 +51,7 @@ function Home() {
         <meta property="product:availability" content="instock" /> */}
       </Helmet>
       <Hero />
-      <Featured featuredProducts={featured} />
+      {/* <Featured featuredProducts={featured} /> */}
       <ProductsByCategory products={featured} title={"Featured products"} actionLinkText="View Deals" navigateTo={"/category/featured"} />
       <ProductsByCategory products={livingRoomProducts} title={"Living Room category"} actionLinkText="View Deals" navigateTo={"/category/living-room"} />
       <ProductsByCategory products={kitchetProducts} title={"Kitchen category"} actionLinkText="View Deals" navigateTo={"/category/kitchen"} />

@@ -12,11 +12,9 @@ import ProductCard from "../components/ProductCard";
 const WishlistPage = () => {
   const token = useSelector(selectToken);
   const wishlist: Product[] = useSelector(selectWishlistProducts);
-  console.log("token::::::", token, "wishlist::::", wishlist);
+  // console.log("token::::::", token, "wishlist::::", wishlist);
   const dispatch = useDispatch<AppDispatch>();
-  const wishlistProducts = useSelector(selectWishlistProducts);
-  const loading = useSelector(selectWishlistLoading);
-  const error = useSelector(selectWishlistError);
+
 
   useEffect(() => {
     const token = localStorage.getItem('jwt'); // Assuming you have the token stored in local storage

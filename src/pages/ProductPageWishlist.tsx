@@ -47,7 +47,7 @@ interface ProductPageProps {
   breadcrList: itemProp[];
   parent?: string;
 }
-const ProductPage = () => {
+const ProductPageWishlist = () => {
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
@@ -131,6 +131,22 @@ const ProductPage = () => {
     { label: `${productToRender.Name}`, path: "/product" },
   ];
 
+    
+  const breadcrumbsWishlist = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: `Wishlist`,
+      path: `/wishlist`,
+    },
+    {
+      label: `${productToRender.Name}`,
+      path: "",
+    },
+  ];
+
   return (
     <>
       <Helmet>
@@ -146,7 +162,7 @@ const ProductPage = () => {
       </Helmet>
       <div className="container  overflow-hidden">
         <div className="my-11">
-          <Breadcrumb items={breadcrumbsProdPageHome} />
+          <Breadcrumb items={breadcrumbsWishlist} />
         </div>
 
         <div className="div">
@@ -242,4 +258,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default ProductPageWishlist;

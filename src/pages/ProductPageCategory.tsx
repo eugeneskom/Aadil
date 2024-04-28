@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -26,7 +26,7 @@ const SimilarProducts: React.FC<{ products: Product[] }> = ({ products }) => (
     <h2 className="text-xl font-semibold text-gray-800 mb-4">Similar Products</h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
       {products.map((product) => (
-        <NavLink to={`/product-page/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} key={product.Id} className="bg-white shadow-lg rounded-lg overflow-hidden">
+        <NavLink to={`/product/${product.Id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} key={product.Id} className="bg-white shadow-lg rounded-lg overflow-hidden">
           <img src={product.ImageUrl} alt={product.Name} className="w-full h-40 object-cover object-center" />
           <div className="p-4">
             <h3 className="text-gray-900 font-semibold text-lg">{product.Name}</h3>
@@ -48,6 +48,7 @@ interface ProductPageProps {
   parent?: string;
 }
 const ProductPageCategory = () => {
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
@@ -128,22 +129,42 @@ const ProductPageCategory = () => {
 
   // console.log("breadcrList", breadcrList);
 
-  
+  function getCategoryNameFromLink(link: string): { formattedCategoryName: string; url: string } {
+    // Define a regular expression pattern to match the category name
+    const pattern = /\/category\/([^/]+)\/product\/\d+/;
+
+    // Extract the category name using the match method
+    const match = link.match(pattern);
+
+    // Extract the categoryName parameter from the matched result
+    const categoryName = match ? match[1] : null;
+
+    // Capitalize the first letter of each word in the categoryName
+    const url = categoryName ? categoryName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "";
+    const formattedCategoryName = categoryName ? categoryName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "";
+
+    return { formattedCategoryName, url };
+  }
+
+  // Example usage
+  const link = location.pathname;
+  const { formattedCategoryName, url } = getCategoryNameFromLink(link);
+  console.log(formattedCategoryName, url, "categoryName"); // Output: "Living Room"
+
   const breadcrumbsProdCategoryHome = [
     {
       label: "Home",
       path: "/",
     },
     {
-      label: "Category",
-      path: "/category",
+      label: `${formattedCategoryName}`,
+      path: `/category/${url}`,
     },
     {
-      label: "Subcategory",
+      label: `${productToRender.Name}`,
       path: "/category/subcategory",
     },
   ];
-
 
   return (
     <>
@@ -158,11 +179,12 @@ const ProductPageCategory = () => {
         <meta property="product:price:currency" content="USD" />
         <meta property="product:availability" content="instock" />
       </Helmet>
-      <Breadcrumb items={breadcrumbsProdCategoryHome} />
       <div className="container  overflow-hidden">
+        <div className="mt-11 mb-11">
+          <Breadcrumb items={breadcrumbsProdCategoryHome} />
+        </div>
         {/* <div className="my-11"> */}
         {/* </div> */}
-
         <div className="div">
           <div className="lg:flex lg:-mx-4">
             <div className="lg:px-4 lg:w-1/2">
@@ -199,7 +221,7 @@ const ProductPageCategory = () => {
                   Category:{" "}
                   {productToRender.Category.map((category, index) => (
                     <span key={index}>
-                      <NavLink to={`/products-category/${category.toLowerCase().replace(/\s+/g, "-")}`} className="text-black font-bold">
+                      <NavLink to={`/category/${category.toLowerCase().replace(/\s+/g, "-")}`} className="text-black font-bold">
                         {category}
                       </NavLink>
                       {index !== productToRender.Category.length - 1 && ", "}
@@ -249,7 +271,6 @@ const ProductPageCategory = () => {
             />
           </div>
         </div>
-
         {filteredProducts.length > 0 && <SimilarProducts products={filteredProducts.slice(0, 5)} />}
       </div>
     </>
