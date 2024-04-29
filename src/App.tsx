@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import LoginCallback from "./components/auth/LoginCallback";
 import { setUser } from "./state/user/userSlice";
 import { RootState, AppDispatch } from "./state/store";
-import { setToken } from "./state/token/tokenSlice";
+import { selectToken, setToken } from "./state/token/tokenSlice";
 import { fetchWishlistProducts, toggleWishlistAsync } from "./state/wishlist/wishlistSlice";
 import { selectProductsStatus } from "./state/products/productsSlice";
 import { setScreenWidth } from "./state/screenWidthSlice";
@@ -16,6 +16,9 @@ import { validateToken } from "./state/token/isValidToken";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
 import Footer from "./templates/Footer";
 import { fetchBrands } from "./state/BrandsSlice";
+import ResetPasswordConfirmation from "./components/auth/ResetConfirmationPage";
+import Products from "./pages/Products";
+import About from "./pages/About";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -35,7 +38,7 @@ export function capitalizeWords(str: string): string {
 }
 
 function App() {
-  // const token = useSelector(selectToken);
+  const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
   const isAuthPopupOpen = useSelector((state: RootState) => state.authPopupState.isAuthPopupOpen);
   const user = useSelector((state: RootState) => state.isValidToken.user);
@@ -81,7 +84,7 @@ function App() {
     }
 
     return () => {};
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (user) {
@@ -122,8 +125,11 @@ function App() {
               <Route path="register" element={<AuthenticationPage />} />
               <Route path="password" element={<AuthenticationPage />} />
             </Route>
+            <Route path="/auth/reset-confirm/:token" element={<ResetPasswordConfirmation />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login/success" element={<LoginCallback />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/product/:id" element={<ProductPage />} />
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/brand/:brandName/product/:id" element={<ProductPageBrand />} />
             <Route path="/brand/:brandName" element={<BrandPage />} />
@@ -132,6 +138,7 @@ function App() {
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/wishlist/product/:id" element={<ProductPageWishlist />} />
             <Route path="/user-account" element={<UserAccount />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </main>
         <Footer />

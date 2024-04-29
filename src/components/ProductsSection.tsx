@@ -1,6 +1,6 @@
 import { Product } from "../types/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsAsync, selectPage, selectProducts, selectProductsStatus, selectTotalPages } from "../state/products/productsSlice";
+import { fetchProductsAsync, selectPage, selectProducts, selectProductsStatus, selectTotalPages, setCategories, setSubCategories } from "../state/products/productsSlice";
 import ProductCard from "./ProductCard";
 import { AppDispatch, RootState } from "../state/store";
 import Filters from "./filters/Filters";
@@ -23,6 +23,10 @@ const ProductSection = () => {
   
 
   useEffect(() => {
+
+    dispatch(setCategories([]));
+    dispatch(setSubCategories([]));
+
     dispatch(fetchProductsAsync({ page: page + 1, limit: 100 }));
   
     return () => {
@@ -33,71 +37,17 @@ const ProductSection = () => {
   const displayedProducts = products ? products.slice(0, 20) : [];
   const totalProducts = products ? products.length : 0;
   const displayedProductsCount = displayedProducts.length;
-  const loadingPercentage = totalProducts === 0 ? 0 : (displayedProductsCount / totalProducts) * 100;
 
-  function groupProductsByManufacturer(products: Product[]): Product[] {
-  // function groupProductsByManufacturer(products: Product[]): Map<string, Product[]> {
-    // test
-    return products;
-    // return products.reduce((map, product) => {
-    //   const manufacturer = product.Manufacturer.toLowerCase();
-    //   if (!map.has(manufacturer)) {
-    //     map.set(manufacturer, []);
-    //   }
-    //   map.get(manufacturer)?.push(product);
-    //   return map;
-    // }, new Map<string, Product[]>());
-  }
+ 
 
-  function sortProductsByManufacturer(products: Product[]): Product[] {
-    return products;
-    // const productsByManufacturer = groupProductsByManufacturer(products);
-    // const manufacturers = Array.from(productsByManufacturer.keys());
-    // const sortedProducts: Product[] = [];
-    // let currentIndex = 0;
-
-    // while (productsByManufacturer.size > 0) {
-    //   const manufacturer = manufacturers[currentIndex];
-    //   const productsFromManufacturer = productsByManufacturer.get(manufacturer) || [];
-
-    //   // Add a product from the current manufacturer
-    //   if (productsFromManufacturer.length > 0) {
-    //     sortedProducts.push(productsFromManufacturer.shift()!);
-    //   }
-
-    //   // Remove the current manufacturer if it has no more products
-    //   if (productsFromManufacturer.length === 0) {
-    //     productsByManufacturer.delete(manufacturer);
-    //     manufacturers.splice(currentIndex, 1);
-    //   }
-
-    //   // Move to the next manufacturer index
-    //   currentIndex = (currentIndex + 1) % manufacturers.length;
-    // }
-
-    // return sortedProducts;
-  }
-
-  const sortedProducts = sortProductsByManufacturer(products);
-
-  function getUniqueManufacturers(products: Product[]): string[] {
-    const uniqueManufacturersSet = new Set<string>();
-
-    products.forEach((product) => {
-      uniqueManufacturersSet.add(product.Manufacturer.toLowerCase());
-    });
-
-    return Array.from(uniqueManufacturersSet);
-  }
-
-  const uniqueManufacturers = getUniqueManufacturers(products);
+ 
 
   return (
     <section className="container pb-11 mx-auto py-8 overflow-hidden">
       {/* Filters */}
       <Filters />
       {/* Products */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{sortedProducts && sortedProducts.length > 0 && sortedProducts.map((product) => <ProductCard product={product} />)}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{products && products.length > 0 && products.map((product) => <ProductCard product={product} />)}</div>
 
       {/* <div className="flex flex-col items-center mt-6">
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">

@@ -12,6 +12,10 @@ interface SignUpPopupProps {
   togglePopup: () => void;
 }
 
+export const googleAuth = () => {
+  window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
+};
+
 const SignUpPopup = () => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -31,9 +35,6 @@ const SignUpPopup = () => {
     dispatch(toggleAuthPopup());
   };
 
-  const googleAuth = () => {
-    window.open(`${process.env.REACT_APP_API_URL}/auth/google`, "_self");
-  };
 
   const facebookAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, "_self");

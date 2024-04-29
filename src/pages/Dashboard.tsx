@@ -6,6 +6,8 @@ interface User {
   _id: string;
   email: string;
   wishlist: Product[];
+  firstName: string;
+  lastName: string;
 }
 
 function Dashboard() {
@@ -100,6 +102,8 @@ function Dashboard() {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">First Name</th>
+                  <th className="py-3 px-6 text-left">Last Name</th>
                   <th className="py-3 px-6 text-left">User Email</th>
                   <th className="py-3 px-6 text-center">Number of Products</th>
                   <th className="py-3 px-6 text-center">Actions</th>
@@ -109,6 +113,8 @@ function Dashboard() {
                 {users.map((user) => (
                   <React.Fragment key={user._id}>
                     <tr className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onClick={() => toggleUserDropdown(user)}>
+                      <td className="py-3 px-6 text-left whitespace-nowrap">{user.firstName}</td>
+                      <td className="py-3 px-6 text-left whitespace-nowrap">{user.lastName}</td>
                       <td className="py-3 px-6 text-left whitespace-nowrap">{user.email}</td>
                       <td className="py-3 px-6 text-center">{user.wishlist.length}</td>
                       <td className="py-3 px-6 text-center">

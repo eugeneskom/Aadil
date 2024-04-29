@@ -168,9 +168,11 @@ const Header = () => {
 
             {/* Sign Up Button */}
             {!isValidToken ? (
-              <button type="button" onClick={googleAuth} className=" header__action hover:text-gray-300 transition-colors duration-300">
-                <BiUser size={24} />
-              </button>
+              <NavLink to="/auth/login" className="header__action hover:text-gray-300 transition-colors duration-300">
+              {/* <button type="button" onClick={googleAuth} className=" header__action hover:text-gray-300 transition-colors duration-300">
+              </button> */}
+              <BiUser size={24} />
+              </NavLink>
             ) : (
               ""
             )}

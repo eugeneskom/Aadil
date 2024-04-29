@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -49,6 +49,7 @@ interface ProductPageProps {
 }
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation()
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
@@ -126,11 +127,28 @@ const ProductPage = () => {
     return null;
   }
 
-  const breadcrumbsProdPageHome = [
+  let breadcrumbsProdPageHome = [
     { label: "Home", path: "/" },
     { label: `${productToRender.Name}`, path: "/product" },
   ];
 
+  if(location.pathname.includes('products')){
+    breadcrumbsProdPageHome = [
+      { label: "Home", path: "/" },
+      { label: `Products`, path: "/products" },
+      { label: `${productToRender.Name}`, path: "" }
+    ]
+  }
+
+  const generateManufacturerSlug = (manufacturerName: string) => {
+    // Convert the manufacturer name to lowercase
+    const lowercaseName = manufacturerName.toLowerCase();
+
+    // Replace spaces with hyphens
+    const slug = lowercaseName.replace(/\s+/g, "-");
+
+    return slug;
+  };
   return (
     <>
       <Helmet>
@@ -165,7 +183,7 @@ const ProductPage = () => {
               <p className="text-gray-500 mb-5">
                 {/* From: <span className="text-black font-bold">{product.CampaignName}</span>{" "} */}
                 From:{" "}
-                <NavLink to={`/brand/${capitalizeWords(productToRender.Manufacturer)}`} className="text-black font-bold">
+                <NavLink to={`/brand/${generateManufacturerSlug(productToRender.Manufacturer)}`} className="text-black font-bold">
                   {productToRender.Manufacturer}
                 </NavLink>{" "}
               </p>

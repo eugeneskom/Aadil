@@ -498,6 +498,13 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   cursor: pointer;
 }
 
+.social-signup-btn{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
 .signup-popup .social-signup-btn {
   display: flex;
   align-items: center;
