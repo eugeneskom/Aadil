@@ -20,6 +20,7 @@ import { fetchBrands } from "./state/BrandsSlice";
 import ResetPasswordConfirmation from "./components/auth/ResetConfirmationPage";
 import Products from "./pages/Products";
 import About from "./pages/About";
+import { HelmetProvider } from "react-helmet-async";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -114,6 +115,8 @@ function App() {
 
   return (
     <>
+      <HelmetProvider>
+
       <Router>
         <ScrollToTop />
         <Header />
@@ -144,6 +147,8 @@ function App() {
         </main>
         <Footer />
       </Router>
+      </HelmetProvider>
+
     </>
   );
 }

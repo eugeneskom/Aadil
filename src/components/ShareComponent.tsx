@@ -11,8 +11,18 @@ interface ShareComponentProps {
 
 const ShareComponent = ({ title, imageUrl, url }: ShareComponentProps) => {
   const shareUrl = window.location.href;
-  console.log("ShareComponent", url, shareUrl, imageUrl, title);
+  // console.log("ShareComponent", url, shareUrl, imageUrl, title);
 
+  const shareOnFacebook = (title:string, imageUrl:string) => {
+    const imageUrlLocal = encodeURIComponent(imageUrl);
+    const titleLocal = encodeURIComponent(title);
+    const description = encodeURIComponent("Description here");
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${imageUrlLocal}&title=${titleLocal}&description=${description}`;
+    window.open(shareUrl, "_blank", "noopener noreferrer");
+  };
+
+
+  console.log(`ShareComponent --- https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent("description")}`)
   return (
     <div className="share-component">
       <Helmet>
@@ -26,12 +36,13 @@ const ShareComponent = ({ title, imageUrl, url }: ShareComponentProps) => {
       <h3>Share this product:</h3>
       <ul className="share-icons">
         <li>
-          <FacebookShareButton url={shareUrl} title={title}>
+          {/* <FacebookShareButton url={shareUrl} title={title}>
             <FaFacebook style={{ color: "#3b5998" }} size={24} />
           </FacebookShareButton>
           <a href={`https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent("description")}`} target="_blank" rel="noopener noreferrer">
             Share on Facebook
-          </a>
+          </a> */}
+          <button onClick={()=>shareOnFacebook(title, imageUrl)}>Share on Facebook</button>
         </li>
         <li>
           <TwitterShareButton url={shareUrl} title={title}>

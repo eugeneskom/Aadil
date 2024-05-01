@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { selectProductById, selectProductsByManufacturer } from "../state/products/productsSlice";
 import { useLocation, useParams } from "react-router-dom";
@@ -10,9 +10,7 @@ import { selectToken } from "../state/token/tokenSlice";
 import CountdownTimer from "../components/CountDownTimer";
 import ShareComponent from "../components/ShareComponent";
 import axios from "axios";
-// import { ShareSocial } from 'react-share-social';
-import { FacebookShareButton, TwitterShareButton, PinterestShareButton, TelegramShareButton } from "react-share";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider, HelmetData } from "react-helmet-async";
 import Breadcrumb from "../components/Breadcrumbs";
 
 function capitalizeWords(str: string): string {
@@ -60,25 +58,41 @@ const ProductPage = () => {
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const isInWishlist = wishlistItems.includes(id ?? "");
   const isSale = product && product.CurrentPrice && product.OriginalPrice && product.CurrentPrice < product.OriginalPrice;
-  const [fetchedProduct, setFetchedProduct] = React.useState<Product | null>(null);
-
+  const [fetchedProduct, setFetchedProduct] = useState<Product | null>(null);
+  const [helmetData, setHelmetData] = useState(new HelmetData({}));
+  console.log('helmetData',helmetData)
   useEffect(() => {
     const fetchSingleProduct = async (id: string) => {
-      // Fetch single product
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
         const data = response.data;
-        console.log("Single product data", data);
         setFetchedProduct(data.product);
+
+        // Update the Helmet data with the product information
+        setHelmetData(
+          new HelmetData({
+            title: data.product.Name,
+            meta: [
+              { name: "description", content: data.product.Description },
+              { property: "og:title", content: data.product.Name },
+              { property: "og:description", content: data.product.Description },
+              { property: "og:image", content: data.product.ImageUrl },
+              { property: "og:url", content: `${process.env.REACT_APP_URL}/product/${data.product.Id}` },
+              { property: "og:type", content: "product" },
+              { property: "product:price:amount", content: data.product.CurrentPrice },
+              { property: "product:price:currency", content: "USD" },
+              { property: "product:availability", content: "instock" },
+            ],
+          })
+        );
         return data;
       } catch (error) {
         console.log(error);
       }
     };
+
     if (!id) return;
     fetchSingleProduct(id);
-
-    return () => {};
   }, [id, product]);
 
   useEffect(() => {
@@ -120,7 +134,7 @@ const ProductPage = () => {
   };
 
   console.log("filteredProducts", filteredProducts);
-  
+
   if (id === undefined || (product === undefined && fetchedProduct === null)) return null;
 
   const productToRender = product || fetchedProduct;
@@ -138,21 +152,6 @@ const ProductPage = () => {
   const link = location.pathname;
   const brandName = extractBrandNameFromUrl(link);
   const { formattedCategoryName, url } = getCategoryNameFromLink(link);
-
-  // const breadcrumbsProdCategoryHome = [
-  //   {
-  //     label: "Home",
-  //     path: "/",
-  //   },
-  //   {
-  //     label: `${brandName}`,
-  //     path: `/brand/${brandName}`,
-  //   },
-  //   {
-  //     label: `${productToRender.Name}`,
-  //     path: "/category/subcategory",
-  //   },
-  // ];
 
   let breadcrumbsProdPageHome = [
     { label: "Home", path: "/" },
@@ -241,17 +240,9 @@ const ProductPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{productToRender.Name}</title>
-        <meta property="og:title" content={productToRender.Name} />
-        <meta property="og:description" content={productToRender.Description} />
-        <meta property="og:image" content={productToRender?.ImageUrl} />
-        <meta property="og:url" content={`${process.env.REACT_APP_URL}/product/${productToRender.Id}`} />
-        <meta property="og:type" content="product" />
-        <meta property="product:price:amount" content={productToRender.CurrentPrice} />
-        <meta property="product:price:currency" content="USD" />
-        <meta property="product:availability" content="instock" />
-      </Helmet>
+      <HelmetProvider context={helmetData.context}>
+        <Helmet prioritizeSeoTags />
+      </HelmetProvider>
       <div className="container  overflow-hidden">
         <div className="my-11">
           <Breadcrumb items={breadcrumbsProdPageHome} />

@@ -12,9 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <HelmetProvider>
+      {/* <HelmetProvider> */}
         <App />
-      </HelmetProvider>
+      {/* </HelmetProvider> */}
     </Provider>
   </React.StrictMode>
 );
