@@ -120,6 +120,7 @@ const ProductPage = () => {
   };
 
   console.log("filteredProducts", filteredProducts);
+  
   if (id === undefined || (product === undefined && fetchedProduct === null)) return null;
 
   const productToRender = product || fetchedProduct;
@@ -331,7 +332,7 @@ const ProductPage = () => {
               {/* )} */}
               <div className="mb-5">
                 {/* <ShareSocial url={location.pathname} socialTypes={["facebook", "twitter", "pinterest", "telegram"]}/> */}
-                <ShareComponent title={productToRender.Name} imageUrl={productToRender.ImageUrl} url={location.pathname} />
+                <ShareComponent title={productToRender.Name} imageUrl={productToRender.ImageUrl} url={`${process.env.REACT_APP_URL}/product/${productToRender.Id}`} />
               </div>
             </div>
           </div>
