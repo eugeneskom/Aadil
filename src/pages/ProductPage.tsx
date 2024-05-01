@@ -240,17 +240,17 @@ const ProductPage = () => {
 
   return (
     <>
-      {/* <Helmet>
+      <Helmet>
         <title>{productToRender.Name}</title>
         <meta property="og:title" content={productToRender.Name} />
         <meta property="og:description" content={productToRender.Description} />
         <meta property="og:image" content={productToRender?.ImageUrl} />
-        <meta property="og:url" content={`https://example.com/product/${productToRender.Id}`} />
+        <meta property="og:url" content={`${process.env.REACT_APP_URL}/product/${productToRender.Id}`} />
         <meta property="og:type" content="product" />
         <meta property="product:price:amount" content={productToRender.CurrentPrice} />
         <meta property="product:price:currency" content="USD" />
         <meta property="product:availability" content="instock" />
-      </Helmet> */}
+      </Helmet>
       <div className="container  overflow-hidden">
         <div className="my-11">
           <Breadcrumb items={breadcrumbsProdPageHome} />
