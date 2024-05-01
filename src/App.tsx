@@ -11,7 +11,8 @@ import { fetchWishlistProducts, toggleWishlistAsync } from "./state/wishlist/wis
 import { selectProductsStatus } from "./state/products/productsSlice";
 import { setScreenWidth } from "./state/screenWidthSlice";
 import SignUpPopup from "./components/auth/SignUpPopup";
-import { UserAccount, Dashboard, CategoryPage, BrandPage, ProductPageCategory, ProductPageBrand, ProductPageWishlist, ProductPage, WishlistPage, Home, AuthenticationPage } from "./pages/index";
+import { UserAccount, Dashboard, CategoryPage, BrandPage, 
+   ProductPage, WishlistPage, Home, AuthenticationPage } from "./pages/index";
 import { validateToken } from "./state/token/isValidToken";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
 import Footer from "./templates/Footer";
@@ -131,12 +132,12 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/products/product/:id" element={<ProductPage />} />
             <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/brand/:brandName/product/:id" element={<ProductPageBrand />} />
+            <Route path="/brand/:brandName/product/:id" element={<ProductPage />} />
             <Route path="/brand/:brandName" element={<BrandPage />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
-            <Route path="/category/:categoryName/product/:id" element={<ProductPageCategory />} />
+            <Route path="/category/:categoryName/product/:id" element={<ProductPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
-            <Route path="/wishlist/product/:id" element={<ProductPageWishlist />} />
+            <Route path="/wishlist/product/:id" element={<ProductPage />} />
             <Route path="/user-account" element={<UserAccount />} />
             <Route path="/about" element={<About />} />
           </Routes>

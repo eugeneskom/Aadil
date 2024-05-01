@@ -10,7 +10,8 @@ import { selectToken } from "../state/token/tokenSlice";
 import CountdownTimer from "../components/CountDownTimer";
 import ShareComponent from "../components/ShareComponent";
 import axios from "axios";
-
+// import { ShareSocial } from 'react-share-social';
+import { FacebookShareButton, TwitterShareButton, PinterestShareButton, TelegramShareButton } from "react-share";
 import { Helmet } from "react-helmet-async";
 import Breadcrumb from "../components/Breadcrumbs";
 
@@ -49,7 +50,7 @@ interface ProductPageProps {
 }
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation()
+  const location = useLocation();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
@@ -127,17 +128,87 @@ const ProductPage = () => {
     return null;
   }
 
+  const extractBrandNameFromUrl = (url: string): string | null => {
+    const match = url.match(/\/brand\/([^/]+)\/product/);
+    return match ? match[1] : null;
+  };
+
+  // Example usage:
+  const link = location.pathname;
+  const brandName = extractBrandNameFromUrl(link);
+  const { formattedCategoryName, url } = getCategoryNameFromLink(link);
+
+  // const breadcrumbsProdCategoryHome = [
+  //   {
+  //     label: "Home",
+  //     path: "/",
+  //   },
+  //   {
+  //     label: `${brandName}`,
+  //     path: `/brand/${brandName}`,
+  //   },
+  //   {
+  //     label: `${productToRender.Name}`,
+  //     path: "/category/subcategory",
+  //   },
+  // ];
+
   let breadcrumbsProdPageHome = [
     { label: "Home", path: "/" },
     { label: `${productToRender.Name}`, path: "/product" },
   ];
 
-  if(location.pathname.includes('products')){
+  if (location.pathname.includes("products")) {
     breadcrumbsProdPageHome = [
       { label: "Home", path: "/" },
       { label: `Products`, path: "/products" },
-      { label: `${productToRender.Name}`, path: "" }
-    ]
+      { label: `${productToRender.Name}`, path: "" },
+    ];
+  } else if (brandName) {
+    breadcrumbsProdPageHome = [
+      {
+        label: "Home",
+        path: "/",
+      },
+      {
+        label: `${brandName}`,
+        path: `/brand/${brandName}`,
+      },
+      {
+        label: `${productToRender.Name}`,
+        path: "/category/subcategory",
+      },
+    ];
+  } else if (formattedCategoryName && url) {
+    breadcrumbsProdPageHome = [
+      {
+        label: "Home",
+        path: "/",
+      },
+      {
+        label: `${formattedCategoryName}`,
+        path: `/category/${url}`,
+      },
+      {
+        label: `${productToRender.Name}`,
+        path: "/category/subcategory",
+      },
+    ];
+  } else if (location.pathname.includes("wishlist")) {
+    breadcrumbsProdPageHome = [
+      {
+        label: "Home",
+        path: "/",
+      },
+      {
+        label: `Wishlist`,
+        path: `/wishlist`,
+      },
+      {
+        label: `${productToRender.Name}`,
+        path: "",
+      },
+    ];
   }
 
   const generateManufacturerSlug = (manufacturerName: string) => {
@@ -149,9 +220,27 @@ const ProductPage = () => {
 
     return slug;
   };
+
+  function getCategoryNameFromLink(link: string): { formattedCategoryName: string; url: string } {
+    // Define a regular expression pattern to match the category name
+    const pattern = /\/category\/([^/]+)\/product\/\d+/;
+
+    // Extract the category name using the match method
+    const match = link.match(pattern);
+
+    // Extract the categoryName parameter from the matched result
+    const categoryName = match ? match[1] : null;
+
+    // Capitalize the first letter of each word in the categoryName
+    const url = categoryName ? categoryName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "";
+    const formattedCategoryName = categoryName ? categoryName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "";
+
+    return { formattedCategoryName, url };
+  }
+
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>{productToRender.Name}</title>
         <meta property="og:title" content={productToRender.Name} />
         <meta property="og:description" content={productToRender.Description} />
@@ -161,7 +250,7 @@ const ProductPage = () => {
         <meta property="product:price:amount" content={productToRender.CurrentPrice} />
         <meta property="product:price:currency" content="USD" />
         <meta property="product:availability" content="instock" />
-      </Helmet>
+      </Helmet> */}
       <div className="container  overflow-hidden">
         <div className="my-11">
           <Breadcrumb items={breadcrumbsProdPageHome} />
@@ -241,7 +330,8 @@ const ProductPage = () => {
               {/* "" */}
               {/* )} */}
               <div className="mb-5">
-                <ShareComponent title={productToRender.Name} imageUrl={productToRender.ImageUrl} />
+                {/* <ShareSocial url={location.pathname} socialTypes={["facebook", "twitter", "pinterest", "telegram"]}/> */}
+                <ShareComponent title={productToRender.Name} imageUrl={productToRender.ImageUrl} url={location.pathname} />
               </div>
             </div>
           </div>
