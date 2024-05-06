@@ -75,12 +75,12 @@ function App() {
 
 
   useEffect(() => {
+    dispatch(fetchBrands());
     // Fetch wishlist on load of the current user
     const tokenLocal = localStorage.getItem("jwt") ?? "";
     if (!tokenLocal) return; // Return if no token is found in localStorage
     const token = JSON.parse(tokenLocal);
     dispatch(fetchWishlistProducts(token));
-    dispatch(fetchBrands());
   }, [dispatch]);
 
   useEffect(() => {
