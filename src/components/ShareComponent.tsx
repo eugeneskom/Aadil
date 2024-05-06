@@ -1,6 +1,5 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaPinterest, FaTelegram } from "react-icons/fa";
-import { FacebookShareButton, TwitterShareButton, PinterestShareButton, TelegramShareButton } from "react-share";
+import { FaFacebook, FaTwitter, FaPinterest, FaTelegram } from "react-icons/fa"; 
 import { Helmet } from "react-helmet-async";
 
 interface ShareComponentProps {
@@ -9,19 +8,33 @@ interface ShareComponentProps {
   url: string;
 }
 
-const ShareComponent = ({ title, imageUrl, url }: ShareComponentProps) => {
-  const shareUrl = window.location.href;
-  // console.log("ShareComponent", url, shareUrl, imageUrl, title);
+interface ShareComponentProps {
+  title: string;
+  imageUrl: string;
+}
 
-  const shareOnFacebook = (title:string, imageUrl:string) => {
-    const imageUrlLocal = encodeURIComponent(imageUrl);
-    const titleLocal = encodeURIComponent(title);
-    const description = encodeURIComponent("Description here");
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${imageUrlLocal}&title=${titleLocal}&description=${description}`;
-    window.open(shareUrl, "_blank", "noopener noreferrer");
+const ShareComponent = ({ title, imageUrl }: ShareComponentProps) => {
+  const shareUrl = window.location.href;
+
+  const shareOnFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&picture=${encodeURIComponent(imageUrl)}`;
+    window.open(facebookUrl, '_blank');
   };
 
+  const shareOnTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}&image=${encodeURIComponent(imageUrl)}`;
+    window.open(twitterUrl, '_blank');
+  };
 
+  const shareOnPinterest = () => {
+    const pinterestUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(title)}&media=${encodeURIComponent(imageUrl)}`;
+    window.open(pinterestUrl, '_blank');
+  };
+
+  const shareOnTelegram = () => {
+    const telegramUrl = `https://telegram.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}&image=${encodeURIComponent(imageUrl)}`;
+    window.open(telegramUrl, '_blank');
+  };
   console.log(`ShareComponent --- https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent("description")}`)
   return (
     <div className="share-component">
@@ -36,30 +49,29 @@ const ShareComponent = ({ title, imageUrl, url }: ShareComponentProps) => {
       <h3>Share this product:</h3>
       <ul className="share-icons">
         <li>
-          {/* <FacebookShareButton url={shareUrl} title={title}>
-            <FaFacebook style={{ color: "#3b5998" }} size={24} />
-          </FacebookShareButton>
-          <a href={`https://www.facebook.com/sharer/sharer.php?u=https://engroovers.com/product/6128903880859&picture=${encodeURIComponent(imageUrl)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent("description")}`} target="_blank" rel="noopener noreferrer">
-            Share on Facebook
-          </a> */}
-          <button onClick={()=>shareOnFacebook(title, imageUrl)}>Share on Facebook</button>
+          <button onClick={shareOnFacebook}>
+            <FaFacebook style={{ color: '#3b5998' }} size={24} />
+          </button>
+        </li>
+      
+        <li>
+          <button onClick={shareOnPinterest}>
+            <FaPinterest style={{ color: '#bd081c' }} size={24} />
+          </button>
         </li>
         <li>
-          <TwitterShareButton url={shareUrl} title={title}>
-            <FaTwitter style={{ color: "#1da1f2" }} size={24} />
-          </TwitterShareButton>
+          <button onClick={shareOnTwitter}>
+            <FaTwitter 
+            style={{ color: '#1da1f2' }}
+            // style={{ color: '#bd081c' }}
+             size={24} />
+          </button>
         </li>
         <li>
-          <PinterestShareButton url={shareUrl} media={imageUrl}>
-            <FaPinterest style={{ color: "#bd081c" }} size={24} />
-          </PinterestShareButton>
+          <button onClick={shareOnTelegram}>
+            <FaTelegram size={24} style={{ color: '#0088cc' }} />
+          </button>
         </li>
-        <li>
-          <TelegramShareButton url={shareUrl} title={title}>
-            <FaTelegram size={24} style={{ color: "#0088cc" }} />
-          </TelegramShareButton>
-        </li>
-        <a href={`https://www.pinterest.com/pin/create/button/?url=https://engroovers.com/product/6128903880859&media=${imageUrl}&description=${title}`}>Share on Pinterest</a>
       </ul>
     </div>
   );
