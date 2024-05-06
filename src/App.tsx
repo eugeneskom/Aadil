@@ -107,8 +107,8 @@ function App() {
   useEffect(() => {
     const tokenLocal = localStorage.getItem("jwt") ?? "";
     let parsedToken = null;
-    if (tokenLocal) {
-      parsedToken = JSON.parse(tokenLocal);
+    parsedToken = tokenLocal ? JSON.parse(tokenLocal) : null;
+    if (parsedToken) {
       dispatch(validateToken(parsedToken));
       dispatch(fetchWishlistProducts(parsedToken));
     }
@@ -151,7 +151,7 @@ function App() {
         {isAuthPopupOpen ? <SignUpPopup /> : ""}
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/auth" element={<AuthenticationPage />}>
               <Route path="login" element={<AuthenticationPage />} />
               <Route path="register" element={<AuthenticationPage />} />
