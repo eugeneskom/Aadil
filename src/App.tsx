@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "./templates/Header";
@@ -21,6 +21,9 @@ import ResetPasswordConfirmation from "./components/auth/ResetConfirmationPage";
 import Products from "./pages/Products";
 import About from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
+import axios from "axios";
+
+
 
 function ScrollToTop() {
   const location = useLocation();
@@ -45,6 +48,31 @@ function App() {
   const isAuthPopupOpen = useSelector((state: RootState) => state.authPopupState.isAuthPopupOpen);
   const user = useSelector((state: RootState) => state.isValidToken.user);
   // console.log("categories", categories);
+
+  
+// const [campaignData, setCampaignData] = useState([]);
+//   console.log('campaignData',campaignData)
+// useEffect(() => {
+//   const fetchCampaignData = async () => {
+//     try {
+//       const options = {
+//         headers: {
+//           'accept': 'application/json',
+//           'authorization': 'secret e2cbbae8515e492d99b126b98d5cec108e1cac69'
+//         }
+//       };
+
+//       const response = await axios.get('https://rest.viglink.com/api/account/campaigns/PRIMARY?format=json&callback=NULL&rowsPerPage=100', options);
+//       setCampaignData(response.data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   fetchCampaignData();
+// }, []);
+
+
 
   useEffect(() => {
     // Fetch wishlist on load of the current user

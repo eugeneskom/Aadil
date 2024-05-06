@@ -43,16 +43,15 @@ interface itemProp {
 }
 
 interface ProductPageProps {
-  breadcrList: itemProp[];
-  parent?: string;
+  product?: Product;
 }
-const ProductPage = () => {
+const ProductPage = ({product}: ProductPageProps ) => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const productSelector = selectProductById(id || "");
   const token = useSelector(selectToken);
   const dispatch = useDispatch<AppDispatch>();
-  const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
+  // const product = useSelector((state: RootState) => productSelector(state)); // Call the function with the RootState
   const filteredProducts = useSelector(selectProductsByManufacturer(id || ""));
   console.log("ProductPage:", product, "id", id);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
@@ -61,6 +60,8 @@ const ProductPage = () => {
   const [fetchedProduct, setFetchedProduct] = useState<Product | null>(null);
   const [helmetData, setHelmetData] = useState(new HelmetData({}));
   console.log('helmetData',helmetData)
+
+
   useEffect(() => {
     const fetchSingleProduct = async (id: string) => {
       try {
