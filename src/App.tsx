@@ -106,9 +106,8 @@ function App() {
 
   useEffect(() => {
     const tokenLocal = localStorage.getItem("jwt") ?? "";
-    let parsedToken = null;
-    if (tokenLocal) {
-      parsedToken = JSON.parse(tokenLocal);
+    let parsedToken = tokenLocal ? JSON.parse(tokenLocal) : null;
+    if (parsedToken) {
       dispatch(validateToken(parsedToken));
       dispatch(fetchWishlistProducts(parsedToken));
     }
