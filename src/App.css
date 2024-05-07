@@ -316,10 +316,10 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
 }
 .hero__inner .col {
   position: relative;
-  min-height: 450px; 
+  min-height: 450px;
 }
 .hero__inner .col img,
-.hero__inner .col .swiper{
+.hero__inner .col .swiper {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -498,7 +498,7 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   cursor: pointer;
 }
 
-.social-signup-btn{
+.social-signup-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -678,53 +678,51 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   display: block;
 }
 
-
-
-.categories-section .swiper-slide{
+.categories-section .swiper-slide {
   height: auto;
 }
-.categories-section .swiper-wrapper{
+.categories-section .swiper-wrapper {
   padding: 20px 0;
 }
-.categories-section .swiper-slide > div{
+.categories-section .swiper-slide > div {
   height: 100%;
 }
 
-
 /* Brand page */
 
-.brand-page__top{
-  position:relative;
+.brand-page__top {
+  position: relative;
   margin-bottom: 150px;
 }
-.brand-page__side{
-  max-width: 300px;
+.brand-page__side {
   padding: 50px 20px 20px;
-  transform: translateY(-70px);
 }
 
-.brand-page__content{
+.brand-page__content {
   display: flex;
   column-gap: 50px;
 }
 
 .brand-page__best,
-.brand-page__right{
+.brand-page__right {
   width: 100%;
 }
 
-.brand-page__logo{
-  position:absolute;
+.brand-page__logo {
+  /* position:absolute;
   bottom: 0;
-  transform: translateY(50%);
+  transform: translateY(50%); */
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
 }
-.brand-page__subtitle{
+.brand-page__subtitle {
   font-size: 48px;
   margin-bottom: 40px;
   line-height: 1.3;
 }
 
-.brand-page__breadcrumbs{
+.brand-page__breadcrumbs {
   margin-bottom: 100px;
 }
 
@@ -732,18 +730,17 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-@media (max-width: 1200px){
+@media (max-width: 1200px) {
   .hero__inner .col {
     position: relative;
-    min-height: 300px; 
+    min-height: 300px;
   }
 
-  .brand-page__side{
-    order: 1
-    
+  .brand-page__side {
+    order: 1;
   }
-  
-  .brand-page__content{
+
+  .brand-page__content {
     display: flex;
     flex-direction: column;
   }
@@ -894,5 +891,16 @@ ul.supmenu-dropdown li.supmenu-li:hover .suplink-title {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
- 
+}
+
+@media (min-width: 1200px) {
+  .brand-page__side {
+    max-width: 300px;
+    padding: 50px 20px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: max-content;
+    max-width: 300px;
+  }
 }

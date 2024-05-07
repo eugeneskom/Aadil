@@ -46,10 +46,12 @@ function Dashboard() {
   };
 
   const handleSyncData = async () => {
+    console.log('handleSyncData')
     try {
       setLoading(true);
       const tokenLocal = localStorage.getItem("jwt") ?? "";
       if (!tokenLocal) return; // Return if no token is found in localStorage
+      console.log('handleSyncData')
 
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/sync-sheets`,
@@ -60,6 +62,7 @@ function Dashboard() {
           },
         }
       );
+      console.log('handleSyncData')
 
       if (response.data.success) {
         setLastUpdatedTime(response.data.lastUpdatedTime);
@@ -67,6 +70,8 @@ function Dashboard() {
       } else {
         alert("Failed to sync data. Please try again.");
       }
+    console.log('handleSyncData')
+      
     } catch (error) {
       console.error("Error syncing data:", error);
       alert("An error occurred while syncing data. Please try again.");

@@ -81,19 +81,19 @@ function BrandPage() {
   return (
     <section className="brand-page">
       <div className="container">
-        <div className="brand-page__top  py-11 shadow-bottom mb-11">
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-5 text-center">{currentBrand.Name}</h1>
+        <div className=" mt-11 mb-5">
+          <Breadcrumb items={breadcrumbItems} />
+        </div>
+        <div className="brand-page__top  py-5 shadow-bottom mb-11">
           <div className="rounded-full border-black overflow-hidden brand-page__logo">
             <img src={currentBrand.Logo} alt={currentBrand.Name} className="rounded-full bg-blue-500 h-40 w-40" />
           </div>
-        </div>
-        <div className="brand-page__breadcrumbs">
-          <Breadcrumb items={breadcrumbItems} />
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-5 text-center">{currentBrand.Name}</h1>
         </div>
 
         <div className="brand-page__content">
           <div className="brand-page__side">
-            <h2 className=" text-5xl font-semibold text-gray-800 mb-4">About {currentBrand.Name}</h2>
+            <h2 className=" text-5xl font-semibold text-gray-800 mb-4"> {currentBrand.Name}</h2>
             <p className="text-gray-600">{currentBrand.Description}</p>
           </div>
           <div className="brand-page__right">
