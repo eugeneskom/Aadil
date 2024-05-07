@@ -12,7 +12,7 @@ function BrandPage() {
   const { brandName } = useParams();
   const brands: Brand[] = useSelector(getBrands);
   const currentBrand = brands.find((brand) => brand.Name.toLowerCase() === brandName?.toLowerCase());
-  console.log('brandName', brandName, brands);
+  console.log("brandName", brandName, brands);
   const [productsNoSale, setProductsNoSale] = useState<Product[] | []>([]);
   const [productsSale, setProductsSale] = useState<Product[] | []>([]);
   const [displayedProductsNoSale, setDisplayedProductsNoSale] = useState<Product[] | []>([]);
@@ -65,7 +65,6 @@ function BrandPage() {
     return null;
   }
 
- 
   const breadcrumbItems = [
     {
       label: "Home",
@@ -75,8 +74,7 @@ function BrandPage() {
       label: `${currentBrand.Name}`,
       path: "/brands",
     },
- 
-  ]
+  ];
 
   return (
     <section className="brand-page">
@@ -85,15 +83,15 @@ function BrandPage() {
           <Breadcrumb items={breadcrumbItems} />
         </div>
         <div className="brand-page__top  py-5 shadow-bottom mb-11">
-          <div className="rounded-full border-black overflow-hidden brand-page__logo">
-            <img src={currentBrand.Logo} alt={currentBrand.Name} className="rounded-full bg-blue-500 h-40 w-40" />
-          </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl mb-5 text-center">{currentBrand.Name}</h1>
         </div>
 
         <div className="brand-page__content">
           <div className="brand-page__side">
-            <h2 className=" text-5xl font-semibold text-gray-800 mb-4"> {currentBrand.Name}</h2>
+            <div className="rounded-full border-black overflow-hidden brand-page__logo">
+              <img src={currentBrand.Logo} alt={currentBrand.Name} className="rounded-full bg-blue-500 h-40 w-40" />
+            </div>
+            <h2 className=" text-5xl font-semibold text-gray-800 mb-4 brand-page__brand-name"> {currentBrand.Name}</h2>
             <p className="text-gray-600">{currentBrand.Description}</p>
           </div>
           <div className="brand-page__right">
