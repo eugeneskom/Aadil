@@ -13,6 +13,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import ProductPreviewPopup from "./ProductPreviewPopup ";
 import { toggleAuthPopup } from "../state/AuthPopupStateSlice";
 import { calculateSalePercentage } from "../helpers";
+import { openProductPreview } from "../state/productPreviewSlice";
 interface ProductProps {
   product: Product;
   isWishlist?: boolean;
@@ -26,6 +27,8 @@ function capitalizeWords(str: string): string {
 }
 
 function ProductCard({ product, isWishlist }: ProductProps) {
+
+
   const navigate = useNavigate();
   const location = useLocation();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
@@ -37,6 +40,11 @@ function ProductCard({ product, isWishlist }: ProductProps) {
   console.log(location.pathname, "location.pathname");
   // Calculate the sale percentage
   const salePercentage = calculateSalePercentage(product);
+  const handlePreviewClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+
+    dispatch(openProductPreview(product));
+  };
 
   useEffect(() => {
     // Checking if the image url is valid, if not the product card won't be rendered
@@ -101,7 +109,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
         {salePercentage !== null && <div className="sale-percentage "> - {salePercentage}%</div>}
         <ul className="product-card__list">
           <li className="product-card__item">
-            <button onClick={(e) => toggleProductPreview(e)} type="button" className="m-2 text-white">
+            <button onClick={handlePreviewClick} type="button" className="m-2 text-white">
               <IoEyeOutline size={25} />
             </button>
           </li>
@@ -143,7 +151,7 @@ function ProductCard({ product, isWishlist }: ProductProps) {
           </button>
         )}
       </div>
-      {showProductPreview ? <ProductPreviewPopup product={product} onClick={(e) => toggleProductPreview(e)} /> : ""}
+      {/* {showProductPreview ? <ProductPreviewPopup product={product} onClick={(e) => toggleProductPreview(e)} /> : ""} */}
     </div>
   );
 }

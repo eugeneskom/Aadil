@@ -3,13 +3,23 @@ import { Product } from "../types/Product";
 import { IoCloseOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { calculateSalePercentage } from "../helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../state/store";
+import { closeProductPreview } from "../state/productPreviewSlice";
 interface ProductPreviewPopupProps {
   product: Product;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
-  console.log("ProductPreviewPopup", product, product.Colors, product.Colors.length);
+function ProductPreviewPopup() {
+  const dispatch = useDispatch();
+  const { product, isOpen } = useSelector((state: RootState) => state.productPreview);
+
+  if (!product || !isOpen) {
+    return null;
+  }
+
+  console.log("ProductPreviewPopup", product.Category, product.SubCategory);
   const salePercentage = calculateSalePercentage(product);
   console.log("salePercentage", salePercentage);
   function extractTextFromHTML(htmlString: string) {
@@ -24,7 +34,7 @@ function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-5">
         <div className="flex items-center justify-end">
-          <button onClick={onClick} className="text-gray-500 hover:bg-orange-500 product-popup-close">
+          <button onClick={() => dispatch(closeProductPreview())} className="text-gray-500 hover:bg-orange-500 product-popup-close">
             <IoCloseOutline size={24} />
           </button>
         </div>
@@ -59,14 +69,14 @@ function ProductPreviewPopup({ product, onClick }: ProductPreviewPopupProps) {
             ) : (
               ""
             )}
-            {product.Category && (
+            {product.Category && product.Category.filter((category) => category.trim() !== "").length > 0 && (
               <p className="text-gray-500 mb-2">
-                Category: <span className="text-black font-bold">{product.Category}</span>
+                Category: <span className="text-black font-bold">{product.Category.filter((category) => category.trim() !== "").join(", ")}</span>
               </p>
             )}
-            {product.SubCategory && (
+            {product.SubCategory && product.SubCategory.filter((subcategory) => subcategory.trim() !== "").length > 0 && (
               <p className="text-gray-500 mb-2">
-                Category: <span className="text-black font-bold">{product.SubCategory}</span>
+                Subcategory: <span className="text-black font-bold">{product.SubCategory.filter((subcategory) => subcategory.trim() !== "").join(", ")}</span>
               </p>
             )}
             <p className="mb-2">Manufacturer: {product.Manufacturer}</p>

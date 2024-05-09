@@ -11,8 +11,7 @@ import { fetchWishlistProducts, toggleWishlistAsync } from "./state/wishlist/wis
 import { selectProductsStatus } from "./state/products/productsSlice";
 import { setScreenWidth } from "./state/screenWidthSlice";
 import SignUpPopup from "./components/auth/SignUpPopup";
-import { UserAccount, Dashboard, CategoryPage, BrandPage, 
-   ProductPage, WishlistPage, Home, AuthenticationPage } from "./pages/index";
+import { UserAccount, Dashboard, CategoryPage, BrandPage, ProductPage, WishlistPage, Home, AuthenticationPage } from "./pages/index";
 import { validateToken } from "./state/token/isValidToken";
 import { fetchCategories, selectCategories } from "./state/categories/categoriesSlice";
 import Footer from "./templates/Footer";
@@ -22,8 +21,7 @@ import Products from "./pages/Products";
 import About from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
 import axios from "axios";
-
-
+import ProductPreviewPopup from "./components/ProductPreviewPopup ";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -49,30 +47,27 @@ function App() {
   const user = useSelector((state: RootState) => state.isValidToken.user);
   // console.log("categories", categories);
 
-  
-// const [campaignData, setCampaignData] = useState([]);
-//   console.log('campaignData',campaignData)
-// useEffect(() => {
-//   const fetchCampaignData = async () => {
-//     try {
-//       const options = {
-//         headers: {
-//           'accept': 'application/json',
-//           'authorization': 'secret e2cbbae8515e492d99b126b98d5cec108e1cac69'
-//         }
-//       };
+  // const [campaignData, setCampaignData] = useState([]);
+  //   console.log('campaignData',campaignData)
+  // useEffect(() => {
+  //   const fetchCampaignData = async () => {
+  //     try {
+  //       const options = {
+  //         headers: {
+  //           'accept': 'application/json',
+  //           'authorization': 'secret e2cbbae8515e492d99b126b98d5cec108e1cac69'
+  //         }
+  //       };
 
-//       const response = await axios.get('https://rest.viglink.com/api/account/campaigns/PRIMARY?format=json&callback=NULL&rowsPerPage=100', options);
-//       setCampaignData(response.data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+  //       const response = await axios.get('https://rest.viglink.com/api/account/campaigns/PRIMARY?format=json&callback=NULL&rowsPerPage=100', options);
+  //       setCampaignData(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-//   fetchCampaignData();
-// }, []);
-
-
+  //   fetchCampaignData();
+  // }, []);
 
   useEffect(() => {
     dispatch(fetchBrands());
@@ -143,39 +138,39 @@ function App() {
   return (
     <>
       <HelmetProvider>
+        <Router>
+          <ScrollToTop />
+          <Header />
+          {isAuthPopupOpen ? <SignUpPopup /> : ""}
+          <ProductPreviewPopup />
 
-      <Router>
-        <ScrollToTop />
-        <Header />
-        {isAuthPopupOpen ? <SignUpPopup /> : ""}
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<AuthenticationPage />}>
-              <Route path="login" element={<AuthenticationPage />} />
-              <Route path="register" element={<AuthenticationPage />} />
-              <Route path="password" element={<AuthenticationPage />} />
-            </Route>
-            <Route path="/auth/reset-confirm/:token" element={<ResetPasswordConfirmation />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/login/success" element={<LoginCallback />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/product/:id" element={<ProductPage />} />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/brand/:brandName/product/:id" element={<ProductPage />} />
-            <Route path="/brand/:brandName" element={<BrandPage />} />
-            <Route path="/category/:categoryName" element={<CategoryPage />} />
-            <Route path="/category/:categoryName/product/:id" element={<ProductPage />} />
-            <Route path="/wishlist" element={<WishlistPage />} />
-            <Route path="/wishlist/product/:id" element={<ProductPage />} />
-            <Route path="/user-account" element={<UserAccount />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </main>
-        <Footer />
-      </Router>
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/auth" element={<AuthenticationPage />}>
+                <Route path="login" element={<AuthenticationPage />} />
+                <Route path="register" element={<AuthenticationPage />} />
+                <Route path="password" element={<AuthenticationPage />} />
+              </Route>
+              <Route path="/auth/reset-confirm/:token" element={<ResetPasswordConfirmation />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/login/success" element={<LoginCallback />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/product/:id" element={<ProductPage />} />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/brand/:brandName/product/:id" element={<ProductPage />} />
+              <Route path="/brand/:brandName" element={<BrandPage />} />
+              <Route path="/category/:categoryName" element={<CategoryPage />} />
+              <Route path="/category/:categoryName/product/:id" element={<ProductPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/wishlist/product/:id" element={<ProductPage />} />
+              <Route path="/user-account" element={<UserAccount />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </main>
+          <Footer />
+        </Router>
       </HelmetProvider>
-
     </>
   );
 }

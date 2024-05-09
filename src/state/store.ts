@@ -9,7 +9,9 @@ import AuthPopupStateSlice from "./AuthPopupStateSlice";
 import searchResultSlice from "./products/searchResultSlice";
 import categoriesSlice from "./categories/categoriesSlice";
 import groupedProductsSlice from "./products/groupedProductsSlice";
+
 import BrandsSlice from "./BrandsSlice";
+import productPreviewSlice from "./productPreviewSlice";
 export const store = configureStore({
   reducer: {
     products: productSlice,
@@ -23,6 +25,7 @@ export const store = configureStore({
     categories: categoriesSlice,
     groupedProducts: groupedProductsSlice,
     brands: BrandsSlice,
+    productPreview: productPreviewSlice
     // Add other reducers here if needed
   },
 });
