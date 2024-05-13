@@ -13,16 +13,16 @@ function Footer() {
             </NavLink>
             <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
                 <li>
-                    <NavLink to="/" className="hover:underline me-4 md:me-6">About</NavLink>
+                    <NavLink to="/about" className="hover:underline me-4 md:me-6">About</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/" className="hover:underline me-4 md:me-6">Privacy Policy</NavLink>
+                    <NavLink to="/privacy-policy" className="hover:underline me-4 md:me-6">Privacy Policy</NavLink>
                 </li>
                 <li>
                     <NavLink to="/" className="hover:underline me-4 md:me-6">Licensing</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/" className="hover:underline">Contact</NavLink>
+                    <NavLink to="/contact-us" className="hover:underline">Contact</NavLink>
                 </li>
             </ul>
         </div>

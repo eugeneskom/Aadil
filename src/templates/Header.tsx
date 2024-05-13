@@ -210,64 +210,53 @@ const Header = () => {
                 </button>
                 <ul className="menu-dropdown sub-menu collapse" id="sub-collapse-pages">
                   <li className="submenu-li">
-                    <NavLink to="/pages/about-us-02" className="sublink-title">
-                      <span className="sp-link-title">About us</span>
-                      {/* <span className="menu-arrow">
-                        <MdKeyboardArrowRight />
-                      </span> */}
+                    <NavLink to="/affiliate-disclosure" className="sublink-title">
+                      <span className="sp-link-title">Affiliate Disclosure</span>
                     </NavLink>
                   </li>
 
                   <li className="submenu-li">
-                    <button type="button" className="sublink-title">
+                    <NavLink to="/contact-us" className="sublink-title ">
                       <span className="sp-link-title">Contact us</span>
-                      {/* <span className="menu-arrow">
-                        <MdKeyboardArrowRight />
-                      </span> */}
-                    </button>
+                    </NavLink>
                   </li>
 
                   <li className="submenu-li">
-                    <NavLink to="/pages/faqs" className="sublink-title">
+                    <NavLink to="/faq" className="sublink-title">
                       <span className="sp-link-title">Faq's</span>
                     </NavLink>
                   </li>
 
-                  <li className="submenu-li">
+                  {/* <li className="submenu-li">
                     <NavLink to="/pages/return-policy" className="sublink-title">
                       <span className="sp-link-title">Refund policy</span>
                     </NavLink>
-                  </li>
+                  </li> */}
 
-                  <li className="submenu-li">
+                  {/* <li className="submenu-li">
                     <NavLink to="/pages/delivery-return" className="sublink-title">
                       <span className="sp-link-title">Shipping &amp; return</span>
                     </NavLink>
-                  </li>
+                  </li> */}
 
-                  <li className="submenu-li">
+                  {/* <li className="submenu-li">
                     <NavLink to="/pages/store-location" className="sublink-title">
                       <span className="sp-link-title">Store locations</span>
                     </NavLink>
-                  </li>
+                  </li> */}
 
                   <li className="submenu-li">
-                    <NavLink to="/pages/privacy-policy" className="sublink-title">
+                    <NavLink to="/privacy-policy" className="sublink-title">
                       <span className="sp-link-title">Privacy policy</span>
                     </NavLink>
                   </li>
 
                   <li className="submenu-li">
-                    <NavLink to="/pages/terms-condition" className="sublink-title">
-                      <span className="sp-link-title">Terms &amp; condition</span>
+                    <NavLink to="/terms-of-services" className="sublink-title">
+                      <span className="sp-link-title">Terms of services</span>
                     </NavLink>
                   </li>
 
-                  <li className="submenu-li">
-                    <NavLink to="/404" className="sublink-title">
-                      <span className="sp-link-title">Page not found</span>
-                    </NavLink>
-                  </li>
                 </ul>
               </li>
               {user?.isAdmin && (

@@ -22,6 +22,11 @@ import About from "./pages/About";
 import { HelmetProvider } from "react-helmet-async";
 import axios from "axios";
 import ProductPreviewPopup from "./components/ProductPreviewPopup ";
+import ContactUs from "./pages/ContactUs";
+import FAQPage from "./pages/FAQPage";
+import TermsOfServicePage from "./pages/TOSPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicy";
+import AffiliateDisclosurePage from "./pages/AffiliateDisclosurePage";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -166,6 +171,11 @@ function App() {
               <Route path="/wishlist/product/:id" element={<ProductPage />} />
               <Route path="/user-account" element={<UserAccount />} />
               <Route path="/about" element={<About />} />
+              <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/terms-of-services" element={<TermsOfServicePage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />
             </Routes>
           </main>
           <Footer />
